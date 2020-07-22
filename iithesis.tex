@@ -1,0 +1,134 @@
+% Opcje klasy 'iithesis' opisane są w komentarzach w pliku klasy. Za ich pomocą
+% ustawia się przede wszystkim język i rodzaj (lic/inz/mgr) pracy, oraz czy na
+% drugiej stronie pracy ma być składany wzór oświadczenia o autorskim wykonaniu.
+\documentclass[declaration,shortabstract]{iithesis}
+
+\usepackage[utf8]{inputenc}
+
+%%%%% DANE DO STRONY TYTUŁOWEJ
+% Niezależnie od języka pracy wybranego w opcjach klasy, tytuł i streszczenie
+% pracy należy podać zarówno w języku polskim, jak i angielskim.
+% Pamiętaj o mądrym (zgodnym z logicznym rozbiorem zdania oraz estetyka) ręcznym
+% złamaniu wierszy w temacie pracy, zwłaszcza tego w języku pracy. Użyj do tego
+% polecenia \fmlinebreak.
+\polishtitle    {Wymagający złamania wierszy\fmlinebreak tytuł pracy w~języku polskim}
+\englishtitle   {English title}
+\polishabstract {Polskie streszczenie}
+\englishabstract{English abstract}
+% w pracach wielu autorów nazwiska można oddzielić poleceniem \and
+\author         {Artur Rosa}
+% w przypadku kilku promotorów, lub konieczności podania ich afiliacji, linie
+% w poniższym poleceniu można złamać poleceniem \fmlinebreak
+\advisor        {dr Andrzej Łukaszewski}
+%\date          {}                     % Data złożenia pracy
+% Dane do oświadczenia o autorskim wykonaniu
+%\transcriptnum {}                     % Numer indeksu
+%\advisorgen    {dr. Jana Kowalskiego} % Nazwisko promotora w dopełniaczu
+%%%%%
+
+%%%%% WLASNE DODATKOWE PAKIETY
+%
+%\usepackage{graphicx,listings,amsmath,amssymb,amsthm,amsfonts,tikz}
+%
+%%%%% WŁASNE DEFINICJE I POLECENIA
+%
+%\theoremstyle{definition} \newtheorem{definition}{Definition}[chapter]
+%\theoremstyle{remark} \newtheorem{remark}[definition]{Observation}
+%\theoremstyle{plain} \newtheorem{theorem}[definition]{Theorem}
+%\theoremstyle{plain} \newtheorem{lemma}[definition]{Lemma}
+%\renewcommand \qedsymbol {\ensuremath{\square}}
+% ...
+%%%%%
+
+\begin{document}
+
+%%%%% POCZĄTEK ZASADNICZEGO TEKSTU PRACY
+
+\chapter{Wprowadzenie}
+\section{Wstęp}
+
+
+
+\section{Background}
+
+
+\subsection{Jakich danych i do czego potrzebują biolodzy}
+
+\subsection{Pozyskiwanie danych}
+
+
+
+
+
+\section{Wykrywanie komórek}
+
+
+\subsection{Obraz wejściowy}
+\subsection{Metody wykrywania kształtów glistopodobnych}
+\subsection{Użyta metoda}
+
+Zalety i wady różnych kanałów obrazów wejściowych
+
+Preprocessing (shape index)
+
+Szkieletonizacja
+
+Wydzielanie kręgosłupów jako komórek
+
+Rozwiązywanie konfliktów (podział komórek)
+
+Poprawianie końcówek (dociąganie do krawędzi)
+
+\section{Śledzenie komórek w czasie}
+
+
+
+
+
+\section{Interfejs użytkownika}
+
+
+
+
+
+
+\section{Opis implementacji}
+
+\subsection{Kod źródłowy}
+\subsection{Kompilacja i uruchomienie}
+
+\subsection{Struktury danych}
+\subsection{Architektura}
+\subsection{Opis wykorzystanego API ImageJ}
+\subsection{Błędy w implementacji ImageJ i sposoby na ich obejście}
+\subsection{Opis sposobu dalszego rozwoju, interfejsy}
+
+
+
+
+
+
+
+\section{Zakończenie}
+
+\subsection{Podsumowanie}
+\subsection{Ograniczenia wynikające z zastosowanych metod}
+\subsection{Dalszy rozwój}
+
+
+
+%%%%% BIBLIOGRAFIA
+
+
+%\bibitem{example} \ldots
+
+\begin{thebibliography}{1}
+\bibitem{example}
+  Example Women,
+  \emph{A Document Preparation System}.
+  Addison Wesley, Massachusetts,
+  2nd Edition,
+  1994.
+\end{thebibliography}
+
+\end{document}
