@@ -38,6 +38,8 @@
 %\theoremstyle{plain} \newtheorem{lemma}[definition]{Lemma}
 %\renewcommand \qedsymbol {\ensuremath{\square}}
 % ...
+
+\newcommand{\image}{\mathbf{I}}
 %%%%%
 
 \begin{document}
@@ -45,75 +47,131 @@
 %%%%% POCZĄTEK ZASADNICZEGO TEKSTU PRACY
 
 \chapter{Wprowadzenie}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Wstęp}
 
+% TODO Wstęp
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Background}
 
+% TODO Background
 
 \subsection{Jakich danych i do czego potrzebują biolodzy}
 
 \subsection{Pozyskiwanie danych}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\chapter{Wykrywanie i śledzenie komórek}
 
+\section{Opis problemu}
+\label{sec:problem}
+
+\subsection{Obrazy wejściowe}
+\label{sec:input-images}
+
+% TODO Obrazy wejściowe
+
+\subsection{Pożądany efekt}
+\label{sec:output}
+% TODO Pożądany efekt
+
+\section{Powiązane prace}
+
+% TODO Powiązane prace
 
 \section{Wykrywanie komórek}
 
+\subsection{Wstęp}
 
-\subsection{Obraz wejściowy}
-\subsection{Metody wykrywania kształtów glistopodobnych}
-\subsection{Użyta metoda}
+Problem opisany w sekcji \ref{sec:problem} zdefiniowany jest dla nagrań spod mikroskopu. Postanowiłem jednak najpierw rozwiązać podobny problem, ale zdefiniowany dla pojedynczego obrazu. Rozwiązanie tego problemu mogłoby z łatwością zostać uogólnione na stos obrazów (nagranie). W tym rozdziale opiszę rozwiązanie uproszczonego problemu: oznaczanie komórek widocznych na pojedynczym obrazie.
 
-Zalety i wady różnych kanałów obrazów wejściowych
 
-Preprocessing (shape index)
+\subsection{Dane wejściowe}
 
-Szkieletonizacja
+% TODO Dane wejściowe - user input itp.
+Oznaczenie wszystkich komórek widocznych na obrazie można rozłożyć na dwa osobne problemy:
+\begin{enumerate}
+  \item Określenie liczby oraz lokalizacji poszczególnych komórek
+  \item Oznaczenie kręgosłupów komórek.
+\end{enumerate}
+
+W niniejszej pracy zdecydowałem się nie rozwiązywać automatycznie pierwszego problemu. Zamiast tego użytkownik zobowiązany jest ręcznie zaznaczyć dokładnie jeden punkt wewnątrz każdej komórki widocznej na obrazie. Wymóg ten dotyczy tylko pierwszej klatki nagrania, co opiszę dokładniej w dalszej części pracy (\ref{sec:cell-tracking}).
+
+% TODO z którego kanału?
+Danymi wejściowymi są zatem obraz $\image$ oraz zbiór punktów $\mathbf{P}$ lokalizujących komórki.
+
+
+
+\subsection{Wstępne przetwarzanie obrazu}
+
+% TODO Wstępne przetwarzanie obrazu
+
+Preprocessing (shape index), ale też zalety i wady różnych kanałów obrazów wejściowych
+
+\subsection{Szkieletyzacja i wstępna detekcja komórek}
+
+% TODO Szkieletyzacja i wstępna detekcja komórek
 
 Wydzielanie kręgosłupów jako komórek
 
-Rozwiązywanie konfliktów (podział komórek)
+\subsection{Rozwiązywanie konfliktów}
+
+% TODO Rozwiązywanie konfliktów
+
+\subsection{Korekta końcówek}
+
+% TODO Korekta końcówek
 
 Poprawianie końcówek (dociąganie do krawędzi)
 
 \section{Śledzenie komórek w czasie}
+\label{sec:cell-tracking}
+
+% TODO Śledzenie komórek w czasie
+Opis jednej iteracji + sprawdzenia czy komórka nie powinna zostać podzielona
+
+\section{Interakcja ze strony użytkownika}
+
+% TODO Interakcja ze strony użytkownika
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Opis implementacji}
+
+% TODO Opis implementacji
+
+
+\section{Kod źródłowy}
+\section{Kompilacja i uruchomienie}
+
+\section{Struktury danych}
+\section{Architektura}
+\section{Opis wykorzystanego API ImageJ}
+\section{Błędy w implementacji ImageJ i sposoby na ich obejście}
+\section{Opis sposobu dalszego rozwoju, interfejsy}
 
 
 
 
 
-\section{Interfejs użytkownika}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Zakończenie}
+
+% TODO Zakończenie
 
 
-
-
-
-
-\section{Opis implementacji}
-
-\subsection{Kod źródłowy}
-\subsection{Kompilacja i uruchomienie}
-
-\subsection{Struktury danych}
-\subsection{Architektura}
-\subsection{Opis wykorzystanego API ImageJ}
-\subsection{Błędy w implementacji ImageJ i sposoby na ich obejście}
-\subsection{Opis sposobu dalszego rozwoju, interfejsy}
-
-
-
-
-
-
-
-\section{Zakończenie}
-
-\subsection{Podsumowanie}
-\subsection{Ograniczenia wynikające z zastosowanych metod}
-\subsection{Dalszy rozwój}
+\section{Podsumowanie}
+\section{Ograniczenia wynikające z zastosowanych metod}
+\section{Dalszy rozwój}
 
 
 
