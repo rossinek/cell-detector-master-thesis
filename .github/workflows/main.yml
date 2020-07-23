@@ -1,0 +1,30 @@
+name: Compile and push paper to build branch
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '*.tex'
+      - '*.cls'
+
+jobs:
+  build:
+    name: Compile and upload
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: iithesis.tex
+      - name: Move paper to build directory
+        run: mkdir build && mv iithesis.pdf build
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@releases/v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: build
+          FOLDER: build
