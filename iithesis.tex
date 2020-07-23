@@ -39,7 +39,11 @@
 %\renewcommand \qedsymbol {\ensuremath{\square}}
 % ...
 
+\usepackage{algorithmic,amsmath}
+
 \newcommand{\image}{\mathbf{I}}
+\renewcommand{\algorithmicforall}{\textbf{for each}}
+
 %%%%%
 
 \begin{document}
@@ -134,7 +138,29 @@ Ze względu na specyficzny kształt komórki można zaobserwować następującą
 
 \subsection{Wybór krawędzi w węzłach}
 
-\ldots % TODO Niestety założenie przyjęte na początku nie zawsze jest spełnione w realistycznym scenariuszu.
+Niestety przyjęte założenie o tym, że każdy piksel należący do zewnętrznego obrysu dowolnej komórki będzie miał wartość $0$, nie zawsze jest spełnione. W realistycznym scenariuszu zdarza się, że jedna z końcówek komórki znajdują się na tyle blisko innej komórki, że wstępne przetwarzanie i progowanie obrazu nie powoduje ich rozdzielenia na obrazie binarnym. Czasem artefakty widoczne na obrazie wejściowym powodują, że wyspa na obrazie binarnym zawiera nie tylko komórkę, ale także fragment innego kształtu. W zdecydowanej większości takich przypadków kręgosłup komórki można opisać spójnym podgrafem o stopniu 2 grafu reprezentującego szkielet wyspy zawierającej komórki.
+
+Wstępna detekcja kręgosłupa danej komórki polega, tak jak w scenariuszu optymistycznym, na odnalezieniu krawędzi $\{v_0, u_0\}$ w grafie $\mathbf{G}$ leżącej najbliżej punktu opisującego komórkę, a następnie na stworzeniu z niej i jej wierzchołków nowego grafu $\mathbf{S}$. Tak utworzony kręgosłup rozszerzany jest później zgodnie z następującym algorytmem:
+
+\begin{algorithmic}
+
+\FORALL{$v \gets v_0, u_0$}
+  \LOOP
+    \STATE
+      $\text{E}_v \gets$ podzbiór krawędzi grafu $E(\mathbf{G}) - E(\mathbf{S})$ incydentnych do $v$,\newline
+      \hphantom{$\text{E}_v \gets$} które nie tworzą cyklu w grafie $\mathbf{S}$
+    \IF{$\text{E}_v = \O$}
+      \STATE \textbf{break}
+    \ENDIF
+    \STATE $\{v, u\} \gets \textbf{argmax}_{e \in \text{E}_v} \text{q}_v(e)$
+    \STATE $\mathbf{S} \gets \mathbf{S} \cup (\{u\}, \{\{v, u\}\}) $
+    \STATE $v \gets u$
+  \ENDLOOP
+\ENDFOR
+\end{algorithmic}
+gdzie funkcja $\text{q}_v(e)$ jest funkcją oceny która służy do wyboru najmocniejszej związanej krawędzi.
+
+\ldots % TODO Funkcja oceny
 
 \subsection{Rozwiązywanie konfliktów}
 
