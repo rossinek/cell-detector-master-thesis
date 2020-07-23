@@ -44,26 +44,25 @@
 
 \begin{document}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%% POCZĄTEK ZASADNICZEGO TEKSTU PRACY
 
 \chapter{Wprowadzenie}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Wstęp}
 
-% TODO Wstęp
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ldots % TODO Wstęp
 
 \section{Background}
 
-% TODO Background
-
 \subsection{Jakich danych i do czego potrzebują biolodzy}
 
+\ldots % TODO Jakich danych i do czego potrzebują biolodzy}
+
 \subsection{Pozyskiwanie danych}
+
+\ldots % TODO Pozyskiwanie danych
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -76,30 +75,29 @@
 \subsection{Obrazy wejściowe}
 \label{sec:input-images}
 
-% TODO Obrazy wejściowe
+\ldots % TODO Obrazy wejściowe
 
 \subsection{Pożądany efekt}
 \label{sec:output}
-% TODO Pożądany efekt
+
+\ldots % TODO Pożądany efekt
 
 \section{Powiązane prace}
 
-% TODO Powiązane prace
+\ldots % TODO Powiązane prace
 
 \section{Wykrywanie komórek}
 
 \subsection{Wstęp}
 
-Problem opisany w sekcji \ref{sec:problem} zdefiniowany jest dla nagrań spod mikroskopu. Postanowiłem jednak najpierw rozwiązać podobny problem, ale zdefiniowany dla pojedynczego obrazu. Rozwiązanie tego problemu mogłoby z łatwością zostać uogólnione na stos obrazów (nagranie). W tym rozdziale opiszę rozwiązanie uproszczonego problemu: oznaczanie komórek widocznych na pojedynczym obrazie.
-
+Problem opisany w sekcji \ref{sec:problem} zdefiniowany jest dla nagrań spod mikroskopu. Postanowiłem jednak najpierw rozwiązać podobny problem, ale zdefiniowany dla pojedynczego obrazu. Rozwiązanie tego problemu mogłoby z łatwością zostać uogólnione na stos obrazów (nagranie). W tym rozdziale opiszę rozwiązanie uproszczonego problemu: oznaczanie komórek widocznych na pojedynczym obrazie. Przez ,,oznaczenie komórki'' mam na myśli odnalezienie łamanej przechodzącej przez środek komórki, a więc jej kręgosłupa.
 
 \subsection{Dane wejściowe}
 
-% TODO Dane wejściowe - user input itp.
 Oznaczenie wszystkich komórek widocznych na obrazie można rozłożyć na dwa osobne problemy:
 \begin{enumerate}
   \item Określenie liczby oraz lokalizacji poszczególnych komórek
-  \item Oznaczenie kręgosłupów komórek.
+  \item Odnalezienie kształtu poszczególnych komórek.
 \end{enumerate}
 
 W niniejszej pracy zdecydowałem się nie rozwiązywać automatycznie pierwszego problemu. Zamiast tego użytkownik zobowiązany jest ręcznie zaznaczyć dokładnie jeden punkt wewnątrz każdej komórki widocznej na obrazie. Wymóg ten dotyczy tylko pierwszej klatki nagrania, co opiszę dokładniej w dalszej części pracy (\ref{sec:cell-tracking}).
@@ -107,57 +105,81 @@ W niniejszej pracy zdecydowałem się nie rozwiązywać automatycznie pierwszego
 % TODO z którego kanału?
 Danymi wejściowymi są zatem obraz $\image$ oraz zbiór punktów $\mathbf{P}$ lokalizujących komórki.
 
+\subsection{Wybór kanału i wstępne przetwarzanie obrazu}
 
+Obraz wejściowy składa się z dwóch podstawowych kanałów (\ref{sec:input-images}).
+Chcąc jak najdokładniej oznaczyć początek i koniec komórki, a także miejsca ich podziału, postanowiłem wybrać kanał, który zawiera wyraźną informację o krawędziach w tych miejscach.
+O ile kanał z fluorescencją mógłby bardzo dobrze sprawdzić się do określenie liczby oraz lokalizacji poszczególnych komórek (w przypadku ich niewielkiej liczby), o tyle drugi kanał zawiera dużo dokładniejszą informację na temat krawędzi komórek.
 
-\subsection{Wstępne przetwarzanie obrazu}
+Celem wstępnego przetwarzania obrazu wejściowego jest w tym przypadku oddzielenie poszczególnych komórek od otoczenia.
 
-% TODO Wstępne przetwarzanie obrazu
+\subsubsection{Shape index map}
 
-Preprocessing (shape index), ale też zalety i wady różnych kanałów obrazów wejściowych
+\ldots % TODO Shape index map i dlaczego sprawdził się dobrze
 
 \subsection{Szkieletyzacja i wstępna detekcja komórek}
 
-% TODO Szkieletyzacja i wstępna detekcja komórek
+Zgodnie z powyższą obserwacją, możemy łatwo oddzielić komórkę od jej otoczenia na obrazie ustalając pewien próg $t \approx 0$. Załóżmy przez chwilę, że binaryzując w ten sposób mapę indeksów kształtu otrzymamy obraz $\image_{bin}$, na którym każdy piksel leżący wewnątrz dowolnej komórki będzie miał wartość $1$, natomiast każdy piksel należący do zewnętrznego obrysu dowolnej komórki (nie należący do komórki, lecz sąsiadujący z pikselem należącym do niej) będzie miał wartość $0$.
+Przy takim założeniu każda komórka jest niezależną ,,wyspą'' na binarnym obrazie $\image_{bin}$. Chcąc odnaleźć ,,kręgosłup'' komórki (łamaną przechodzącą przez jej środek) chcemy tak naprawdę znaleźć łamaną, która jest równoodległa od jej krawędzi. Bardzo podobny problem rozwiązują algorytmy do wyznaczania szkieletu -- ich celem jest odnalezienie zbioru punktów równoodległych od co najmniej dwóch brzegów.
 
-Wydzielanie kręgosłupów jako komórek
+Na potrzeby tej pracy do szkieletonizacji użyta została implementacja algorytmu ,,3D thinning algorithm''\cite{algo:3d-thinning} w formie pluginu dla programu ImageJ\cite{plugin:skeletonize3D}. Mimo iż wtyczka pozwala na szkieletyzację obrazów 3D, w tym przypadku została użyta do przetworzenia pojedynczego obrazu 2D. Wynikiem szkieletyzacji jest binarny obraz o pewnych właściwościach. Każdy aktywny piksel można przyporządkować do trzech grup:
+\begin{itemize}
+  \item końcówki -- mają mniej niż 2 sąsiadujące aktywne piksele
+  \item węzły -- mają więcej niż 2 sąsiadujące aktywne piksele
+  \item połączenia -- mają dokładnie 2 sąsiadujące aktywne piksele.
+\end{itemize}
+Przedstawiając szkielet jako graf końcówki tworzyłyby wierzchołki o stopniu równym $1$ lub $0$, wierzchołki o większych stopniach przedstawiałyby zbiory sąsiadujących ze sobą węzłów, natomiast krawędzie reprezentowałyby zbiory sąsiadujących ze sobą połączeń (zakończonych zbiorem węzłów lub końcówką). Taką reprezentację grafową można uzyskać za pomocą kolejnej wtyczki dla programu ImageJ tego samego autora\cite{plugin:analyzeSkeleton}. Poza standardowymi informacjami wierzchołki i krawędzie utworzonego za jej pomocą grafu przechowują zbiory pikseli które reprezentują.
+
+Ze względu na specyficzny kształt komórki można zaobserwować następującą właściwość: po przeprowadzeniu szkieletyzacji obrazu $\image_{bin}$, o ile przyjęte wcześniej założenie jest spełnione, szkielet każdej z komórek składa się dokładnie z dwóch końcówek i połączeń między nimi. Łamaną opisującą zbiór połączeń można z powodzeniem nazwać ,,kręgosłupem komórki''. Mając do dyspozycji zbiór punktów $\mathbf{P}$ lokalizujących komórki można teraz w łatwy sposób odnaleźć dla każdej z nich graf ją opisujący (zawierający dwa wierzchołki i jedną krawędź). Jednym ze sposobów może być wyszukanie dla każdego punktu ze zbioru $\mathbf{P}$ krawędź która znajduje się najbliżej tego punktu, gdzie odległość między punktem a krawędzią zdefiniowana jest jako odległość między punktem, a najbliższym pikselem, który należy do zbioru opisywanego przez tę krawędź.
+
+\subsection{Wybór krawędzi w węzłach}
+
+\ldots % TODO Niestety założenie przyjęte na początku nie zawsze jest spełnione w realistycznym scenariuszu.
 
 \subsection{Rozwiązywanie konfliktów}
 
-% TODO Rozwiązywanie konfliktów
+\ldots % TODO Rozwiązywanie konfliktów
+
+\subsection{Uzyskiwanie linii łamanej}
+
+\ldots % TODO Uzyskiwanie linii łamanej
+
 
 \subsection{Korekta końcówek}
 
-% TODO Korekta końcówek
+\ldots % TODO Poprawianie końcówek (dociąganie do krawędzi)
 
-Poprawianie końcówek (dociąganie do krawędzi)
 
 \section{Śledzenie komórek w czasie}
 \label{sec:cell-tracking}
 
-% TODO Śledzenie komórek w czasie
-Opis jednej iteracji + sprawdzenia czy komórka nie powinna zostać podzielona
+\ldots % TODO Śledzenie komórek w czasie
+
+% Opis jednej iteracji + sprawdzenia czy komórka nie powinna zostać podzielona
 
 \section{Interakcja ze strony użytkownika}
 
-% TODO Interakcja ze strony użytkownika
+\ldots % TODO Interakcja ze strony użytkownika
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Opis implementacji}
 
-% TODO Opis implementacji
-
-
 \section{Kod źródłowy}
+\ldots % TODO Kod źródłowy
 \section{Kompilacja i uruchomienie}
-
+\ldots % TODO Kod źródłowy
 \section{Struktury danych}
+\ldots % TODO Struktury danych
 \section{Architektura}
+\ldots % TODO Architektura
 \section{Opis wykorzystanego API ImageJ}
+\ldots % TODO Opis wykorzystanego API ImageJ
 \section{Błędy w implementacji ImageJ i sposoby na ich obejście}
+\ldots % TODO Błędy w implementacji ImageJ i sposoby na ich obejście
 \section{Opis sposobu dalszego rozwoju, interfejsy}
-
+\ldots % TODO Opis sposobu dalszego rozwoju, interfejsy
 
 
 
@@ -166,12 +188,13 @@ Opis jednej iteracji + sprawdzenia czy komórka nie powinna zostać podzielona
 
 \chapter{Zakończenie}
 
-% TODO Zakończenie
-
-
 \section{Podsumowanie}
+\ldots % TODO Podsumowanie
 \section{Ograniczenia wynikające z zastosowanych metod}
+\ldots % TODO Ograniczenia wynikające z zastosowanych metod
 \section{Dalszy rozwój}
+\ldots % TODO Dalszy rozwój
+
 
 
 
@@ -181,12 +204,28 @@ Opis jednej iteracji + sprawdzenia czy komórka nie powinna zostać podzielona
 %\bibitem{example} \ldots
 
 \begin{thebibliography}{1}
-\bibitem{example}
-  Example Women,
-  \emph{A Document Preparation System}.
-  Addison Wesley, Massachusetts,
-  2nd Edition,
+
+\bibitem{algo:3d-thinning}
+  Ta-Chih Lee, Rangasami L. Kashyap, Chong-Nam Chu,
+  \emph{Building skeleton models via 3-D medial surface/axis thinning algorithms},
+  Computer Vision, Graphics, and Image Processing,
+  56(6):462–478,
   1994.
+
+\bibitem{plugin:skeletonize3D}
+  Ignacio Arganda-Carreras,
+  \emph{Skeletonize3D},
+  2.1.1,
+  2017,
+  \url{https://imagej.net/Skeletonize3D}.
+
+\bibitem{plugin:analyzeSkeleton}
+  Ignacio Arganda-Carreras,
+  \emph{AnalyzeSkeleton},
+  3.3.0,
+  2018,
+  \url{https://imagej.net/AnalyzeSkeleton}.
+
 \end{thebibliography}
 
 \end{document}
