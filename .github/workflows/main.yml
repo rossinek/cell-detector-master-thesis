@@ -1,4 +1,4 @@
-name: Compile and push paper to build branch
+name: Compile and deploy PDF
 on:
   push:
     branches:
