@@ -121,7 +121,7 @@ Ostatecznie zdecydowałem się użyć narzędzia które nie jest związane z wyk
 
 \subsubsection{Mapa indeksów kształtu}
 
-Postanowiłem spróbować wyliczyć mapę indeksów kształtu (ang. shape index map) dla obrazu wejściowego, na którym wcześniej zastosowałem rozmycie gaussowskie. Indeks kształtu to liczba z przedziału $[-1, 1]$ przyporządkowana na podstawie ,,lokalnego kształtu'' powierzchni. Jest to skaloniezminnicza (ang. scale invariant) miara, która dzieli powierzchnię na obszary wypukłe, wklęsłe i hiperboliczne (rysunek \ref{fig:shape-index-range})\cite{paper:shape-index}. Obraz wejściowy interpretowany jest tutaj jako mapa wysokości.
+Postanowiłem spróbować wyliczyć mapę indeksów kształtu (ang. shape index map) dla obrazu wejściowego, na którym wcześniej zastosowałem rozmycie gaussowskie. Indeks kształtu to liczba z przedziału $[-1, 1]$ przyporządkowana na podstawie ,,lokalnego kształtu'' powierzchni. Jest to skaloniezminnicza (ang. scale invariant) miara, która dzieli powierzchnię na obszary wypukłe, wklęsłe i hiperboliczne (rysunek \ref{fig:shape-index-range})\cite{paper:shape-index}. Obraz wejściowy interpretowany jest tutaj jako mapa wysokości. Zastosowanie rozmycia gaussowskiego w pierwszym kroku jest niezbędne w tym przypadku ze względu na nieodporność tej miary na szum obecny na obrazie wejściowym. Do wyliczenia mapy indeksów skorzystałem z wtyczki dla programu ImageJ autorstwa Johannesa Schindelina\cite{plugin:shape-index-map}.
 
 \begin{figure}
   \includegraphics[width=\textwidth]{images/shape-index-range.png}
@@ -129,20 +129,20 @@ Postanowiłem spróbować wyliczyć mapę indeksów kształtu (ang. shape index 
   \label{fig:shape-index-range}
 \end{figure}
 
-\ldots % TODO dlaczego sprawdził się dobrze
+Okazało się, że na wynikowej mapie otoczenie komórek interpretowane jest jako obszar wklęsły, w przeciwieństwie do samych komórek, których wnętrze oznaczane jest indeksami kształtów wypukłych. Własność ta zachodzi na większości testowych obrazów nawet przy stosunkowo dużym zagęszczeniu komórek.
 
 \subsection{Szkieletyzacja i wstępna detekcja komórek}
 
 Zgodnie z powyższą obserwacją, możemy łatwo oddzielić komórkę od jej otoczenia na obrazie ustalając pewien próg $t \approx 0$. Załóżmy przez chwilę, że binaryzując w ten sposób mapę indeksów kształtu otrzymamy obraz $\image_{bin}$, na którym każdy piksel leżący wewnątrz dowolnej komórki będzie miał wartość $1$, natomiast każdy piksel należący do zewnętrznego obrysu dowolnej komórki (nie należący do komórki, lecz sąsiadujący z pikselem należącym do niej) będzie miał wartość $0$.
 Przy takim założeniu każda komórka jest niezależną ,,wyspą'' na binarnym obrazie $\image_{bin}$. Chcąc odnaleźć ,,kręgosłup'' komórki (łamaną przechodzącą przez jej środek) chcemy tak naprawdę znaleźć łamaną, która jest równoodległa od jej krawędzi. Bardzo podobny problem rozwiązują algorytmy do wyznaczania szkieletu -- ich celem jest odnalezienie zbioru punktów równoodległych od co najmniej dwóch brzegów.
 
-Na potrzeby tej pracy do szkieletonizacji użyta została implementacja algorytmu ,,3D thinning algorithm''\cite{algo:3d-thinning} w formie pluginu dla programu ImageJ\cite{plugin:skeletonize3D}. Mimo iż wtyczka pozwala na szkieletyzację obrazów 3D, w tym przypadku została użyta do przetworzenia pojedynczego obrazu 2D. Wynikiem szkieletyzacji jest binarny obraz o pewnych właściwościach. Każdy aktywny piksel można przyporządkować do trzech grup:
+Na potrzeby tej pracy do szkieletonizacji użyta została implementacja algorytmu ,,3D thinning algorithm''\cite{algo:3d-thinning} w formie pluginu dla programu ImageJ\cite{plugin:skeletonize-3d}. Mimo iż wtyczka pozwala na szkieletyzację obrazów 3D, w tym przypadku została użyta do przetworzenia pojedynczego obrazu 2D. Wynikiem szkieletyzacji jest binarny obraz o pewnych właściwościach. Każdy aktywny piksel można przyporządkować do trzech grup:
 \begin{itemize}
   \item końcówki -- mają mniej niż 2 sąsiadujące aktywne piksele
   \item węzły -- mają więcej niż 2 sąsiadujące aktywne piksele
   \item połączenia -- mają dokładnie 2 sąsiadujące aktywne piksele.
 \end{itemize}
-Przedstawiając szkielet jako graf końcówki tworzyłyby wierzchołki o stopniu równym $1$ lub $0$, wierzchołki o większych stopniach przedstawiałyby zbiory sąsiadujących ze sobą węzłów, natomiast krawędzie reprezentowałyby zbiory sąsiadujących ze sobą połączeń (zakończonych zbiorem węzłów lub końcówką). Taką reprezentację grafową można uzyskać za pomocą kolejnej wtyczki dla programu ImageJ tego samego autora\cite{plugin:analyzeSkeleton}. Poza standardowymi informacjami wierzchołki i krawędzie utworzonego za jej pomocą grafu przechowują zbiory pikseli które reprezentują.
+Przedstawiając szkielet jako graf końcówki tworzyłyby wierzchołki o stopniu równym $1$ lub $0$, wierzchołki o większych stopniach przedstawiałyby zbiory sąsiadujących ze sobą węzłów, natomiast krawędzie reprezentowałyby zbiory sąsiadujących ze sobą połączeń (zakończonych zbiorem węzłów lub końcówką). Taką reprezentację grafową można uzyskać za pomocą kolejnej wtyczki dla programu ImageJ tego samego autora\cite{plugin:analyze-skeleton}. Poza standardowymi informacjami wierzchołki i krawędzie utworzonego za jej pomocą grafu przechowują zbiory pikseli które reprezentują.
 
 Ze względu na specyficzny kształt komórki można zaobserwować następującą właściwość: po przeprowadzeniu szkieletyzacji obrazu $\image_{bin}$, o ile przyjęte wcześniej założenie jest spełnione, szkielet każdej z komórek składa się dokładnie z dwóch końcówek i połączeń między nimi. Łamaną opisującą zbiór połączeń można z powodzeniem nazwać ,,kręgosłupem komórki''. Mając do dyspozycji zbiór punktów $\mathbf{P}$ lokalizujących komórki można teraz w łatwy sposób odnaleźć dla każdej z nich graf ją opisujący (zawierający dwa wierzchołki i jedną krawędź). Jednym ze sposobów może być wyszukanie dla każdego punktu ze zbioru $\mathbf{P}$ krawędź która znajduje się najbliżej tego punktu, gdzie odległość między punktem a krawędzią zdefiniowana jest jako odległość między punktem, a najbliższym pikselem, który należy do zbioru opisywanego przez tę krawędź.
 
@@ -248,6 +248,12 @@ Takie rozwiązanie sprawdza się dobrze dla komórek, których kręgosłup znajd
   10:557–565,
   1992.
 
+\bibitem{plugin:shape-index-map}
+  Johannes Schindelin,
+  \emph{Shape Index Map},
+  2010,
+  \url{https://imagej.net/Shape_Index_Map}.
+
 \bibitem{algo:3d-thinning}
   Ta-Chih Lee, Rangasami L. Kashyap, Chong-Nam Chu,
   \emph{Building skeleton models via 3-D medial surface/axis thinning algorithms},
@@ -255,14 +261,14 @@ Takie rozwiązanie sprawdza się dobrze dla komórek, których kręgosłup znajd
   56(6):462–478,
   1994.
 
-\bibitem{plugin:skeletonize3D}
+\bibitem{plugin:skeletonize-3d}
   Ignacio Arganda-Carreras,
   \emph{Skeletonize3D},
   2.1.1,
   2017,
   \url{https://imagej.net/Skeletonize3D}.
 
-\bibitem{plugin:analyzeSkeleton}
+\bibitem{plugin:analyze-skeleton}
   Ignacio Arganda-Carreras,
   \emph{AnalyzeSkeleton},
   3.3.0,
