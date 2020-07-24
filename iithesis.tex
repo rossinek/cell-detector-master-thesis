@@ -39,8 +39,7 @@
 %\renewcommand \qedsymbol {\ensuremath{\square}}
 % ...
 
-\usepackage{algorithmic,amsmath}
-
+\usepackage{algorithmic,amsmath,graphicx}
 \DeclareMathOperator*{\argmax}{\textbf{argmax}}
 \newcommand{\image}{\mathbf{I}}
 \renewcommand{\algorithmicforall}{\textbf{for each}}
@@ -116,11 +115,21 @@ Obraz wejściowy składa się z dwóch podstawowych kanałów (\ref{sec:input-im
 Chcąc jak najdokładniej oznaczyć początek i koniec komórki, a także miejsca ich podziału, postanowiłem wybrać kanał, który zawiera wyraźną informację o krawędziach w tych miejscach.
 O ile kanał z fluorescencją mógłby bardzo dobrze sprawdzić się do określenie liczby oraz lokalizacji poszczególnych komórek (w przypadku ich niewielkiej liczby), o tyle drugi kanał zawiera dużo dokładniejszą informację na temat krawędzi komórek.
 
-Celem wstępnego przetwarzania obrazu wejściowego jest w tym przypadku oddzielenie poszczególnych komórek od otoczenia.
+Celem wstępnego przetwarzania obrazu wejściowego jest w tym przypadku oddzielenie poszczególnych komórek od otoczenia, zachowując przy tym informację na temat ich krawędzi. W ramach pracy przeprowadziłem wiele testów mających na celu odnalezienie narzędzia spełniającego ten cel. Krawędzie otrzymywane za pomocą filtrów czy algorytmów do ich wyszukiwania często były nieciągłe. Dobierając inne parametry często pojawiały się niechciane zaznaczenia wewnątrz komórek.
 
-\subsubsection{Shape index map}
+Ostatecznie zdecydowałem się użyć narzędzia które nie jest związane z wykrywaniem krawędzi. Zaobserwowałem, że zdjęcia zrobione tą techniką mają pewne specyficzne właściwości. Komórki są na nich dość równomiernie oświetlone, przez co dobrze widać ich ,,tubowaty'' kształt. Każdą komórkę otacza też ciemne obramowanie.
 
-\ldots % TODO Shape index map i dlaczego sprawdził się dobrze
+\subsubsection{Mapa indeksów kształtu}
+
+Postanowiłem spróbować wyliczyć mapę indeksów kształtu (ang. shape index map) dla obrazu wejściowego, na którym wcześniej zastosowałem rozmycie gaussowskie. Indeks kształtu to liczba z przedziału $[-1, 1]$ przyporządkowana na podstawie ,,lokalnego kształtu'' powierzchni. Jest to skaloniezminnicza (ang. scale invariant) miara, która dzieli powierzchnię na obszary wypukłe, wklęsłe i hiperboliczne (rysunek \ref{fig:shape-index-range})\cite{paper:shape-index}. Obraz wejściowy interpretowany jest tutaj jako mapa wysokości.
+
+\begin{figure}
+  \includegraphics[width=\textwidth]{images/shape-index-range.png}
+  \caption{Skala indeksu kształtu z podziałem na dziewięć kategorii. \cite{paper:shape-index}}
+  \label{fig:shape-index-range}
+\end{figure}
+
+\ldots % TODO dlaczego sprawdził się dobrze
 
 \subsection{Szkieletyzacja i wstępna detekcja komórek}
 
@@ -231,6 +240,13 @@ Takie rozwiązanie sprawdza się dobrze dla komórek, których kręgosłup znajd
 %\bibitem{example} \ldots
 
 \begin{thebibliography}{1}
+
+\bibitem{paper:shape-index}
+  Jan J Koenderink, Andrea J van Doorn,
+  \emph{Surface shape and curvature scales},
+  Image and Vision Computing,
+  10:557–565,
+  1992.
 
 \bibitem{algo:3d-thinning}
   Ta-Chih Lee, Rangasami L. Kashyap, Chong-Nam Chu,
