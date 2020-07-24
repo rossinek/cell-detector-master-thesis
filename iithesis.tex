@@ -40,6 +40,7 @@
 % ...
 
 \usepackage{algorithmic,amsmath,graphicx}
+\usepackage[export]{adjustbox}
 \DeclareMathOperator*{\argmax}{\textbf{argmax}}
 \newcommand{\image}{\mathbf{I}}
 \renewcommand{\algorithmicforall}{\textbf{for each}}
@@ -173,18 +174,70 @@ Takie rozwiązanie sprawdza się dobrze dla komórek, których kręgosłup znajd
 
 \subsection{Rozwiązywanie konfliktów}
 
-Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfliktów''. Niech $\mathbf{\Sigma}_0$ będzie zbiorem wszystkich znalezionych kręgosłupów, natomiast $X(\mathbf{\Sigma})$ zbiorem par kręgosłupów nachodzących na siebie należących do zbioru $\mathbf{\Sigma}$. Rozwiązywanie konfliktów przebiega następująco:
+Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfliktów''. Niech $\mathbf{\Sigma}_0$ będzie zbiorem wszystkich znalezionych kręgosłupów, natomiast $X(\mathbf{\Sigma})$ zbiorem par kręgosłupów nachodzących na siebie należących do zbioru $\mathbf{\Sigma}$. Rozwiązywanie konfliktów przebiega w następujący sposób:
 
 \begin{algorithmic}
 
 \WHILE{$X(\mathbf{\Sigma}_n) \neq \O$}
   \STATE $\{S_x, S_y\} \gets$ dowolna para ze zbioru $X(\mathbf{\Sigma})$
-  \STATE $\{S_x', S_y'\} \gets$ rozwiąż konflikt pomiędzy $S_x$ i $S_y$
+  \STATE $\{S_x', S_y'\} \gets$ wynik rozwiązania konfliktu pomiędzy $S_x$ i $S_y$
   \STATE $\mathbf{\Sigma}_{n+1} \gets (\mathbf{\Sigma}_n - \{S_x, S_y\}) \cup \{S_x', S_y'\}$
 \ENDWHILE
 
 \end{algorithmic}
 
+Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma kręgosłupami, zależy od tego w jaki sposób nachodzą one na siebie. Kluczową rolę odgrywają tutaj także punkty lokalizujące komórki. W dalszej części pisząc, o punkcie charakterystycznym komórki, będę miał na myśli punkt leżący na kręgosłupie będący najbliżej punktu lokalizującego komórkę. Wyróżniłem 4 typy nakładania się kręgosłupów.
+
+\subsubsection{Nakładanie się częściowe z końcówką}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-pwv.png}
+  $\rightarrow$
+  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-pwv-solved.png}
+\end{figure}
+
+W tym przypadku część wspólna przydzielana jest do jednego z kręgosłupów w całości.
+Są dwie możliwości: oba punkty charakterystyczne komórki leżą poza częścią wspólną lub dokładnie jeden z nich znajduje się w części wspólnej.
+Gdyby oba punkty leżały w części wspólnej, to ze względu na sposób konstrukcji szkieletów, podczas procesu rozszerzania dobierane byłyby te same krawędzie, a więc końcowo oba kręgosłupy byłyby dokładnie takie same.
+W drugim przypadku sprawa jest prosta –- część wspólna zostaje przydzielona do kręgosłupa którego punkt charakterystyczny leży w części wspólnej. W pierwszym przypadku część wspólna przydzielana jest do tego kręgosłupa z którym jest mocniej związana (siłę wiązania określam w podobny sposób jak w algorytmie konstrukcji kręgosłupa).
+
+\subsubsection{Nakładanie się częściowe}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-p.png}
+  $\rightarrow$
+  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-p-solved.png}
+\end{figure}
+
+W przypadku takiego rodzaju nakładania oba punkty charakterystyczne komórki znajdują się poza częścią wspólną.
+Rozwiązanie konfliktu polega tutaj na znalezieniu najsłabszego punktu części wspólnej (mającego najniższy indeks kształtu), a następnie odpowiednim skróceniu obu kręgosłupów do tego punktu.
+
+\subsubsection{Pełne pokrycie}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-f.png}
+  $\rightarrow$
+  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-f-solved.png}
+\end{figure}
+
+Sposób rozwiązania tego konfliktu jest bardzo podobny do sposobu rozwiązania nakładania się częściowego. Najsłabszy punkt wyszukiwany jest w tym przypadku pomiędzy punktami charakterystycznymi komórek.
+
+
+\subsubsection{Nakładanie się wielokrotne}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-m.png}
+  $\rightarrow$
+  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-m-solved1.png}
+  $\rightarrow$
+  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-m-solved2.png}
+\end{figure}
+
+Dwa kręgosłupy mogą mieć więcej niż jeden konflikt równocześnie. Jest to rzadkie, ale realistyczne. W tym przypadku w każdej iteracji rozwiązywany jest jeden z takich konfliktów za pomocą sposobów opisanych powyżej.
 
 \subsection{Uzyskiwanie linii łamanej}
 
@@ -215,7 +268,7 @@ Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfli
 \section{Kod źródłowy}
 \ldots % TODO Kod źródłowy
 \section{Kompilacja i uruchomienie}
-\ldots % TODO Kod źródłowy
+\ldots % TODO Kompilacja i uruchomienie
 \section{Struktury danych}
 \ldots % TODO Struktury danych
 \section{Architektura}
