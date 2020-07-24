@@ -150,31 +150,41 @@ Ze względu na specyficzny kształt komórki można zaobserwować następującą
 
 Niestety przyjęte założenie o tym, że każdy piksel należący do zewnętrznego obrysu dowolnej komórki będzie miał wartość $0$, nie zawsze jest spełnione. W realistycznym scenariuszu zdarza się, że jedna z końcówek komórki znajdują się na tyle blisko innej komórki, że wstępne przetwarzanie i progowanie obrazu nie powoduje ich rozdzielenia na obrazie binarnym. Czasem artefakty widoczne na obrazie wejściowym powodują, że wyspa na obrazie binarnym zawiera nie tylko komórkę, ale także fragment innego kształtu. W zdecydowanej większości takich przypadków kręgosłup komórki można opisać spójnym podgrafem o stopniu 2 grafu reprezentującego szkielet wyspy zawierającej komórki.
 
-Wstępna detekcja kręgosłupa danej komórki polega, tak jak w scenariuszu optymistycznym, na odnalezieniu krawędzi $\{v_0, u_0\}$ w grafie $\mathbf{G}$ leżącej najbliżej punktu opisującego komórkę, a następnie na stworzeniu z niej i jej wierzchołków nowego grafu $\mathbf{S}$. Tak utworzony kręgosłup rozszerzany jest później zgodnie z następującym algorytmem:
+Wstępna detekcja kręgosłupa danej komórki polega, tak jak w scenariuszu optymistycznym, na odnalezieniu krawędzi $\{v_0, u_0\}$ w grafie $\mathbf{G}$ leżącej najbliżej punktu opisującego komórkę, a następnie na stworzeniu z niej i jej wierzchołków nowego grafu $\mathbf{S}_0$. Tak utworzony kręgosłup rozszerzany jest później zgodnie z następującym algorytmem:
 
 \begin{algorithmic}
-
 \FORALL{$v \gets v_0, u_0$}
   \LOOP
     \STATE
-      $\text{E}_v \gets$ podzbiór krawędzi grafu $E(\mathbf{G}) - E(\mathbf{S})$ incydentnych do $v$,\newline
-      \hphantom{$\text{E}_v \gets$} które nie tworzą cyklu w grafie $\mathbf{S}$
+      $\text{E}_v \gets$ podzbiór krawędzi grafu $E(\mathbf{G}) - E(\mathbf{S}_n)$ incydentnych do $v$,\newline
+      \hphantom{$\text{E}_v \gets$} które nie tworzą cyklu w grafie $\mathbf{S}_n$
     \IF{$\text{E}_v = \O$}
       \STATE \textbf{break}
     \ENDIF
     \STATE $\{v, u\} \gets \argmax_{e \in \text{E}_v} q_v(e)$
-    \STATE $\mathbf{S} \gets \mathbf{S} \cup (\{u\}, \{\{v, u\}\}) $
+    \STATE $\mathbf{S}_{n+1} \gets \mathbf{S}_n \cup (\{u\}, \{\{v, u\}\}) $
     \STATE $v \gets u$
   \ENDLOOP
 \ENDFOR
 \end{algorithmic}
 gdzie funkcja $q_v(e)$ jest funkcją oceny, która służy do wyboru najmocniej związanej krawędzi. Siła wiązania zdefiniowana jest tutaj jako najniższa wartość indeksu kształtu (oryginalnego obrazu) dla piksela leżącego na krawędzi $e$, w okolicy wierzchołka $v$ (w odległości nie większej niż pewna stała $d$ od środka masy pikseli tworzących węzeł $v$).
 
-Takie rozwiązanie sprawdza się dobrze dla komórek, których kręgosłup znajduje się w grafie $\mathbf{G}$, oraz jego zakończenia w tym grafie mają stopień $1$. Pomijam na ten moment przypadek, gdy szukany kręgosłup komórki nie istnieje w grafie $\mathbf{G}$. W pozostałych przypadkach przynajmniej jedno z zakończeń szukanego kręgosłupa $\mathbf{S}$ ma w grafie $\mathbf{G}$ stopień większy niż $1$. Zatem, o ile funkcja oceny $q_v(e)$ sprawdzi się dobrze jeśli chodzi o dobór krawędzi należących do szukanego kręgosłupa komórki, uzyskany na końcu algorytmu kręgosłup $\mathbf{S}'$ będzie nadgrafem szukanego kręgosłupa $\mathbf{S}$. W takim przypadku ,,nadmiarowa'' część kręgosłupa należy do szkieletu innej komórki lub jest wynikiem artefaktu widocznego na oryginalnym obrazie. Drugi przypadek pozostawmy do ręcznego rozwiązania użytkownikowi. Pierwszy natomiast, nachodzące na siebie kręgosłupy komórek, rozwiązujemy automatycznie.
+Takie rozwiązanie sprawdza się dobrze dla komórek, których kręgosłup znajduje się w grafie $\mathbf{G}$, oraz jego zakończenia w tym grafie mają stopień $1$. Pomijam na ten moment przypadek, gdy szukany kręgosłup komórki nie istnieje w grafie $\mathbf{G}$. W pozostałych przypadkach przynajmniej jedno z zakończeń szukanego kręgosłupa $\mathbf{S}$ ma w grafie $\mathbf{G}$ stopień większy niż $1$. Zatem, o ile funkcja oceny $q_v(e)$ sprawdzi się dobrze jeśli chodzi o dobór krawędzi należących do szukanego kręgosłupa komórki, uzyskany na końcu algorytmu kręgosłup $\mathbf{S}_n$ będzie nadgrafem szukanego kręgosłupa $\mathbf{S}$. W takim przypadku ,,nadmiarowa'' część kręgosłupa należy do szkieletu innej komórki lub jest wynikiem artefaktu widocznego na oryginalnym obrazie. Drugi przypadek pozostawiam do ręcznego rozwiązania użytkownikowi. Pierwszy natomiast, nachodzące na siebie kręgosłupy komórek, rozwiązuję automatycznie.
 
 \subsection{Rozwiązywanie konfliktów}
 
-\ldots % TODO Rozwiązywanie konfliktów
+Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfliktów''. Niech $\mathbf{\Sigma}_0$ będzie zbiorem wszystkich znalezionych kręgosłupów, natomiast $X(\mathbf{\Sigma})$ zbiorem par kręgosłupów nachodzących na siebie należących do zbioru $\mathbf{\Sigma}$. Rozwiązywanie konfliktów przebiega następująco:
+
+\begin{algorithmic}
+
+\WHILE{$X(\mathbf{\Sigma}_n) \neq \O$}
+  \STATE $\{S_x, S_y\} \gets$ dowolna para ze zbioru $X(\mathbf{\Sigma})$
+  \STATE $\{S_x', S_y'\} \gets$ rozwiąż konflikt pomiędzy $S_x$ i $S_y$
+  \STATE $\mathbf{\Sigma}_{n+1} \gets (\mathbf{\Sigma}_n - \{S_x, S_y\}) \cup \{S_x', S_y'\}$
+\ENDWHILE
+
+\end{algorithmic}
+
 
 \subsection{Uzyskiwanie linii łamanej}
 
