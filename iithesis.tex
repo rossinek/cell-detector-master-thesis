@@ -41,6 +41,7 @@
 
 \usepackage{algorithmic,amsmath}
 
+\DeclareMathOperator*{\argmax}{\textbf{argmax}}
 \newcommand{\image}{\mathbf{I}}
 \renewcommand{\algorithmicforall}{\textbf{for each}}
 
@@ -152,15 +153,15 @@ Wstępna detekcja kręgosłupa danej komórki polega, tak jak w scenariuszu opty
     \IF{$\text{E}_v = \O$}
       \STATE \textbf{break}
     \ENDIF
-    \STATE $\{v, u\} \gets \textbf{argmax}_{e \in \text{E}_v} \text{q}_v(e)$
+    \STATE $\{v, u\} \gets \argmax_{e \in \text{E}_v} q_v(e)$
     \STATE $\mathbf{S} \gets \mathbf{S} \cup (\{u\}, \{\{v, u\}\}) $
     \STATE $v \gets u$
   \ENDLOOP
 \ENDFOR
 \end{algorithmic}
-gdzie funkcja $\text{q}_v(e)$ jest funkcją oceny która służy do wyboru najmocniejszej związanej krawędzi.
+gdzie funkcja $q_v(e)$ jest funkcją oceny, która służy do wyboru najmocniej związanej krawędzi. Siła wiązania zdefiniowana jest tutaj jako najniższa wartość indeksu kształtu (oryginalnego obrazu) dla piksela leżącego na krawędzi $e$, w okolicy wierzchołka $v$ (w odległości nie większej niż pewna stała $d$ od środka masy pikseli tworzących węzeł $v$).
 
-\ldots % TODO Funkcja oceny
+Takie rozwiązanie sprawdza się dobrze dla komórek, których kręgosłup znajduje się w grafie $\mathbf{G}$, oraz jego zakończenia w tym grafie mają stopień $1$. Pomijam na ten moment przypadek, gdy szukany kręgosłup komórki nie istnieje w grafie $\mathbf{G}$. W pozostałych przypadkach przynajmniej jedno z zakończeń szukanego kręgosłupa $\mathbf{S}$ ma w grafie $\mathbf{G}$ stopień większy niż $1$. Zatem, o ile funkcja oceny $q_v(e)$ sprawdzi się dobrze jeśli chodzi o dobór krawędzi należących do szukanego kręgosłupa komórki, uzyskany na końcu algorytmu kręgosłup $\mathbf{S}'$ będzie nadgrafem szukanego kręgosłupa $\mathbf{S}$. W takim przypadku ,,nadmiarowa'' część kręgosłupa należy do szkieletu innej komórki lub jest wynikiem artefaktu widocznego na oryginalnym obrazie. Drugi przypadek pozostawmy do ręcznego rozwiązania użytkownikowi. Pierwszy natomiast, nachodzące na siebie kręgosłupy komórek, rozwiązujemy automatycznie.
 
 \subsection{Rozwiązywanie konfliktów}
 
