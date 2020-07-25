@@ -135,7 +135,7 @@ Okazało się, że na wynikowej mapie otoczenie komórek interpretowane jest jak
 \subsection{Szkieletyzacja i wstępna detekcja komórek}
 
 Zgodnie z powyższą obserwacją, możemy łatwo oddzielić komórkę od jej otoczenia na obrazie ustalając pewien próg $t \approx 0$. Załóżmy przez chwilę, że binaryzując w ten sposób mapę indeksów kształtu otrzymamy obraz $\image_{bin}$, na którym każdy piksel leżący wewnątrz dowolnej komórki będzie miał wartość $1$, natomiast każdy piksel należący do zewnętrznego obrysu dowolnej komórki (nie należący do komórki, lecz sąsiadujący z pikselem należącym do niej) będzie miał wartość $0$.
-Przy takim założeniu każda komórka jest niezależną ,,wyspą'' na binarnym obrazie $\image_{bin}$. Chcąc odnaleźć ,,kręgosłup'' komórki (łamaną przechodzącą przez jej środek) chcemy tak naprawdę znaleźć łamaną, która jest równoodległa od jej krawędzi. Bardzo podobny problem rozwiązują algorytmy do wyznaczania szkieletu -- ich celem jest odnalezienie zbioru punktów równoodległych od co najmniej dwóch brzegów.
+Przy takim założeniu każda komórka jest niezależną ,,wyspą'' na binarnym obrazie $\image_{bin}$. Chcąc odnaleźć ,,kręgosłup'' komórki (łamaną przechodzącą przez jej środek) chcemy tak naprawdę znaleźć łamaną, która jest równoodległa od jej krawędzi. Bardzo podobny problem rozwiązują algorytmy do wyznaczania szkieletu. Ich celem jest odnalezienie zbioru punktów równoodległych od co najmniej dwóch brzegów.
 
 Na potrzeby tej pracy do szkieletonizacji użyta została implementacja algorytmu ,,3D thinning algorithm''\cite{algo:3d-thinning} w formie pluginu dla programu ImageJ\cite{plugin:skeletonize-3d}. Mimo iż wtyczka pozwala na szkieletyzację obrazów 3D, w tym przypadku została użyta do przetworzenia pojedynczego obrazu 2D. Wynikiem szkieletyzacji jest binarny obraz o pewnych właściwościach. Każdy aktywny piksel można przyporządkować do trzech grup:
 \begin{itemize}
@@ -192,23 +192,23 @@ Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma kręgosłupami, zale�
 
 \begin{figure}[h]
   \centering
-  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-pwv.png}
+  \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-pwv.png}
   $\rightarrow$
-  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-pwv-solved.png}
+  \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-pwv-solved.png}
 \end{figure}
 
 W tym przypadku część wspólna przydzielana jest do jednego z kręgosłupów w całości.
 Są dwie możliwości: oba punkty charakterystyczne komórki leżą poza częścią wspólną lub dokładnie jeden z nich znajduje się w części wspólnej.
 Gdyby oba punkty leżały w części wspólnej, to ze względu na sposób konstrukcji szkieletów, podczas procesu rozszerzania dobierane byłyby te same krawędzie, a więc końcowo oba kręgosłupy byłyby dokładnie takie same.
-W drugim przypadku sprawa jest prosta –- część wspólna zostaje przydzielona do kręgosłupa którego punkt charakterystyczny leży w części wspólnej. W pierwszym przypadku część wspólna przydzielana jest do tego kręgosłupa z którym jest mocniej związana (siłę wiązania określam w podobny sposób jak w algorytmie konstrukcji kręgosłupa).
+W drugim przypadku sprawa jest prosta -- część wspólna zostaje przydzielona do kręgosłupa którego punkt charakterystyczny leży w części wspólnej. W pierwszym przypadku część wspólna przydzielana jest do tego kręgosłupa z którym jest mocniej związana (siłę wiązania określam w podobny sposób jak w algorytmie konstrukcji kręgosłupa).
 
 \subsubsection{Nakładanie się częściowe}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-p.png}
+  \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-p.png}
   $\rightarrow$
-  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-p-solved.png}
+  \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-p-solved.png}
 \end{figure}
 
 W przypadku takiego rodzaju nakładania oba punkty charakterystyczne komórki znajdują się poza częścią wspólną.
@@ -218,9 +218,9 @@ Rozwiązanie konfliktu polega tutaj na znalezieniu najsłabszego punktu części
 
 \begin{figure}[h]
   \centering
-  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-f.png}
+  \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-f.png}
   $\rightarrow$
-  \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-f-solved.png}
+  \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-f-solved.png}
 \end{figure}
 
 Sposób rozwiązania tego konfliktu jest bardzo podobny do sposobu rozwiązania nakładania się częściowego. Najsłabszy punkt wyszukiwany jest w tym przypadku pomiędzy punktami charakterystycznymi komórek.
@@ -237,16 +237,32 @@ Sposób rozwiązania tego konfliktu jest bardzo podobny do sposobu rozwiązania 
   \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-m-solved2.png}
 \end{figure}
 
-Dwa kręgosłupy mogą mieć więcej niż jeden konflikt równocześnie. Jest to rzadkie, ale realistyczne. W tym przypadku w każdej iteracji rozwiązywany jest jeden z takich konfliktów za pomocą sposobów opisanych powyżej.
+Dwa kręgosłupy mogą mieć więcej niż jeden konflikt równocześnie. Jest to rzadkie, ale realistyczne.
+W tym przypadku w każdej iteracji rozwiązywany jest jeden z takich konfliktów za pomocą sposobów opisanych powyżej.
 
-\subsection{Uzyskiwanie linii łamanej}
+\subsection{Uzyskiwanie linii łamanej korekta końcowa}
 
-\ldots % TODO Uzyskiwanie linii łamanej
-
+Po rozwiązaniu wszystkich konfliktów każdy kręgosłup opisuje szkielet pewnej komórki.
+Kolejnym krokiem jest konwersja reprezentacji grafowej (która zawiera zbiór pikseli opisujących szkielet) do linii łamanaj.
+W takiej formie użytkownik będzie mógł ręcznie modyfikować zaznaczenia komórek korzystając ze standardowego interfejsu programu ImageJ.
+Pierwsza wersja linii łamanej powstaje ze wszystkich punktów tworzących krawędzie i końcówki kręgosłupa, a także ze środków masy jego węzłów.
+Następnie geometria łamanej jest upraszczana za pomocą algorytmu Ramera--Douglasa--Peuckera\cite{algo:ramer-douglas-peucker}.
+Algorytm ten eliminuje punkty, których usunięcie nie wpływa znacząco na kształt łamanej tj. po ich usunięciu odległość uproszczonej łamanej od oryginalnej jest nie większa niż pewna przyjęta stała.
 
 \subsection{Korekta końcówek}
 
-\ldots % TODO Poprawianie końcówek (dociąganie do krawędzi)
+Ostatnim krokiem oznaczania komórek jest korekta końcówek.
+Potrzeba korekty wynika z algorytmu szkieletyzacji.
+Proces ten polega na erodowaniu binarnego obrazu --- z tego powodu końcówki szkieletu komórki często oddalone są od faktycznej krawędzi na oryginalnym obrazie.
+Dotyczy to tylko zakończeń które reprezentowane są przez wierzchołki mające w oryginalnym szkielecie obrazu stopień równy $1$.
+Nie dzieje się tak w przypadku, gdy binarny obraz komórki łączy się w tym miejscu z inną komórką, a zakończenie powstało na skutek rozwiązania konfliktu.
+
+Właściwej lokalizacji zakończenia komórki szukam na półprostej tworzonej przez ostatni odcinek łamanej, która ją opisuje.
+Mając do dyspozycji obraz binarny na podstawie którego powstał szkielet, szukam zakończenia wyspy leżącego najbliżej początku półprostej.
+Jeśli punkt ten leży nie dalej niż pewna przyjęta stała, staje się on nowym zakończeniem łamanej.
+Stała którą przyjąłem była nie większa niż przewidywana szerokość komórki.
+
+Proces ten powtarzany jest dla każdego zakończenia komórki wymagającego poprawienia.
 
 
 \section{Śledzenie komórek w czasie}
@@ -308,7 +324,7 @@ Dwa kręgosłupy mogą mieć więcej niż jeden konflikt równocześnie. Jest to
   Jan J Koenderink, Andrea J van Doorn,
   \emph{Surface shape and curvature scales},
   Image and Vision Computing,
-  10:557–565,
+  10:557--565,
   1992.
 
 \bibitem{plugin:shape-index-map}
@@ -321,7 +337,7 @@ Dwa kręgosłupy mogą mieć więcej niż jeden konflikt równocześnie. Jest to
   Ta-Chih Lee, Rangasami L. Kashyap, Chong-Nam Chu,
   \emph{Building skeleton models via 3-D medial surface/axis thinning algorithms},
   Computer Vision, Graphics, and Image Processing,
-  56(6):462–478,
+  56(6):462--478,
   1994.
 
 \bibitem{plugin:skeletonize-3d}
@@ -337,6 +353,11 @@ Dwa kręgosłupy mogą mieć więcej niż jeden konflikt równocześnie. Jest to
   3.3.0,
   2018,
   \url{https://imagej.net/AnalyzeSkeleton}.
+  
+\bibitem{algo:ramer-douglas-peucker}
+  Wikipedia,
+  \emph{Ramer--Douglas--Peucker algorithm},
+  \url{https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm}.
 
 \end{thebibliography}
 
