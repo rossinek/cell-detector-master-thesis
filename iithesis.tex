@@ -39,8 +39,12 @@
 %\renewcommand \qedsymbol {\ensuremath{\square}}
 % ...
 
-\usepackage{algorithmic,amsmath,graphicx}
 \usepackage[export]{adjustbox}
+\usepackage[plain]{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
 \DeclareMathOperator*{\argmax}{\textbf{argmax}}
 \newcommand{\image}{\mathbf{I}}
 \renewcommand{\algorithmicforall}{\textbf{for each}}
@@ -51,9 +55,11 @@
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%% POCZĄTEK ZASADNICZEGO TEKSTU PRACY
 
 \chapter{Wprowadzenie}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \section{Wstęp}
 
@@ -73,6 +79,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Wykrywanie i śledzenie komórek}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \section{Opis problemu}
 \label{sec:problem}
@@ -98,6 +107,7 @@
 Problem opisany w sekcji \ref{sec:problem} zdefiniowany jest dla nagrań spod mikroskopu. Postanowiłem jednak najpierw rozwiązać podobny problem, ale zdefiniowany dla pojedynczego obrazu. Rozwiązanie tego problemu mogłoby z łatwością zostać uogólnione na stos obrazów (nagranie). W tym rozdziale opiszę rozwiązanie uproszczonego problemu: oznaczanie komórek widocznych na pojedynczym obrazie. Przez ,,oznaczenie komórki'' mam na myśli odnalezienie łamanej przechodzącej przez środek komórki, a więc jej kręgosłupa.
 
 \subsection{Dane wejściowe}
+\label{sec:detection-input}
 
 Oznaczenie wszystkich komórek widocznych na obrazie można rozłożyć na dwa osobne problemy:
 \begin{enumerate}
@@ -148,13 +158,15 @@ Przedstawiając szkielet jako graf końcówki tworzyłyby wierzchołki o stopniu
 Ze względu na specyficzny kształt komórki można zaobserwować następującą właściwość: po przeprowadzeniu szkieletyzacji obrazu $\image_{bin}$, o ile przyjęte wcześniej założenie jest spełnione, szkielet każdej z komórek składa się dokładnie z dwóch końcówek i połączeń między nimi. Łamaną opisującą zbiór połączeń można z powodzeniem nazwać ,,kręgosłupem komórki''. Mając do dyspozycji zbiór punktów $\mathbf{P}$ lokalizujących komórki można teraz w łatwy sposób odnaleźć dla każdej z nich graf ją opisujący (zawierający dwa wierzchołki i jedną krawędź). Jednym ze sposobów może być wyszukanie dla każdego punktu ze zbioru $\mathbf{P}$ krawędź która znajduje się najbliżej tego punktu, gdzie odległość między punktem a krawędzią zdefiniowana jest jako odległość między punktem, a najbliższym pikselem, który należy do zbioru opisywanego przez tę krawędź.
 
 \subsection{Wybór krawędzi w węzłach}
+\label{sec:spine-extending}
 
 Niestety przyjęte założenie o tym, że każdy piksel należący do zewnętrznego obrysu dowolnej komórki będzie miał wartość $0$, nie zawsze jest spełnione. W realistycznym scenariuszu zdarza się, że jedna z końcówek komórki znajdują się na tyle blisko innej komórki, że wstępne przetwarzanie i progowanie obrazu nie powoduje ich rozdzielenia na obrazie binarnym. Czasem artefakty widoczne na obrazie wejściowym powodują, że wyspa na obrazie binarnym zawiera nie tylko komórkę, ale także fragment innego kształtu. W zdecydowanej większości takich przypadków kręgosłup komórki można opisać spójnym podgrafem o stopniu 2 grafu reprezentującego szkielet wyspy zawierającej komórki.
 
 Wstępna detekcja kręgosłupa danej komórki polega, tak jak w scenariuszu optymistycznym, na odnalezieniu krawędzi $\{v_0, u_0\}$ w grafie $\mathbf{G}$ leżącej najbliżej punktu opisującego komórkę, a następnie na stworzeniu z niej i jej wierzchołków nowego grafu $\mathbf{S}_0$. Tak utworzony kręgosłup rozszerzany jest później zgodnie z następującym algorytmem:
 
+\begin{algorithm}[H]
 \begin{algorithmic}
-\FORALL{$v \gets v_0, u_0$}
+\FORALL{$v \in \{ v_0, u_0 \}$}
   \LOOP
     \STATE
       $\text{E}_v \gets$ podzbiór krawędzi grafu $E(\mathbf{G}) - E(\mathbf{S}_n)$ incydentnych do $v$,\newline
@@ -162,20 +174,25 @@ Wstępna detekcja kręgosłupa danej komórki polega, tak jak w scenariuszu opty
     \IF{$\text{E}_v = \O$}
       \STATE \textbf{break}
     \ENDIF
-    \STATE $\{v, u\} \gets \argmax_{e \in \text{E}_v} q_v(e)$
+    \STATE $\{v, u\} \gets \argmax_{e \in \text{E}_v} \ q_v(e)$
     \STATE $\mathbf{S}_{n+1} \gets \mathbf{S}_n \cup (\{u\}, \{\{v, u\}\}) $
     \STATE $v \gets u$
   \ENDLOOP
 \ENDFOR
 \end{algorithmic}
-gdzie funkcja $q_v(e)$ jest funkcją oceny, która służy do wyboru najmocniej związanej krawędzi. Siła wiązania zdefiniowana jest tutaj jako najniższa wartość indeksu kształtu (oryginalnego obrazu) dla piksela leżącego na krawędzi $e$, w okolicy wierzchołka $v$ (w odległości nie większej niż pewna stała $d$ od środka masy pikseli tworzących węzeł $v$).
+\end{algorithm}
+
+\noindent
+Funkcja $q_v(e)$ jest tutaj funkcją oceny, która służy do wyboru najmocniej związanej krawędzi. Siła wiązania zdefiniowana jest tutaj jako najniższa wartość indeksu kształtu (oryginalnego obrazu) dla piksela leżącego na krawędzi $e$, w okolicy wierzchołka $v$ (w odległości nie większej niż pewna stała $d$ od środka masy pikseli tworzących węzeł $v$).
 
 Takie rozwiązanie sprawdza się dobrze dla komórek, których kręgosłup znajduje się w grafie $\mathbf{G}$, oraz jego zakończenia w tym grafie mają stopień $1$. Pomijam na ten moment przypadek, gdy szukany kręgosłup komórki nie istnieje w grafie $\mathbf{G}$. W pozostałych przypadkach przynajmniej jedno z zakończeń szukanego kręgosłupa $\mathbf{S}$ ma w grafie $\mathbf{G}$ stopień większy niż $1$. Zatem, o ile funkcja oceny $q_v(e)$ sprawdzi się dobrze jeśli chodzi o dobór krawędzi należących do szukanego kręgosłupa komórki, uzyskany na końcu algorytmu kręgosłup $\mathbf{S}_n$ będzie nadgrafem szukanego kręgosłupa $\mathbf{S}$. W takim przypadku ,,nadmiarowa'' część kręgosłupa należy do szkieletu innej komórki lub jest wynikiem artefaktu widocznego na oryginalnym obrazie. Drugi przypadek pozostawiam do ręcznego rozwiązania użytkownikowi. Pierwszy natomiast, nachodzące na siebie kręgosłupy komórek, rozwiązuję automatycznie.
 
 \subsection{Rozwiązywanie konfliktów}
+\label{sec:fix-conflicts}
 
 Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfliktów''. Niech $\mathbf{\Sigma}_0$ będzie zbiorem wszystkich znalezionych kręgosłupów, natomiast $X(\mathbf{\Sigma})$ zbiorem par kręgosłupów nachodzących na siebie należących do zbioru $\mathbf{\Sigma}$. Rozwiązywanie konfliktów przebiega w następujący sposób:
 
+\begin{algorithm}[H]
 \begin{algorithmic}
 
 \WHILE{$X(\mathbf{\Sigma}_n) \neq \O$}
@@ -185,12 +202,13 @@ Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfli
 \ENDWHILE
 
 \end{algorithmic}
+\end{algorithm}
 
 Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma kręgosłupami, zależy od tego w jaki sposób nachodzą one na siebie. Kluczową rolę odgrywają tutaj także punkty lokalizujące komórki. W dalszej części pisząc, o punkcie charakterystycznym komórki, będę miał na myśli punkt leżący na kręgosłupie będący najbliżej punktu lokalizującego komórkę. Wyróżniłem 4 typy nakładania się kręgosłupów.
 
 \subsubsection{Nakładanie się częściowe z końcówką}
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-pwv.png}
   $\rightarrow$
@@ -204,7 +222,7 @@ W drugim przypadku sprawa jest prosta -- część wspólna zostaje przydzielona 
 
 \subsubsection{Nakładanie się częściowe}
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-p.png}
   $\rightarrow$
@@ -216,7 +234,7 @@ Rozwiązanie konfliktu polega tutaj na znalezieniu najsłabszego punktu części
 
 \subsubsection{Pełne pokrycie}
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-f.png}
   $\rightarrow$
@@ -228,7 +246,7 @@ Sposób rozwiązania tego konfliktu jest bardzo podobny do sposobu rozwiązania 
 
 \subsubsection{Nakładanie się wielokrotne}
 
-\begin{figure}[h]
+\begin{figure}[H]
   \centering
   \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-m.png}
   $\rightarrow$
@@ -250,6 +268,7 @@ Następnie geometria łamanej jest upraszczana za pomocą algorytmu Ramera--Doug
 Algorytm ten eliminuje punkty, których usunięcie nie wpływa znacząco na kształt łamanej tj. po ich usunięciu odległość uproszczonej łamanej od oryginalnej jest nie większa niż pewna przyjęta stała.
 
 \subsection{Korekta końcówek}
+\label{sec:correct-endpoints}
 
 Ostatnim krokiem oznaczania komórek jest korekta końcówek.
 Potrzeba korekty wynika z algorytmu szkieletyzacji.
@@ -264,22 +283,79 @@ Stała którą przyjąłem była nie większa niż przewidywana szerokość kom�
 
 Proces ten powtarzany jest dla każdego zakończenia komórki wymagającego poprawienia.
 
-
 \section{Śledzenie komórek w czasie}
 \label{sec:cell-tracking}
 
-\ldots % TODO Śledzenie komórek w czasie
+Do tej pory opisywałem sposób na wykrywanie i oznaczanie komórek na pojedynczym obrazie, mając do dyspozycji punkty lokalizujące komórki wprowadzone przez użytkownika.
+Oryginalny problem dotyczył jednak stosu obrazów przedstawiającego proces rozwoju komórek w czasie.
+Uogólnienie opisanego sposobu polega na automatycznym wyznaczaniu dla każdej komórki kilku potencjalnych punktów ją lokalizujących, na podstawie łamanej opisującej tę komórkę w poprzedniej klatce nagrania naniesionej na aktualną klatkę.
+Następnie wybierane są te punkty (i stworzone przez nie kręgosłupy), które dały najlepsze efekty względem pewnej funkcji oceny.
 
-% Opis jednej iteracji + sprawdzenia czy komórka nie powinna zostać podzielona
+Jeśli nowy kręgosłup komórki jest znacząco krótszy niż łamana opisująca ją na poprzednim obrazie, prawdopodobnie oznacza to, że nastąpił podział komórki. W takim przypadku wyszukiwany jest kolejny kręgosłup. Tym razem kandydatów na punkty lokalizujące poszukuję tylko po jednej stronie łamanej. Jeśli pierwszy kręgosłup powstał na podstawie punktu leżącego bliżej końca łamanej, jego bliźniaczy kręgosłup prawdopodobnie znajduje się bliżej jej początku i vice versa.
+
+Po odnalezieniu wszystkich nowych kręgosłupów zgodnie z powyższą procedurą, następuje etap rozwiązywania konfliktów, konwersji na linie łamane i ostatecznej korekty końcówek (\ref{sec:fix-conflicts}--\ref{sec:correct-endpoints}).
+
+
+
+Niech $\mathbf{C}_n$ będzie zbiorem łamanych opisujących komórki na $n$-tym obrazie stosu.
+Niech $\phi_\sigma(d)$ będzie funkcją która liczbą z przedziału $[0, 1]$ przyporządkowuje punkty leżące na łamanej $\sigma$, proporcjonalnie do odległości od jej początku (przyjmijmy, że linia łamana ma zdefiniowany ,,kierunek'', tzn. ma początek i koniec). Niech $S_n(p)$ będzie szkieletem komórki wyznaczonym zgodnie z metodą opisaną wcześniej (\ref{sec:detection-input}--\ref{sec:spine-extending}) dla punktu lokalizującego $p$ i $n$-tej klatki nagrania.
+Cały proces można zobrazować następującym algorytmem:
+
+\begin{algorithm}[H]
+\begin{algorithmic}
+
+\FORALL{$n \in \{ 0, 1, \ldots, n-1 \}$}
+  \STATE $\mathbf{\Sigma}_{n+1} \gets \O$
+  \FORALL{$\sigma \in \mathbf{C}_n$}
+    \STATE $\Sigma \gets \{ S_{n+1}(\phi_\sigma(d)) \ | \ d \in \text{D} \}$
+    \STATE $S \gets \argmax_{S \in \Sigma} \ q_\sigma(S)$
+    \STATE $\mathbf{\Sigma}_{n+1} \gets \mathbf{\Sigma}_{n+1} \cup \{ S \}$
+    
+    \IF{$| S | < 0.9 \cdot | \sigma |$}
+      \STATE $\Sigma' \gets \{ S_{n+1}(\phi_\sigma(d')) \ | \ d' \in \text{D}' \}$
+      \STATE $S' \gets \argmax_{S' \in \Sigma} \ q_\sigma(S')$
+      \STATE $\mathbf{\Sigma}_{n+1} \gets \mathbf{\Sigma}_{n+1} \cup \{ S' \}$
+    \ENDIF
+  \ENDFOR
+  \STATE $\mathbf{\hat{\Sigma}}_{n+1} \gets$ wynik rozwiązania konfliktów w zbiorze $\mathbf{\Sigma}_{n+1}$
+  \STATE $\mathbf{C}_{n+1} \gets$ wynik konwersji na łamane i korekcie końcówek elementów zbioru $\mathbf{\hat{\Sigma}}_{n+1}$
+\ENDFOR
+
+\end{algorithmic}
+\end{algorithm}
+
+\noindent
+W algorytmie pojawia się zbiór $D \subseteq [0, 1]$ którego elementy dobrałem empirycznie jako $\{ 0.2, 0.4, 0.6, 0.8 \}$.
+Zbiór $D' \subset D$ to zbiór, który zależy od wcześniejszego wyboru najlepszego kandydata na kręgosłup komórki. Jeśli w danej iteracji kręgosłup $S$ powstał na podstawie punktu lokalizującego leżącego na pierwszej połowie łamanej, będzie to zbiór $\{ d \in D \ | \ d > 0.5 \}$ w przeciwnym wypadku będzie to pozostała część zbioru $D$.
 
 \section{Interakcja ze strony użytkownika}
 
-\ldots % TODO Interakcja ze strony użytkownika
+Niestety powyższe działania nie sprawdzą się dobrze w każdym przypadku.
+Jest wiele czynników które utrudniają poprawną detekcję komórek.
+Większość z nich związana jest ze słabą jakością nagrań.
+Obrazy są mocno zaszumione, często występują na nich artefakty, czasem płytka na której poruszają się komórki minimalnie się przesuwa, a innym razem mikroskop traci ostrość na kilka klatek nagrania.
+Zapewne można próbować rozwiązać te problemy automatycznie, ale na pewno pojawią się nowe, nie rozważane wcześniej przypadki.
+Właśnie z tego powodu postanowiłem zapewnić użytkownikowi możliwość interaktywnego poprawiania automatycznie wyznaczonych komórek, ale także całkowicie manualne kontynuowanie detekcji, zachowując przy tym informacje o historii komórek.
+
+Komórki przedstawione są w oknie programu jako standardowe zaznaczenia programu ImageJ i można je edytować za pomocą standardowego interfejsu.
+Poza tym plugin stworzyłem dwa dodatkowe narzędzia dla użytkownika.
+Pierwsze z nich służy do rozcinania komórek w miejscach, w których się one dzielą.
+Mimo że algorytm śledzenia ma mechanizm odpowiedzialny za zauważenie takich zmian, zdarza się że dzieje się to zbyt późno (komórki jeszcze przez pewien czas po podziale znajdują się bardzo blisko siebie).
+
+Drugie narzędzie służy do skracania końcówek zaznaczeń.
+Zauważyłem, że częstym problemem jest to, że zaznaczenie wybiega poza krawędzie komórki.
+Najczęściej dzieje się to ze względu na występujące na obrazie artefakty lub punkty stałe na płytkach znajdujące się blisko zakończeń komórek.
+Żeby przyspieszyć proces poprawiania takich zaznaczeń można skorzystać z narzędzia do skracania końcówek, które działa podobnie do ,,gumki'' w popularnych programach graficznych.
+
+Chcąc ręcznie oznaczyć komórki w kolejnej klatce (zamiast wyliczać je automatycznie na podstawie poprzedniej), użytkownik może skorzystać z opcji duplikowania klatki. Dzięki temu w aktualnej klatce pojawią się wszystkie zaznaczenia z klatki poprzedniej, które następnie można ręcznie dopasować do ich nowej pozycji.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Opis implementacji}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \section{Kod źródłowy}
 \ldots % TODO Kod źródłowy
@@ -297,11 +373,12 @@ Proces ten powtarzany jest dla każdego zakończenia komórki wymagającego popr
 \ldots % TODO Opis sposobu dalszego rozwoju, interfejsy
 
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Zakończenie}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \section{Podsumowanie}
 \ldots % TODO Podsumowanie
@@ -311,9 +388,11 @@ Proces ten powtarzany jest dla każdego zakończenia komórki wymagającego popr
 \ldots % TODO Dalszy rozwój
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%% BIBLIOGRAFIA
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %\bibitem{example} \ldots
