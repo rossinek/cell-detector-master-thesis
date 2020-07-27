@@ -79,6 +79,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \chapter{Wykrywanie i śledzenie komórek}
+\label{cha:detection-and-tracking}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -101,6 +102,7 @@
 \ldots % TODO Powiązane prace
 
 \section{Wykrywanie komórek}
+\label{sec:cell-detection}
 
 \subsection{Wstęp}
 
@@ -386,6 +388,56 @@ Aby uruchomić plugin w ramach własnej niezależnej instancji ImageJ, po zbudow
 
 
 \section{Obsługa pluginu}
+
+Po zainstalowaniu pluginu w programie ImageJ pojawi się nowe menu \texttt{Development} (rysunek \ref{fig:ui-menu}) w którym znajdują się narzędzia zaimplementowane na potrzeby tej pracy. Poza głównym pluginem (\texttt{Cell detector}) znajdują się tam jeszcze dodatkowe wtyczki służące do importu oraz eksportu komórek, a także narzędzia pomocne w rozwoju programu.
+\begin{figure}
+  \centering
+  \includegraphics[width=0.7\textwidth]{images/ui-menu.png}
+  \caption{Menu programu ImageJ rozszerzone o wtyczki zaimplementowane na potrzeby tej pracy.}
+  \label{fig:ui-menu}
+\end{figure}
+Główny plugin podzielony jest na trzy kroki:
+
+
+\begin{enumerate}
+  \item Lokalizacja i wstępna detekcja komórek
+  \item Śledzenie komórek w czasie
+  \item Analiza danych
+\end{enumerate}
+
+Przed uruchomieniem pluginu należy otworzyć nagranie które chcemy analizować. Po jego uruchomieniu zobaczymy okno pluginu przedstawiające pierwszy krok.
+Interfejs pluginu na każdym etapie składa się z kilku stałych i kilku zmiennych (w zależności od aktualnego kroku) części składowych.
+Po prawej stronie znajduje się zawartość standardowego okna wielokanałowego stosu obrazów ImageJ.
+Dwa suwaki w dolnej części służą do wyboru kanału oraz klatki nagrania.
+Obok suwaka do wyboru klatki znajduje się przycisk start/stop służący do odtwarzania nagrania.
+W górnej części panelu znajdującego się po lewej stronie znajdują się kontrolki specyficzne dla danego kroku pluginu. W jego dolnej części znajdują się narzędzia przydatne na każdym etapie działania pluginu, a także przyciski do zmiany kroku.
+
+\subsection{Lokalizacja i wstępna detekcja komórek}
+
+Pierwszy etap polega na zaznaczeniu przez użytkownika punktów lokalizujących komórki, a następnie uruchomieniu wstępnej detekcji (rysunek \ref{fig:ui-step-detector}). W tym celu należy wcisnąć przycisk \texttt{Select cells}, zaznaczyć każdą komórkę widoczną na pierwszej klatce nagrania klikając w nią kursorem, a następnie wcisnąć przycisk \texttt{Run detection}. W celu poprawienia wstępnej selekcji można skorzystać z przycisku \texttt{Reset}, który usuwa cały uzyskany do tej pory efekt.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{images/ui-step-detector.png}
+  \caption{Pierwszy krok pluginu służący do wstępnej detekcji komórek.}
+  \label{fig:ui-step-detector}
+\end{figure}
+
+W dodatkowym panelu \texttt{advanced settings} ukryte zostały dodatkowe parametry sterujące procesem detekcji komórek (\ref{sec:cell-detection}), takie jak siła rozmycia gaussowskiego czy wartość progowa użyte na etapie wstępnego przetwarzania obrazu.
+Można tam również włączyć podgląd mapy indeksów kształtu, a także szkieletu na podstawie których przebiega proces detekcji.
+
+\subsection{Śledzenie komórek w czasie}
+
+Kolejnym krokiem jest śledzenie komórek w czasie (rysunek \ref{fig:ui-step-tracker}). Użytkownik na tym etapie może zdecydować w jaki sposób chce dalej pracować. Może skorzystać z opcji automatycznego wyliczenia jednej bądź kilku kolejnych klatek (przycisk \texttt{calculate next}) lub zduplikować aktualnie zaznaczone komórki do kolejnej klatki a następnie skorzystać z dostępnych narzędzi i manualnie je dostosować (\texttt{duplicate}).
+%Niezależnie od wybranej opcji należy pamiętać, że komórki można edytować
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{images/ui-step-tracker.png}
+  \caption{Drugi krok pluginu służący do wstępnej śledzenia komórek w czasie.}
+  \label{fig:ui-step-tracker}
+\end{figure}
+
 \ldots % TODO Obsługa pluginu
 
 \section{Struktury danych}
