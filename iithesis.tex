@@ -44,6 +44,7 @@
 \usepackage{algorithmic}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{subcaption}
 
 \DeclareMathOperator*{\argmax}{\textbf{argmax}}
 \newcommand{\image}{\mathbf{I}}
@@ -412,9 +413,13 @@ Dwa suwaki w dolnej części służą do wyboru kanału oraz klatki nagrania.
 Obok suwaka do wyboru klatki znajduje się przycisk start/stop służący do odtwarzania nagrania.
 W górnej części panelu znajdującego się po lewej stronie znajdują się kontrolki specyficzne dla danego kroku pluginu. W jego dolnej części znajdują się narzędzia przydatne na każdym etapie działania pluginu, a także przyciski do zmiany kroku.
 
+% TODO Wybór kanału
+
 \subsection{Lokalizacja i wstępna detekcja komórek}
 
-Pierwszy etap polega na zaznaczeniu przez użytkownika punktów lokalizujących komórki, a następnie uruchomieniu wstępnej detekcji (rysunek \ref{fig:ui-step-detector}). W tym celu należy wcisnąć przycisk \texttt{Select cells}, zaznaczyć każdą komórkę widoczną na pierwszej klatce nagrania klikając w nią kursorem, a następnie wcisnąć przycisk \texttt{Run detection}. W celu poprawienia wstępnej selekcji można skorzystać z przycisku \texttt{Reset}, który usuwa cały uzyskany do tej pory efekt.
+Pierwszy etap polega na zaznaczeniu przez użytkownika punktów lokalizujących komórki, a następnie uruchomieniu wstępnej detekcji (rysunek \ref{fig:ui-step-detector}).
+W tym celu należy wcisnąć przycisk \texttt{Select cells}, zaznaczyć każdą komórkę widoczną na pierwszej klatce nagrania klikając w nią kursorem, a następnie wcisnąć przycisk \texttt{Run detection}.
+W celu poprawienia wstępnej selekcji można skorzystać z przycisku \texttt{Reset}, który usuwa cały uzyskany do tej pory efekt.
 
 \begin{figure}
   \centering
@@ -428,8 +433,10 @@ Można tam również włączyć podgląd mapy indeksów kształtu, a także szki
 
 \subsection{Śledzenie komórek w czasie}
 
-Kolejnym krokiem jest śledzenie komórek w czasie (rysunek \ref{fig:ui-step-tracker}). Użytkownik na tym etapie może zdecydować w jaki sposób chce dalej pracować. Może skorzystać z opcji automatycznego wyliczenia jednej bądź kilku kolejnych klatek (przycisk \texttt{calculate next}) lub zduplikować aktualnie zaznaczone komórki do kolejnej klatki a następnie skorzystać z dostępnych narzędzi i manualnie je dostosować (\texttt{duplicate}).
-%Niezależnie od wybranej opcji należy pamiętać, że komórki można edytować
+Kolejnym krokiem jest śledzenie komórek w czasie (rysunek \ref{fig:ui-step-tracker}).
+Użytkownik na tym etapie może zdecydować w jaki sposób chce dalej pracować.
+Może skorzystać z opcji automatycznego wyliczenia jednej bądź kilku kolejnych klatek (przycisk \texttt{calculate next}) lub zduplikować aktualnie zaznaczone komórki do kolejnej klatki a następnie skorzystać z dostępnych narzędzi i manualnie je dostosować (\texttt{duplicate}).
+Cofając się w historii do poprzednich klatek można poprawiać zaznaczenia. Można też powtórnie wyliczyć zaznaczenia na danym obrazie, jednak należy wtedy pamiętać, że zaznaczenia w kolejnych klatkach zostaną zresetowane.
 
 \begin{figure}
   \centering
@@ -437,6 +444,70 @@ Kolejnym krokiem jest śledzenie komórek w czasie (rysunek \ref{fig:ui-step-tra
   \caption{Drugi krok pluginu służący do wstępnej śledzenia komórek w czasie.}
   \label{fig:ui-step-tracker}
 \end{figure}
+
+\subsection{Analiza danych}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{images/ui-step-measurements.png}
+  \caption{Trzeci krok pluginu służący do analizy zaznaczonych komórek.}
+  \label{fig:ui-step-measurements}
+\end{figure}
+
+Ostatni krok umożliwia analizę danych wyliczonych na podstawie zaznaczonych komórek (rysunek \ref{fig:ui-step-measurements}).
+W celu zapewnienia poprawności danych należy najpierw wskazać numer kanału z fluorescencją. Kolejnym krokiem jest wybór komórki do analizy.
+Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów wykresów (rysunek \ref{fig:ui-plots}):
+
+\begin{itemize}
+  \item wykresu przedstawiającego zmianę długości w czasie
+  \item stosu profili intensywności pod łamaną opisującą komórkę na kanale z fluorescencją (dla każdej klatki życia komórki)
+  \item średniego profilu intensywności od łamaną opisującą komórkę na kanale z fluorescencją (oś X każdego profilu jest przed uśrednieniem normalizowana do przedziału $[0, 1]$)
+  \item umiejscowienia ,,ognisk'' na kanale z fluorescencją w czasie.
+\end{itemize}
+
+\begin{figure}
+  \centering
+  
+  \begin{subfigure}[t]{.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/ui-plot-lengths.png}
+    \caption{\centering Wykresu przedstawiający zmianę długości w czasie.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/ui-plot-profiles.png}
+    \caption{\centering Stos profili intensywności pod łamaną opisującą komórkę na kanale z fluorescencją.}
+  \end{subfigure}
+  \hfill
+  
+  \par\bigskip
+  
+  \begin{subfigure}[t]{.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/ui-plot-avg-profile.png}
+    \caption{\centering Średni profil intensywności od łamaną opisującą komórkę na kanale z fluorescencją.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/ui-plot-picks.png}
+    \caption{\centering Umiejscowienie ,,ognisk'' na kanale z fluorescencją w czasie.}
+  \end{subfigure}
+  \hfill
+  
+  \caption{Różne rodzaje wykresów.}
+  \label{fig:ui-plots}
+\end{figure}
+
+W celu analizy profili i długości komórek poza programem można, za pomocą kolejnych przycisków, wyeksportować dane pojedynczej lub wszystkich komórek do formatu CSV.
+
+
+\subsection{Manualna modyfikacja komórek}
+
+W celu manualnej modyfikacji komórki należy wybrać ją w oknie \texttt{Roi Manager}, które otwierane jest automatycznie podczas pracy z komórkami. Komórka na obrazie będzie wyświetlona w postaci standardowego zaznaczenia wykonanego narzędziem do zaznaczania linii łamanej (ang. Segmented Line Selection Tool)\cite{imagej:segmented-line}. Zmiany tego zaznaczenia oraz usunięte lub dodane wierzchołki zapisywane są także dla komórki.
+
+Dodatkowo okno pluginu wyposażone jest w dwa dodatkowe 
 
 \ldots % TODO Obsługa pluginu
 
@@ -516,6 +587,11 @@ Kolejnym krokiem jest śledzenie komórek w czasie (rysunek \ref{fig:ui-step-tra
   Wikipedia,
   \emph{Ramer--Douglas--Peucker algorithm},
   \url{https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm}.
+  
+\bibitem{imagej:segmented-line}
+  ImageJ User Guide,
+  \emph{Segmented Line Selection Tool},
+  \url{https://imagej.nih.gov/ij/docs/guide/146-19.html#sub:Segmented-Line-Selection}.
 
 \end{thebibliography}
 
