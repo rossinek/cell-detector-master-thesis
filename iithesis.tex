@@ -505,9 +505,27 @@ W celu analizy profili i długości komórek poza programem można, za pomocą k
 
 \subsection{Manualna modyfikacja komórek}
 
-W celu manualnej modyfikacji komórki należy wybrać ją w oknie \texttt{Roi Manager}, które otwierane jest automatycznie podczas pracy z komórkami. Komórka na obrazie będzie wyświetlona w postaci standardowego zaznaczenia wykonanego narzędziem do zaznaczania linii łamanej (ang. Segmented Line Selection Tool)\cite{imagej:segmented-line}. Zmiany tego zaznaczenia oraz usunięte lub dodane wierzchołki zapisywane są także dla komórki.
+W celu manualnej modyfikacji komórki należy wybrać ją w oknie \texttt{ROI Manager}, które otwierane jest automatycznie podczas pracy z komórkami (rysunek \ref{fig:ui-roi-manager}).
+Komórka na obrazie będzie wyświetlona w postaci standardowego zaznaczenia wykonanego narzędziem do zaznaczania linii łamanej (ang. Segmented Line Selection Tool)\cite{imagej:segmented-line}.
+Przesuwanie, usuwanie lub dodawanie wierzchołków takiego zaznaczenia zapisywane jest także dla komórki.
+Komórki usunięte z listy okna \texttt{ROI Manager} zostaną usunięte również z kolekcji wraz z zaznaczeniami w kolejnych klatkach, jak i całym potomstwem.
+Kolekcja zaznaczeń dla poprzednich klatek pozostanie bez zmian.
 
-Dodatkowo okno pluginu wyposażone jest w dwa dodatkowe 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.3\textwidth]{images/ui-roi-manager.png}
+  \caption{Okno \texttt{ROI Manager} pozwalające na wybór komórki.}
+  \label{fig:ui-roi-manager}
+\end{figure}
+
+Dodatkowo okno pluginu wyposażone jest w dwa dodatkowe narzędzia mające ułatwić manualną edycję komórek. Narzędzia można włączyć za pomocą przycisków widocznych w lewym dolnym rogu okna pluginu.
+
+Tryb rozcinania komórek można aktywować za pomocą przycisku z ikoną w kształcie nożyczek (\raisebox{-0.1em}{\includegraphics[width=0.9em]{images/tool-cut.png}}). Służy on do ręcznego oznaczania punktów podziału komórek. Po jego uruchomieniu użytkownik może ,,przeciąć'' komórkę rysując symboliczną linię na obrazie. Przecięta komórka zostanie podzielona na dwie komórki, które zostaną dodane do kolekcji jako ,,dzieci'' komórki sprzed podziału (jeśli występuje ona w poprzedniej klatce).
+Ze względu na cykl życia opisywanych komórek, nie jest możliwe doprowadzenie do stanu w którym jedna komórka dzieli się na więcej niż dwie części.
+Należy pamiętać, że rozcięcie komórki, która została oznaczona w późniejszych klatkach, wiąże się z utratą jej zaznaczeń w tych klatkach oraz usunięciem jej potomstwa.
+
+Drugim dodatkowym narzędziem jest tryb skracania końcówek, uruchamiany za pomocą przycisku z ikoną w kształcie gumki do mazania (\raisebox{-0.1em}{\includegraphics[width=0.9em]{images/tool-erase.png}}). Działa on podobnie do narzędzia ,,gumki'' obecnego w popularnych programach graficznych. Za jego pomocą nie można podzielić komórki, ale można ją skrócić lub całkowicie usunąć.
+Jeśli cała komórka zostanie ,,wymazana'' to, analogicznie jak przy usuwaniu komórki z poziomu okna \texttt{ROI Manager}, usunięte zostaną również zaznaczenia w kolejnych klatkach oraz jej potomstwo.
 
 \ldots % TODO Obsługa pluginu
 
