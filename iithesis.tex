@@ -358,9 +358,36 @@ Chcąc ręcznie oznaczyć komórki w kolejnej klatce (zamiast wyliczać je autom
 
 
 \section{Kod źródłowy}
-\ldots % TODO Kod źródłowy
+
+Kod źródłowy projektu zamieszczony został w publicznie dostępnym repozytorium w serwisie GitHub.
+% TODO Licencja?
+Repozytorium można znaleźć pod adresem
+\linebreak\url{https://github.com/rossinek/cell-detector-imagej-plugin}.
+
+Program zaimplementowany jest jako wtyczka do programu ImageJ, napisana w języku Java. Do automatyzacji procesu budowy wykorzystany został Apache Maven. Wszystkie zależności zostały uwzględnione w pliku konfiguracyjnym dla Mavena, który odpowiada również za ich pobranie.
+
+Plugin był rozwijany głównie na systemie macOS Catalina, ale został również przetestowany na systemie Windows 10. 
+
 \section{Kompilacja i uruchomienie}
-\ldots % TODO Kompilacja i uruchomienie
+
+Do poprawnego zbudowania pluginu z kodu źródłowego należy upewnić się że zainstalowane są wymagane zależności. Poniższa instrukcja zakłada, że system wyposażony jest w:
+
+\begin{itemize}
+  \item Apache Maven w wersji większej lub równej \texttt{3.3.9}
+  \item Java w wersji 8.
+\end{itemize}
+
+Aby zbudować projekt należy skorzystać z komendy \texttt{mvn}, która spowoduje pobranie wszystkich zależności,  kompilację kodu źródłowego i wywołanie testów automatycznych.
+
+Zbudowany plugin dla programu ImageJ można znaleźć w folderze \texttt{target} pod nazwą \texttt{Mtbt\_Plugin-\{wersja\}.jar}. Tak spakowany plugin można zainstalować w programie ImageJ (lub Fiji) wklejając go do folderu \texttt{jars} w miejscu gdzie zainstalowany jest program.
+
+Aby uruchomić plugin w ramach własnej niezależnej instancji ImageJ, po zbudowaniu projektu można uruchomić główną metodę programu komendą
+\linebreak\texttt{mvn exec:java -Dexec.mainClass="dev.mtbt.Main"}.
+
+
+\section{Obsługa pluginu}
+\ldots % TODO Obsługa pluginu
+
 \section{Struktury danych}
 \ldots % TODO Struktury danych
 \section{Architektura}
