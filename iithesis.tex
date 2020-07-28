@@ -591,15 +591,45 @@ Aby nie utracić efektów swojej pracy, użytkownik może wyeksportować oznaczo
 Stworzony w ten sposób plik \texttt{XML} jest wynikiem serializacji kolekcji komórek.
 Podczas kolejnej sesji, po otwarciu tego samego nagrania, zapisane komórki można wczytać korzystając z menu \texttt{Development > Import cells}.
 
-\section{Struktury danych}
+\section{Dokumentacja techniczna}
+
+\subsection{Struktura projektu}
+
+Główna struktura plików projektu podzielona jest zgodnie z konwencją zaproponowaną przez zespół Apache Maven\cite{docs:maven-project-layout}. Główne foldery to:
+\begin{itemize}
+  \item \texttt{src/main/java} -- kod źródłowy aplikacji
+  \item \texttt{src/main/resources} -- zasoby aplikacji np. obrazki
+  \item \texttt{src/test/java} -- kod źródłowy testów automatycznych.
+\end{itemize}
+
+Kod źródłowy aplikacji podzielony jest na kilka folderów, ze względu na aspekt którego dotyczy:
+
+\begin{itemize}
+  \item \texttt{cells} -- kod zawierający logikę dotyczącą domeny pracy, m.in. kod pluginu, interfejsy poszczególnych kroków, główne algorytmy itp.; wewnątrz wydzielono jeszcze dodatkowo foldery: 
+  \begin{itemize}
+    \item[$\circ$] \texttt{serialization} -- kod dotyczący importu i eksportu komórek
+    \item[$\circ$] \texttt{skeleton} -- implementacja poszczególnych kroków pluginu opisana w tej pracy (oparta na szkieletyzacji)
+  \end{itemize}
+  \item \texttt{graph} -- implementacja grafu
+  \item \texttt{gui} -- implementacje okien i komponentów interfejsu
+  \item \texttt{imagej} -- klasy ułatwiające prace i komunikację z programem--hostem ImageJ
+  \item \texttt{util} -- inne pomocnicze klasy
+  \item \texttt{vendor} -- publicznie dostępne wtyczki do programu ImageJ lub opakowania ułatwiające korzystanie z zależności zadeklarowanych w \texttt{pom.xml}.
+\end{itemize}
+
+\subsection{Architektura}
+\ldots % TODO Główny plugin i interfejsy, możliwość podmiany dowolnego kroku pluginu
+
+\subsection{Struktury danych}
 \ldots % TODO Struktury danych
-\section{Architektura}
-\ldots % TODO Architektura
-\section{Opis wykorzystanego API ImageJ}
+
+\subsection{Opis wykorzystanego API ImageJ}
 \ldots % TODO Opis wykorzystanego API ImageJ
-\section{Błędy w implementacji ImageJ i sposoby na ich obejście}
+
+\subsection{Błędy w implementacji ImageJ i sposoby na ich obejście}
 \ldots % TODO Błędy w implementacji ImageJ i sposoby na ich obejście
-\section{Opis sposobu dalszego rozwoju, interfejsy}
+
+\subsection{Opis sposobu dalszego rozwoju, interfejsy}
 \ldots % TODO Opis sposobu dalszego rozwoju, interfejsy
 
 
@@ -672,6 +702,11 @@ Podczas kolejnej sesji, po otwarciu tego samego nagrania, zapisane komórki moż
   ImageJ User Guide,
   \emph{Segmented Line Selection Tool},
   \url{https://imagej.nih.gov/ij/docs/guide/146-19.html#sub:Segmented-Line-Selection}.
+  
+\bibitem{docs:maven-project-layout}
+  Apache Maven Project,
+  \emph{Introduction to the Standard Directory Layout},
+  \url{https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html}
 
 \end{thebibliography}
 
