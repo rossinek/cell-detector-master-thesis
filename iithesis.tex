@@ -44,6 +44,7 @@
 \usepackage{algorithmic}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{qtree}
 \usepackage{subcaption}
 
 \DeclareMathOperator*{\argmax}{\textbf{argmax}}
@@ -410,10 +411,11 @@ Przed uruchomieniem pluginu należy otworzyć nagranie które chcemy analizować
 Interfejs pluginu na każdym etapie składa się z kilku stałych i kilku zmiennych (w zależności od aktualnego kroku) części składowych.
 Po prawej stronie znajduje się zawartość standardowego okna wielokanałowego stosu obrazów ImageJ.
 Dwa suwaki w dolnej części służą do wyboru kanału oraz klatki nagrania.
+Wybór kanału ma wpływ na to, na którym kanale odbywa się detekcja.
+% TODO który kanał należy wybrać
 Obok suwaka do wyboru klatki znajduje się przycisk start/stop służący do odtwarzania nagrania.
 W górnej części panelu znajdującego się po lewej stronie znajdują się kontrolki specyficzne dla danego kroku pluginu. W jego dolnej części znajdują się narzędzia przydatne na każdym etapie działania pluginu, a także przyciski do zmiany kroku.
 
-% TODO Wybór kanału
 
 \subsection{Lokalizacja i wstępna detekcja komórek}
 
@@ -500,7 +502,7 @@ Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów w
   \label{fig:ui-plots}
 \end{figure}
 
-W celu analizy profili i długości komórek poza programem można, za pomocą kolejnych przycisków, wyeksportować dane pojedynczej lub wszystkich komórek do formatu CSV.
+W celu analizy profili i długości komórek poza programem można, za pomocą kolejnych przycisków, wyeksportować dane pojedynczej lub wszystkich komórek do formatu \texttt{CSV} (ang. comma-separated values).
 
 
 \subsection{Manualna modyfikacja komórek}
@@ -520,14 +522,74 @@ Kolekcja zaznaczeń dla poprzednich klatek pozostanie bez zmian.
 
 Dodatkowo okno pluginu wyposażone jest w dwa dodatkowe narzędzia mające ułatwić manualną edycję komórek. Narzędzia można włączyć za pomocą przycisków widocznych w lewym dolnym rogu okna pluginu.
 
-Tryb rozcinania komórek można aktywować za pomocą przycisku z ikoną w kształcie nożyczek (\raisebox{-0.1em}{\includegraphics[width=0.9em]{images/tool-cut.png}}). Służy on do ręcznego oznaczania punktów podziału komórek. Po jego uruchomieniu użytkownik może ,,przeciąć'' komórkę rysując symboliczną linię na obrazie. Przecięta komórka zostanie podzielona na dwie komórki, które zostaną dodane do kolekcji jako ,,dzieci'' komórki sprzed podziału (jeśli występuje ona w poprzedniej klatce).
+Tryb rozcinania komórek można aktywować za pomocą przycisku z ikoną w kształcie nożyczek (\raisebox{-0.1em}{\includegraphics[width=0.9em]{images/tool-cut.png}}).
+Służy on do ręcznego oznaczania punktów podziału komórek. Po jego uruchomieniu użytkownik może ,,przeciąć'' komórkę rysując symboliczną linię na obrazie.
+Przecięta komórka zostanie podzielona na dwie komórki, które zostaną dodane do kolekcji jako ,,dzieci'' komórki sprzed podziału (jeśli występuje ona w poprzedniej klatce).
 Ze względu na cykl życia opisywanych komórek, nie jest możliwe doprowadzenie do stanu w którym jedna komórka dzieli się na więcej niż dwie części.
 Należy pamiętać, że rozcięcie komórki, która została oznaczona w późniejszych klatkach, wiąże się z utratą jej zaznaczeń w tych klatkach oraz usunięciem jej potomstwa.
 
-Drugim dodatkowym narzędziem jest tryb skracania końcówek, uruchamiany za pomocą przycisku z ikoną w kształcie gumki do mazania (\raisebox{-0.1em}{\includegraphics[width=0.9em]{images/tool-erase.png}}). Działa on podobnie do narzędzia ,,gumki'' obecnego w popularnych programach graficznych. Za jego pomocą nie można podzielić komórki, ale można ją skrócić lub całkowicie usunąć.
+Drugim dodatkowym narzędziem jest tryb skracania końcówek, uruchamiany za pomocą przycisku z ikoną w kształcie gumki do mazania (\raisebox{-0.1em}{\includegraphics[width=0.9em]{images/tool-erase.png}}).
+Działa on podobnie do narzędzia ,,gumki'' obecnego w popularnych programach graficznych. Za jego pomocą nie można podzielić komórki, ale można ją skrócić lub całkowicie usunąć.
 Jeśli cała komórka zostanie ,,wymazana'' to, analogicznie jak przy usuwaniu komórki z poziomu okna \texttt{ROI Manager}, usunięte zostaną również zaznaczenia w kolejnych klatkach oraz jej potomstwo.
 
-\ldots % TODO Obsługa pluginu
+\subsection{Nazewnictwo komórek oraz ich orientacja}
+
+Aby ułatwić identyfikację komórek, przyjąłem stałą konwencję ich nazewnictwa.
+Nazwa składa się z trzech członów: identyfikatora komórki źródłowej, indeksu pokolenia oraz indeksu w ramach pokolenia.
+Komórkom źródłowym (nie mającym rodzica) zostaje przydzielony unikalny identyfikator w postaci wielkiej litery alfabetu.
+Indeks pokolenia jak i indeks w ramach pokolenia wynikają z natury kolekcji komórek.
+Każda komórka dzieli się w pewnym momencie na dwie nowe komórki (dzieci) nowego pokolenia.
+,,Drzewo genealogiczne'' komórek będzie w takim przypadku drzewem binarnym, a indeksy pokolenia i w ramach pokolenia będą odpowiednio odległością od korzenia i liczbą porządkową w ramach tego samego indeksu pokolenia.
+Przykładowe drzewo pokrewieństwa opisane nazwami komórek przedstawia rysunek \ref{fig:tree-naming}.
+
+
+\begin{figure}[h]
+  \Tree 
+    [.\texttt{A-0-1}
+      [.\texttt{A-1-1}
+        [.\texttt{A-2-1}
+          {\ldots}
+          {\ldots}
+        ]
+        [.\texttt{A-2-2}
+          {\ldots}
+          {\ldots}
+        ]
+      ]
+      [.\texttt{A-1-2}
+        [.\texttt{A-2-3}
+          {\ldots}
+          {\ldots}
+        ]
+        [.\texttt{A-2-4}
+          {\ldots}
+          {\ldots}
+        ]
+      ]
+    ]
+  \caption{Drzewo genealogiczne opisane zgodnie z konwencją nazewnictwa.}
+  \label{fig:tree-naming}
+\end{figure}
+
+Dzięki tak skonstruowanej konwencji nazewnictwa można łatwo zidentyfikować pochodzenie komórki, a także stopień pokrewieństwa z innymi komórkami.
+
+W celu zapewnienia spójności analizowanych na końcu danych, ustaliłem również stałą orientację komórek.
+Aby móc rozróżnić końcówki komórek, wystarczy zaznaczyć opcję \texttt{show endpoints} w dolnej części okna pluginu.
+Kolorem czerwonym oznaczone zostaną końcówki powstałe w wyniku podziału komórki, a zielonym te które były wcześniej końcówkami komórki rodzica (rysunek \ref{fig:ui-show-endpoints}). W przypadku komórki źródłowej końcówki oznaczone są losowo.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.3\textwidth]{images/ui-show-endpoints.png}
+  \caption{Komórki wraz ze znacznikami identyfikującymi końcówki.}
+  \label{fig:ui-show-endpoints}
+\end{figure}
+
+\subsection{Importowanie i eksportowanie komórek}
+
+Manualne oznaczanie i poprawianie komórek może być czasochłonne i nie zawsze można zakończyć pracę w ciągu jednej sesji.
+Aby nie utracić efektów swojej pracy, użytkownik może wyeksportować oznaczone komórki za pomocą menu \texttt{Development > Export cells}.
+Stworzony w ten sposób plik \texttt{XML} jest wynikiem serializacji kolekcji komórek.
+Podczas kolejnej sesji, po otwarciu tego samego nagrania, zapisane komórki można wczytać korzystając z menu \texttt{Development > Import cells}.
 
 \section{Struktury danych}
 \ldots % TODO Struktury danych
