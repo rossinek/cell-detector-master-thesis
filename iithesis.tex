@@ -390,6 +390,7 @@ Aby uruchomić plugin w ramach własnej niezależnej instancji ImageJ, po zbudow
 
 
 \section{Obsługa pluginu}
+\label{sec:user-manual}
 
 Po zainstalowaniu pluginu w programie ImageJ pojawi się nowe menu \texttt{Development} (rysunek \ref{fig:ui-menu}) w którym znajdują się narzędzia zaimplementowane na potrzeby tej pracy. Poza głównym pluginem (\texttt{Cell detector}) znajdują się tam jeszcze dodatkowe wtyczki służące do importu oraz eksportu komórek, a także narzędzia pomocne w rozwoju programu.
 \begin{figure}
@@ -506,6 +507,7 @@ W celu analizy profili i długości komórek poza programem można, za pomocą k
 
 
 \subsection{Manualna modyfikacja komórek}
+\label{sec:user-manual-modifications}
 
 W celu manualnej modyfikacji komórki należy wybrać ją w oknie \texttt{ROI Manager}, które otwierane jest automatycznie podczas pracy z komórkami (rysunek \ref{fig:ui-roi-manager}).
 Komórka na obrazie będzie wyświetlona w postaci standardowego zaznaczenia wykonanego narzędziem do zaznaczania linii łamanej (ang. Segmented Line Selection Tool)\cite{imagej:segmented-line}.
@@ -533,6 +535,7 @@ Działa on podobnie do narzędzia ,,gumki'' obecnego w popularnych programach gr
 Jeśli cała komórka zostanie ,,wymazana'' to, analogicznie jak przy usuwaniu komórki z poziomu okna \texttt{ROI Manager}, usunięte zostaną również zaznaczenia w kolejnych klatkach oraz jej potomstwo.
 
 \subsection{Nazewnictwo komórek oraz ich orientacja}
+\label{sec:cell-naming}
 
 Aby ułatwić identyfikację komórek, przyjąłem stałą konwencję ich nazewnictwa.
 Nazwa składa się z trzech członów: identyfikatora komórki źródłowej, indeksu pokolenia oraz indeksu w ramach pokolenia.
@@ -608,22 +611,92 @@ Kod źródłowy aplikacji podzielony jest na kilka folderów, ze względu na asp
   \item \texttt{cells} -- kod zawierający logikę dotyczącą domeny pracy, m.in. kod pluginu, interfejsy poszczególnych kroków, główne algorytmy itp.; wewnątrz wydzielono jeszcze dodatkowo foldery: 
   \begin{itemize}
     \item[$\circ$] \texttt{serialization} -- kod dotyczący importu i eksportu komórek
-    \item[$\circ$] \texttt{skeleton} -- implementacja poszczególnych kroków pluginu opisana w tej pracy (oparta na szkieletyzacji)
+    \item[$\circ$] \texttt{skeleton} -- implementacja króków detekcji i śledzenia komórek opisana w tej pracy (oparta na szkieletyzacji)
+    \item[$\circ$] \texttt{measurements} -- implementacja etapu analizy danych
   \end{itemize}
   \item \texttt{graph} -- implementacja grafu
-  \item \texttt{gui} -- implementacje okien i komponentów interfejsu
+  \item \texttt{gui} -- implementacje generycznych okien i komponentów interfejsu
   \item \texttt{imagej} -- klasy ułatwiające prace i komunikację z programem--hostem ImageJ
   \item \texttt{util} -- inne pomocnicze klasy
   \item \texttt{vendor} -- publicznie dostępne wtyczki do programu ImageJ lub opakowania ułatwiające korzystanie z zależności zadeklarowanych w \texttt{pom.xml}.
 \end{itemize}
 
-\subsection{Architektura}
-\ldots % TODO Główny plugin i interfejsy, możliwość podmiany dowolnego kroku pluginu
+\subsubsection{Konwencja nazewnictwa}
 
-\subsection{Struktury danych}
-\ldots % TODO Struktury danych
+Nazwy interfejsów rozpoczynają się od wielkiej litery ,,\texttt{I}'' np. \texttt{ICellsPluginStep}, natomiast nazwy klas abstrakcyjnych zaczynają się od prefiksu ,,\texttt{Abstract}'' np. \texttt{AbstractCellCollection}.
 
-\subsection{Opis wykorzystanego API ImageJ}
+\subsection{Główne struktury danych}
+
+\subsubsection{\texttt{AbstractCellCollection}}
+
+Ta abstrakcyjna klasa służy do opisywania drzewiastej struktury komórek. Dziedziczą po niej dwie klasy: \texttt{CellCollection} oraz \texttt{Cell}.
+Ta pierwsza służy do przechowywania kolekcji komórek reprezentowanych przez klasę \texttt{Cell}.
+Druga natomiast oprócz reprezentowania komórki, może zawierać także referencje do dwóch komórek potomnych, tworząc w ten sposób binarne ,,drzewo genealogiczne'' komórki.
+
+Klasa deklaruje m.in. metody dodawania i usuwania komórek z kolekcji, ale także metody do wydobywania wszystkich komórek ,,żyjących'' w danej klatce nagrania.
+
+Klasy dziedziczące po \texttt{AbstractCellCollection} muszą być serializowalne.
+Własność ta jest wykorzystywana podczas importowania i eksportowania komórek do pliku \texttt{XML}.
+
+\subsubsection{\texttt{Cell}}
+
+Jest to klasa opisująca komórkę i cały jej cykl życia -- od pojawienia się, do momentu podziału na dwie nowe komórki (może zawierać także referencje do tych komórek potomnych).
+Obiekt tej klasy zawiera informacje o każdej klatce w której występuje komórka w postaci referencji do instancji \texttt{AbstractCellFrame}.
+Pozwala też określić i odczytać poszczególne części nazwy komórki takie jak identyfikator komórki źródłowej, indeks pokolenia czy indeks w ramach pokolenia (\ref{sec:cell-naming}).
+
+Poza wyżej wymienionymi oraz dziedziczonymi po klasie \texttt{AbstractCellCollection} funkcjonalnościami, obiekt tej klasy zawiera również metody potrzebne do uzyskania reprezentacji komórki w postaci standardowego zaznaczenia w programie ImageJ.
+
+\subsubsection{\texttt{AbstractCellFrame}}
+
+Klasa ta deklaruje metody służące do uzyskania zaznaczenia pojedynczej komórki w konkretnej klatce nagrania, a także do modyfikacji tego zaznaczenia.
+
+Na potrzeby tej pracy powstała jej implementacja \texttt{PolylineCellFrame}, która reprezentuje zaznaczenie komórki w postaci linii łamanej.
+
+\subsubsection{\texttt{Graph}, \texttt{Edge}, \texttt{Vertex}, \texttt{Point}}
+
+Klasy te składają się na implementację grafu, który zawiera dodatkowe informacje o punktach składających się na krawędzie i wierzchołki.
+
+\subsection{Architektura umożliwiająca dalszy rozwój}
+
+Główną klasą projektu jest \texttt{CellsPlugin}, która instancjonowana jest przez program ImageJ po otwarciu wtyczki z poziomu menu \texttt{Development > Cell Detector}.
+Podczas uruchomienia tworzona jest kopia aktualnie otwartego stosu obrazów, która wyświetlona zostaje w specjalnym oknie pluginu (jego opis znajduje się w rozdziale \ref{sec:user-manual}), a także utworzona zostaje pusta kolekcja komórek.
+
+Podczas inicjalizacji uruchomiony zostaje również nasłuch na różnego rodzaju zdarzenia programu--hosta ImageJ m.in. na:
+\begin{itemize}
+  \item zmiany podglądu obrazu -- umożliwia to wyświetlenie odpowiednich komórek dla aktualnie oglądanej klatki
+  \item zmiany zaznaczeń na obrazie -- dzięki temu zmiany mogą być zapisywane dla komórek opisywanych przez zmodyfikowane zaznaczenia
+  \item zmianę aktywnego narzędzia -- może mieć wpływ na zachowanie wybranego narzędzia specjalnego (\ref{sec:user-manual-modifications})
+  \item zmiany na liście okna \texttt{Roi Manager} -- umożliwia to usuwanie komórek z poziomu tego okna.
+\end{itemize}
+
+Każdy z trzech etapów pluginu (wstępna detekcja, śledzenie komórek i analiza danych) jest obiektem klasy implementującej interfejs \texttt{ICellsPluginStep}.
+Interfejs ten deklaruje zaledwie trzy publiczne metody:
+
+\begin{itemize}
+
+\item \texttt{JComponent init(ImagePlus imp, CellCollection cells)}
+
+Metoda ta wywoływana jest podczas inicjalizacji danego kroku np. przy starcie pluginu (dla kroku wstępnej detekcji) lub przy wciśnięciu przycisku \texttt{next} (dla kolejnego kroku).
+Argumentami są obraz źródłowy (nagranie) oraz referencje do kolekcji komórek.
+Metoda odpowiedzialna jest również za stworzenie i zwrócenie komponent interfejsu danego kroku, który zostanie automatycznie umieszczony w odpowiednim miejscu okna wtyczki.
+
+\item \texttt{void imageUpdated()}
+
+Ta metoda służy do nasłuchiwania na zmiany obrazu i wyświetlanych komórek.
+Uruchamiana jest przez przez plugin po każdej aktualizacji podglądu obrazu i komórek na nim wyświetlonych.
+
+\item \texttt{void cleanup()}
+
+Metoda ta wywoływana jest podczas zmiany aktualnego kroku lub przy zamknięciu pluginu.
+
+\end{itemize}
+
+Dzięki tak zaprojektowanemu systemowi każdy z etapów programu jest niezależny i może zostać z łatwością wymieniony na inną implementację tego interfejsu.
+Kod pluginu zawiera wszystkie główne struktury danych (lub ich abstrakcyjne wersje) i dzięki temu jest zupełnie niezależny od implementacji poszczególnych kroków -- komunikuje się z nimi jedynie za pomocą opisanych wyżej interfejsów.
+Funkcjonalności niezależne od implementacji poszczególnych etapów takie jak wyświetlanie, usuwanie i ręczna modyfikacja komórek, a także ich eksportowanie i importowanie, bazują wyłącznie na metodach deklarowanych przez odpowiednie interfejsy lub klasy abstrakcyjne.
+
+\subsection{Wykorzystywane API ImageJ}
+
 \ldots % TODO Opis wykorzystanego API ImageJ
 
 \subsection{Błędy w implementacji ImageJ i sposoby na ich obejście}
