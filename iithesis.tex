@@ -697,13 +697,58 @@ Funkcjonalności niezależne od implementacji poszczególnych etapów takie jak 
 
 \subsection{Wykorzystywane API ImageJ}
 
-\ldots % TODO Opis wykorzystanego API ImageJ
+ImageJ jest częścią większego ekosystemu SciJava.
+Projekty tworzone w ramach tego ekosystemu są wytwarzane jako otwarte oprogramowanie z publicznie dostępnym kodem.
+ImageJ jest nie tylko programem, ale rozszerzalną platformą zbudowaną na rozszerzalnej architekturze opartej o mechanizm pluginów.
+Stanowi to jeden z największych atutów tej platformy\cite{imagej:philosophy}.
 
-\subsection{Błędy w implementacji ImageJ i sposoby na ich obejście}
-\ldots % TODO Błędy w implementacji ImageJ i sposoby na ich obejście
+Plugin został napisany przy wykorzystaniu nowszego API ImageJ2, jednak korzysta również z warstwy zapewniającej kompatybilność z ImageJ 1.x.
+Spowodowane jest to głównie brakiem dobrej dokumentacji istotnych funkcjonalności dla nowszej wersji API, dostępnej w trakcie implementacji projektu.
 
-\subsection{Opis sposobu dalszego rozwoju, interfejsy}
-\ldots % TODO Opis sposobu dalszego rozwoju, interfejsy
+W moim programie zdecydowałem się użyć natywnych dla ImageJ narzędzi do tworzenia zaznaczeń (ROIs, ang. regions of interest), w celu wyświetlania i modyfikacji komórek.
+Dzięki temu nie musiałem tworzyć od nowa mechanizmów służących do wyświetlania wielu linii łamanych na obrazie, a także do ich modyfikacji.
+Również narzędzia do przecinania i skracania końcówek są tak naprawdę nakładką na standardowe narzędzia do zaznaczania linii i zaznaczania za pomocą pędzla.
+
+\subsection{Brakujące lub niespójne API ImageJ}
+
+W tak dużym otwartym oprogramowaniu tworzonym przez dużą społeczność nie sposób uniknąć niespójności czy obsłużyć wszystkie warunki brzegowe.
+Implementując niektóre funkcjonalności zdecydowałem się użyć standardowych narzędzi ImageJ, w celu nieco innym niż ich oryginalne przeznaczenie.
+Ze względu na to, potrzebowałem niskopoziomowego dostępu do różnych mechanizmów za tym stojących, aby wstrzyknąć tam własną warstwę pośredniczącą.
+Twórcy ImageJ, mając na uwadze potrzebę rozszerzalności, wyposażyli tę platformę w szereg narzędzi mających w tym pomóc.
+Mimo wszystko kilka elementów systemu okazało się działać nie do końca zgodnie z intuicją i wymagało nie do końca eleganckiego rozszerzenia.
+
+\subsubsection{Nasłuchiwanie na zdarzenia modyfikacji ROI}
+
+Chcąc rejestrować wydarzenia na temat modyfikacji wyświetlanych aktualnie zaznaczeń, należy zaimplementować interfejs \texttt{RoiListener}, a następnie tę implementację zarejestrować przekazując ją do statycznej metody \texttt{Roi::addRoiListener}.
+Słuchacz będzie otrzymywać zgłoszenia na temat różnych wydarzeń związanych z zaznaczeniami m.in. na temat ich utworzenia, przesunięcia, modyfikacji, rozszerzenia, ukończenia czy usunięcia.
+W moim programie nasłuchiwanie na te wydarzenia odgrywa kluczową rolę.
+Zdiagnozowałem kilka miejsc w których system notyfikacji działa, moim zdaniem, niezgodnie z intuicją:
+\begin{itemize}
+  \item Tworzenie zaznaczenia w kształcie linii polega na oznaczenie kursorem myszy punktu początkowego, wciśnięciu głównego klawisza myszy, przeciągnięciu kursora do miejsca docelowego, a następnie zwolnieniu klawisza myszy. Konstruując zaznaczenie w kształcie linii, słuchacz dostaje informacje na temat wydarzenia związanego z modyfikacją, natomiast po zwolnieniu przycisku myszy nie jest zgłaszane żadne wydarzenie. Intuicja podpowiada mi, że powinno zostać zgłoszone wydarzenie związane z ukończeniem konstrukcji zaznaczenia.
+  \item Analogiczny problem występuje w przypadku zaznaczania za pomocą pędzla. Tutaj proces zaznaczania podobny jest do ,,malowania'' narzędziem pędzla w popularnych programach graficznych. I w tym przypadku po zwolnieniu przycisku myszy nie jest zgłaszane żadne wydarzenie.
+  \item Zaznaczenie w postaci lini łamanej może być modyfikowane na różne sposoby. Można przeciągać całą linię łamaną lub modyfikować jej wierzchołki poprzez ich przeciąganie, usuwanie lub dodawanie. W przypadku przesunięć całego zaznaczenia jak i w przypadku zmiany pozycji poszczególnych wierzchołków zgłaszane są poprawne wydarzenia (odpowiednio o przesunięciu i modyfikacji). Jednak w przypadku usuwania i dodawania wierzchołków żadne wydarzenie nie jest zgłaszane.
+\end{itemize}
+
+W celu rozwiązania pierwszych dwóch problemów postanowiłem stworzyć własną warstwę aplikacji (\texttt{RoiObserver}) odpowiedzialną za obserwowanie zmian zaznaczeń.
+Nasłuchuje ona na zmiany zaznaczeń poprzez interfejs \texttt{RoiListener}, ale także nasłuchuje na zdarzenia związane z interakcją między kursorem myszy, a otwartymi oknami obrazów.
+Podczas konstrukcji problematycznych zaznaczeń zapisywane są ich referencje, aby następnie po zgłoszeniu wydarzenia o zwolnieniu przycisku myszy wyemitować brakujące wydarzenie.
+
+Trzeci problem został rozwiązany poprzez utworzenie i korzystanie z nowej klasy rozszerzającej zaznaczenie w kształcie lini łamanej.
+Nadpisuje ona tylko jedną metodę \texttt{PolygonRoi::mouseDownInHandle}, która używana jest do tworzenia i usuwania dodatkowych wierzchołków (odbywa się to przez kliknięcie kursorem myszy w wierzchołek mając przy tym wciśnięty klawisz \texttt{alt} lub \texttt{control}).
+Nowa wersja metody wywołuje oryginalną, zachowując przy tym pierwotny sposób działania, a następnie zgłasza wydarzenie związane z modyfikacją.
+
+\subsubsection{Usuwanie ROI z poziomu okna \texttt{ROI Manager}}
+
+Najbardziej naturalnym sposobem na usunięcie komórki (np. w przypadku gdy została niepoprawnie podzielona), wydaje się zaznaczenie jej na liście okna \texttt{ROI Manager} i wciśnięcie przycisku \texttt{Delete} na klawiaturze lub z poziomu interfejsu.
+Bez specjalnej obsługi takiego zachowania, zaznaczenie komórki zniknęłoby, mimo że komórka wciąż pozostawałaby w kolekcji i po odświeżeniu podglądu znów pojawiłaby się na ekranie.
+Takie zachowanie byłoby nieintuicyjne z perspektywy użytkownika.
+Postanowiłem więc stworzyć odpowiednią obsługę takiej sytuacji.
+Okazało się jednak, że nie istnieje żadne narzędzie pozwalające otrzymać powiadomienie na temat usuniętego z poziomu tego okna zaznaczenia.
+
+Problem ten rozwiązałem dostając się do komponentu wyświetlającego listę komórek.
+Pozwala on na nasłuchiwanie na zmianę zawartości, w szczególności usunięcie jednego lub wielu elementów.
+Po otrzymaniu takiego powiadomienia, stan listy porównywany jest z kolekcją komórek, które powinny aktualnie być wyświetlane -- te których brakuje na liście usuwane są również z kolekcji.
+Rozwiązanie to nie jest wyjątkowo stabilne, ponieważ dokonuje konwersji typów bazując na strukturze komponentów z jakich składa się okno \texttt{ROI Manager}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -779,7 +824,12 @@ Funkcjonalności niezależne od implementacji poszczególnych etapów takie jak 
 \bibitem{docs:maven-project-layout}
   Apache Maven Project,
   \emph{Introduction to the Standard Directory Layout},
-  \url{https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html}
+  \url{https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html}.
+
+\bibitem{imagej:philosophy}
+  ImageJ User Guide,
+  \emph{Philosophy},
+  \url{https://imagej.net/Philosophy}.
 
 \end{thebibliography}
 
