@@ -11,8 +11,8 @@
 % Pamiętaj o mądrym (zgodnym z logicznym rozbiorem zdania oraz estetyka) ręcznym
 % złamaniu wierszy w temacie pracy, zwłaszcza tego w języku pracy. Użyj do tego
 % polecenia \fmlinebreak.
-\polishtitle    {Wykrywanie i śledzenie komórek glistopodobnych w programie ImageJ}
-\englishtitle   {Worm-like cell detection and tracking in ImageJ}
+\polishtitle    {Wykrywanie i śledzenie cyklu komórkowego prątków w programie ImageJ}
+\englishtitle   {Mycobacterial cell cycle detection and tracking in ImageJ}
 \polishabstract {Polskie streszczenie}
 \englishabstract{English abstract}
 % w pracach wielu autorów nazwiska można oddzielić poleceniem \and
@@ -65,17 +65,81 @@
 
 \section{Wstęp}
 
-\ldots % TODO Wstęp
 
-\section{Background}
+Prątki, czyli bakterie z rodzaju Mycobacterium, znane są przede wszystkim za sprawą patogennych gatunków m.in. Mycobacterium tuberculosis i Mycobacterium leprae, które powodują odpowiednio gruźlicę i trąd. Choroby te, a w szczególności gruźlica, są wciąż poważnym problemem w wielu miejscach świata. Według światowej organizacji zdrowia, na całym świecie gruźlica jest jedną z 10 głównych przyczyn zgonów, a zarazem główną przyczyną spowodowaną przez pojedynczy czynnik zakaźny\cite{who-stats}. Szacuje się, że w samym 2018 roku na całym świecie zachorowało na gruźlicę około 10 milionów ludzi.
 
-\subsection{Jakich danych i do czego potrzebują biolodzy}
+Niniejsza praca powstała przy współpracy z pracownikami naukowymi Zakładu Mikrobiologii Molekularnej na Wydziale Biotechnologii Uniwersytetu Wrocławskiego. Badania przez nich prowadzone, są w dużej mierze tzw. badaniami podstawowymi, a więc ich celem jest przede wszystkim zdobywanie nowej wiedzy i poznawanie biologii prątków. Badania tego typu są często wykorzystywane w dalszych analizach, skierowanych już na konkretne zastosowania praktyczne takie jak np. poszukiwanie nowych leków.
 
-\ldots % TODO Jakich danych i do czego potrzebują biolodzy}
 
-\subsection{Pozyskiwanie danych}
+\section{Opis zagadnienia}
+\label{sec:intro-description}
 
-\ldots % TODO Pozyskiwanie danych
+Chcąc dokładniej poznać naturę mikroorganizmów z rodziny Mycobacteriaceae, badacze analizują parametry różnych procesów cyklu komórkowego.
+% np. czas replikacji czy segregacji lub separacji chromosomów potomnych, tempo i charakterystykę zmian długości komórek, czy lokalizację wewnątrzkomórkową niektórych białek.
+Takie analizy pozwalają między innymi na określenie wpływu różnych inhibitorów/antybiotyków na cykl komórkowy\cite{paper:watching-dna-replication}.
+Zebrane dane mogą posłużyć także do określenia funkcji wybranego białka\cite{paper:protein-responsibility}.
+Badanie to polega na modyfikacji szczepu poprzez np. usunięciu genu, który je koduje i analizę różnych procesów komórkowych w takim szczepie -- sprawdza się między innymi czy cykl komórkowy bądź morfologia pojedynczych komórek nie zostały u nich zaburzone.
+
+Ze względu na zróżnicowanie populacji bakteryjnych, ważne jest, aby analizy przeprowadzane były na poziomie pojedynczych komórek.
+Podejście takie pozwala na odkrycie zależności, które są spełnione tylko dla części populacji.
+Przykładowo część komórek z tego samego szczepu może inaczej reagować na podany inhibitor.
+
+Istnieje wiele parametrów poszczególnych procesów cyklu komórkowego, których pomiary mogą być przydatne w badaniach nad biologią prątków.
+Takimi parametrami mogą być np. czas replikacji czy segregacji chromosomów potomnych (procesy powielania DNA chromosomalnego i segregacji nowo zreplikowanego DNA do komórek potomnych), tempo i charakterystyka zmian długości komórek, czy lokalizacja wewnątrzkomórkowa niektórych białek.
+%procesy replikacji czy segregacji (procesy powielania DNA chromosomalnego i segregacji nowo zreplikowanego DNA do komórek potomnych)
+% lub separacji chromosomów potomnych
+
+\subsubsection{Komórki modelowe}
+
+Jednym z organizmów modelowych w badaniach nad biologią prątków są komórki Mycobacterium smegmatis.
+W przeciwieństwie do ich bardziej znanych krewnych Mycobacterium tuberculosis, mikroorganizmy te nie są chorobotwórcze, dzięki czemu badania z ich udziałem są bezpieczniejsze i tym samym łatwiejsze do przeprowadzenia.
+W przypadku obu tych gatunków podstawowe procesy komórkowe wyglądają podobnie.
+Kolejną ważną cechą jest ich czas podziału, który jest 8 razy krótszy niż czas podziału komórek wywołujących gruźlicę i wynosi około 3 godziny.
+
+W celu śledzenia różnych procesów cyklu komórkowego wykorzystuje się fluorescencyjne szczepy reporterowe, które produkują białka zaangażowane w procesy replikacji czy segregacji lub białka umożliwiające wizualizację chromosomu tych bakterii w fuzji z białkami fluorescencyjnymi (tj. białka fuzyjne).
+
+\subsubsection{Pozyskiwanie danych}
+
+Do obserwacji komórek modelowych badacze z Wydziału Biotechnologii Uniwersytetu Wrocławskiego używają mikroskopu wyposażonego jest w zestaw filtrów umożliwiający wizualizację różnych białek fluorescencyjnych.
+Podczas eksperymentu obserwowane komórki naświetlane są falami o odpowiedniej długości.
+Aminokwasy wewnątrz danego białka fluorescencyjnego tworzące fluorofor, absorbują promieniowanie elektormagnetyczne o określonej długości, a następnie emitują promieniowanie o niższej energii.
+Na zarejestrowanych w ten sposób obrazach widoczne są tzw. ,,ogniska fluorescencji''.
+Są to makrokompleksy jakie tworzą białka fuzyjne z DNA chromosomalnym bakterii. 
+%Przykładowo zielona kropka, która po czasie rozdziela się na dwie, które są następnie dziedziczone do komórek potomnych obrazuje maszynerię replikacyjną czyli powielającą DNA naszych bakterii.
+
+Oprócz fluorescencji, która obrazuje wewnętrzną strukturę komórki, obserwuje się także ich zewnętrzną strukturę oświetloną światłem widzialnym.
+W celu zwiększenia kontrastu takich obrazów stosuje się układy z kontrastem różnicowo--interferencyjnym Nomarskiego (DIC, ang. differential interference contrast).
+
+Przykładowy eksperyment przeprowadzany jest przez 20h w komorze, która umożliwia utrzymanie optymalnej dla komórek modelowych temperatury (37$^{\circ}$C).
+Co 10 min wykonywane jest zdjęcie.
+Tak pozyskane nagranie badacze obrabiają przy użyciu programu Fiji\cite{imagej:fiji}.
+Jest to dystrybucja otwartego oprogramowania ImageJ służącego do przetwarzania obrazów.
+Wyposażona jest w wiele wtyczek ułatwiających naukową analizę obrazu.
+Przy jej pomocy zbierane są także dane dotyczące poszczególnych komórek na poszczególnych klatkach nagrania, takie jak długość czy umiejscowienie ,,ognisk fluorescencji''.
+W tym celu pracownicy naukowi ręcznie oznaczają mierzoną komórkę na obrazie, aby następnie skorzystać z odpowiednich narzędzi programu dokonujących pomiarów.
+Pomiary są zapisywane, a proces powtarzany jest dla pozostałych komórek widocznych w danej klatce, a następnie dla pozostałych klatek nagrania.
+Kolejną częścią procesu jest analiza zbiorczych danych w programie RStudio.
+Tam dokonywane są analizy statystyczne czy wizualizacje wyników, które następnie wykorzystywane są w pracach naukowych.
+
+Podczas wywiadu z badaczami Wydziału Biotechnologii dowiedziałem się, że istnieją różne narzędzia do automatycznej analizy danych mikroskopowych, ale są one tworzone pod konkretne gatunki bakterii.
+Populacje prątków są bardzo zróżnicowane, przez co ciężko stworzyć ujednolicony algorytm do ich rozpoznawania.
+Dodatkowym utrudnieniem jest specyficzna budowa ściany komórkowej bakterii Mycobacterium smegmatis, która powoduje, że po podziale, komórki te bardzo długo są do siebie ,,przyklejone''.
+
+\section{Cel pracy}
+\label{sec:target}
+
+Aktualny proces zbierania danych z nagrania jest żmudny i dodatkowo wymaga pracy z wieloma narzędziami jednocześnie.
+Idealnym rozwiązaniem byłaby pełna automatyzacja procesu, ale dużym usprawnieniem mogłoby być również podzielenie tego procesu na dwa etapy:
+\begin{itemize}
+  \item zaznaczanie komórek
+  \item dokonywanie pomiarów.
+\end{itemize}
+W aktualnym procesie każda komórka zaznaczana jest osobno, dokonywane i zapisywane są dla niej pomiary, a następnie proces powtarzany jest dla kolejnych komórek.
+Możliwość zaznaczenia wszystkich komórek w pierwszym kroku, a następnie dokonania na nich pomiarów, mogłaby usprawnić cały proces.
+Przy takim podejściu możliwy staje się także zapis i odczyt wszystkich zaznaczeń, co dałoby możliwość wielokrotnego wykorzystania raz włożonej pracy.
+
+Celem niniejszej pracy jest stworzenie narzędzia, które ułatwiałoby w przyszłości opisany powyżej proces pozyskiwania danych, a tym samym ułatwiało pracę badaczom.
+Narzędzie to postanowiłem zaimplementować jako wtyczkę do programu ImageJ, ze względu na dotychczasowe doświadczenia zespołu i biegłość w obsłudze tego programu.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -92,16 +156,71 @@
 \subsection{Obrazy wejściowe}
 \label{sec:input-images}
 
-\ldots % TODO Obrazy wejściowe
+Proces uzyskiwania nagrań przedstawiających cykl komórkowy Mycobacterium smegmatis opisałem w rozdziale \ref{sec:intro-description}.
+Nagrania takie są w istocie stosem obrazów wykonanych w stałych odstępach czasu.
+Na pojedynczy obraz składają się przynajmniej dwa podstawowe kanały.
+Pierwszy z nich pozyskany jest za pomocą zjawiska fluorescencji i przedstawia głównie rozmieszczenie białek fuzyjnych.
+Drugi kanał przedstawia komórki oświetlone światłem widzialnym w kontraście DIC.
+Pozwala na dokładniejsze zaobserwowanie kształtu i rozmieszczenia poszczególnych komórek.
+Poszczególne kanały przykładowego kadru nagrania przedstawia rysunek \ref{fig:input-images}.
+
+\begin{figure}[h]
+  \centering
+  
+  \begin{subfigure}[t]{.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/input-channel-1.png}
+    \caption{\centering Kanał fluorescencji.}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{.45\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{images/input-channel-2.png}
+    \caption{\centering Kanał światła widzialnego w kontraście DIC.}
+  \end{subfigure}
+  \hfill
+    
+  \caption{Dwa kanały tej samej klatki przykładowego nagrania.}
+  \label{fig:input-images}
+\end{figure}
+
 
 \subsection{Pożądany efekt}
-\label{sec:output}
 
-\ldots % TODO Pożądany efekt
+Celem pracy, który został opisany dokładniej w rozdziale \ref{sec:target}, jest uproszczenie części procesu pozyskiwania danych o cyklu komórkowym prątków z gatunku Mycobacterium smegmatis.
+Narzędzie stworzone na potrzeby tej pracy ma pomóc badaczom w żmudnym procesie oznaczania komórek na nagraniach.
+Optymistyczny scenariusz zakłada że program, przy niewielkiej interakcji ze strony użytkownika, oznaczy komórki na wszystkich obrazach, zachowując przy tym informacje na temat pochodzenia każdej z nich.
+Oznaczenie komórki oznacza odnalezienie krzywej lub linii łamanej przechodzącej przez środek komórki.
+Taki opis komórki pomoże nie tylko przy analizie zmian długości komórek, ale także pozwoli odczytać profil intensywności takiego oznaczenia z kanału fluorescencji.
+Dodatkowym atutem byłaby możliwość edycji tego typu zaznaczeń w przypadkach gdy program nie wyznaczył ich poprawnie.
+
+Ze względu na słabą jakość nagrań oraz często występujące na obrazach artefakty, automatyczne oznaczanie może nie być możliwe przy niektórych klatkach lub nawet całych nagraniach.
+W takich przypadkach użytkownik powinien mieć możliwość ręcznego stworzenia oznaczeń.
 
 \section{Powiązane prace}
 
-\ldots % TODO Powiązane prace
+
+W literaturze opisano wiele metod wykrywania prątków na obrazach wykonanych przy pomocy mikroskopów.
+W większości dotyczą one jednak wykrywania komórek gruźlicy w celach diagnostycznych.
+Część takich metod, szczególnie wcześniejszych, opierała się na pracy z wykorzystaniem fluorescencji\cite{paper:detection-of-tb-with-ip}.
+Istnieją także prace wykorzystujące zdjęcia oświetlane światłem widzialnym.
+Metody te mogą być szczególnie przydatne w miejscach, w których dostęp do mikroskopów fluorescencyjnych jest ograniczony lub wręcz niemożliwy\cite{paper:ip-techniques-for-identifying-tb}.
+Celem tego typu metod jest najczęściej segmentacja obrazu na komórki gruźlicy i pozostałe obszary.
+Efekt takiego działania pozwala na stwierdzenie obecności lub nieobecności komórek na obrazie, a także na określeniu ich lokalizacji. O ile metody te niewątpliwie są bardzo ważne w diagnostyce, o tyle niekoniecznie sprawdzą się w przypadku analizy danych na poziomie pojedynczych komórek.
+
+%Duża część prac opiera się na analizie kolorów
+%Niektóre metody bazują na odpowiednim sposobie przygotowania zdjęć (np. zabarwieniu tła na określony kolor\cite{paper:detection-of-tb-with-ip}).
+
+Podobnym zagadnieniem, niekoniecznie w kontekście dziedziny, ale z perspektywy przetwarzania obrazów, jest także wykrywanie nicieni.
+Jeden z gatunków, Caenorhabditis elegans, od wielu lat jest organizmem modelowym w badaniach nauk biologicznych\cite{wiki:c-elegans}.
+C. elegans, podobnie jak prątki, ma symetryczny tubowaty kształt przypominający robaka.
+Oczywiście jest to zupełnie inny rząd wielkości.
+Badania takich bezkręgowców często polega na analizie danych na poziomie pojedynczego osobnika.
+W literaturze można znaleźć prace opisujące metody automatycznego oznaczania i opisywania tych nicieni.
+Ze względu na różnicę w wielkości, dużo łatwiej jest wykonać bardzo dobrej jakości nagranie przedstawiające te żyjątka, niż nagranie przedstawiające prątki.
+Lepsza jakość nagrań znacząco ułatwia ich późniejszą obróbkę.
+Mimo różnic pomiędzy tymi dziedzinami, praca opisana przez Javiera Fernándeza\cite{paper:worm-detection} była w pewnym stopniu inspiracją do zaproponowanej przeze mnie metody.
+
 
 \section{Wykrywanie komórek}
 \label{sec:cell-detection}
@@ -119,10 +238,11 @@ Oznaczenie wszystkich komórek widocznych na obrazie można rozłożyć na dwa o
   \item Odnalezienie kształtu poszczególnych komórek.
 \end{enumerate}
 
-W niniejszej pracy zdecydowałem się nie rozwiązywać automatycznie pierwszego problemu. Zamiast tego użytkownik zobowiązany jest ręcznie zaznaczyć dokładnie jeden punkt wewnątrz każdej komórki widocznej na obrazie. Wymóg ten dotyczy tylko pierwszej klatki nagrania, co opiszę dokładniej w dalszej części pracy (\ref{sec:cell-tracking}).
+W niniejszej pracy zdecydowałem się nie rozwiązywać automatycznie pierwszego problemu.
+Zamiast tego użytkownik zobowiązany jest ręcznie zaznaczyć dokładnie jeden punkt wewnątrz każdej komórki widocznej na obrazie.
+Wymóg ten dotyczy tylko pierwszej klatki nagrania, co opiszę dokładniej w dalszej części pracy (\ref{sec:cell-tracking}).
 
-% TODO z którego kanału?
-Danymi wejściowymi są zatem obraz $\image$ oraz zbiór punktów $\mathbf{P}$ lokalizujących komórki.
+Danymi wejściowymi są zatem dwa kanały obrazu $\image$ oraz zbiór punktów $\mathbf{P}$ lokalizujących komórki.
 
 \subsection{Wybór kanału i wstępne przetwarzanie obrazu}
 
@@ -364,7 +484,7 @@ Chcąc ręcznie oznaczyć komórki w kolejnej klatce (zamiast wyliczać je autom
 \section{Kod źródłowy}
 
 Kod źródłowy projektu zamieszczony został w publicznie dostępnym repozytorium w serwisie GitHub.
-% TODO Licencja?
+% TODO licencja?
 Repozytorium można znaleźć pod adresem
 \linebreak\url{https://github.com/rossinek/cell-detector-imagej-plugin}.
 
@@ -412,8 +532,8 @@ Przed uruchomieniem pluginu należy otworzyć nagranie które chcemy analizować
 Interfejs pluginu na każdym etapie składa się z kilku stałych i kilku zmiennych (w zależności od aktualnego kroku) części składowych.
 Po prawej stronie znajduje się zawartość standardowego okna wielokanałowego stosu obrazów ImageJ.
 Dwa suwaki w dolnej części służą do wyboru kanału oraz klatki nagrania.
-Wybór kanału ma wpływ na to, na którym kanale odbywa się detekcja.
-% TODO który kanał należy wybrać
+Wybór kanału ma wpływ na to, na którym z nich odbywa się detekcja.
+Pierwszym wyborem powinien być kanał przedstawiający komórki oświetlone światłem widzialnym.
 Obok suwaka do wyboru klatki znajduje się przycisk start/stop służący do odtwarzania nagrania.
 W górnej części panelu znajdującego się po lewej stronie znajdują się kontrolki specyficzne dla danego kroku pluginu. W jego dolnej części znajdują się narzędzia przydatne na każdym etapie działania pluginu, a także przyciski do zmiany kroku.
 
@@ -759,11 +879,11 @@ Rozwiązanie to nie jest wyjątkowo stabilne, ponieważ dokonuje konwersji typó
 
 
 \section{Podsumowanie}
-\ldots % TODO Podsumowanie
+\ldots % TODO Zakończenie: Podsumowanie
 \section{Ograniczenia wynikające z zastosowanych metod}
-\ldots % TODO Ograniczenia wynikające z zastosowanych metod
+\ldots % TODO Zakończenie: Ograniczenia wynikające z zastosowanych metod
 \section{Dalszy rozwój}
-\ldots % TODO Dalszy rozwój
+\ldots % TODO Zakończenie: Dalszy rozwój
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -776,6 +896,61 @@ Rozwiązanie to nie jest wyjątkowo stabilne, ponieważ dokonuje konwersji typó
 %\bibitem{example} \ldots
 
 \begin{thebibliography}{1}
+
+\bibitem{who-stats}
+  World Health Organization,
+  \emph{Tuberculosis},
+  \url{https://www.who.int/news-room/fact-sheets/detail/tuberculosis},
+  2020.
+
+\bibitem{paper:watching-dna-replication}
+  Damian Trojanowski, Marta Kołodziej, Joanna Hołówka, Rolf M{\"u}ller, Jolanta Zakrzewska-Czerwińska,
+  \emph{Watching DNA Replication Inhibitors in Action: Exploiting Time-Lapse Microfluidic Microscopy as a Tool for Target-Drug Interaction Studies in Mycobacterium},
+  Antimicrobial Agents and Chemotherapy,
+  American Society for Microbiology Journals,
+  63(10),
+  2019.
+%  \url{https://aac.asm.org/content/63/10/e00739-19}
+
+\bibitem{paper:protein-responsibility}
+  Joanna Hołówka, Damian Trojanowski, Katarzyna Ginda, Bartosz Wojtaś, Bartłomiej Gielniewski, Dagmara Jakimowicz, Jolanta Zakrzewska-Czerwińska,
+  \emph{HupB Is a Bacterial Nucleoid-Associated Protein with an Indispensable Eukaryotic-Like Tail},
+  mBio,
+  American Society for Microbiology,
+  8(6),
+  2017.
+
+\bibitem{imagej:fiji}
+  ImageJ User Guide,
+  \emph{Fiji},
+  \url{https://imagej.net/Fiji}.
+  
+\bibitem{paper:detection-of-tb-with-ip}
+  H. B. Rachna, M. S. Mallikarjuna Swamy,
+  \emph{Detection of Tuberculosis Bacilli using Image Processing Techniques},
+  International Journal of Soft Computing and Engineering,
+  3:47-51,
+  2013.
+
+\bibitem{paper:ip-techniques-for-identifying-tb}
+  P. Sadaphal, J. Rao, G. W. Comstock, M. F. Beg,
+  \emph{Image processing techniques for identifying Mycobacterium tuberculosis in Ziehl-Neelsen stains},
+  The international journal of tuberculosis and lung disease : the official journal of the International Union against Tuberculosis and Lung Disease,
+  12(5):579–582,
+  2008.
+
+\bibitem{wiki:c-elegans}
+  Wikipedia,
+  \emph{Caenorhabditis elegans},
+  \url{https://pl.wikipedia.org/wiki/Caenorhabditis_elegans}.
+  
+\bibitem{paper:worm-detection}
+  Javier Fernández,
+  \emph{Image Processing to Detect Worms},
+  Uppsala Universitet,
+  Uppsala,
+  Sweden,
+  2010.
 
 \bibitem{paper:shape-index}
   Jan J Koenderink, Andrea J van Doorn,
