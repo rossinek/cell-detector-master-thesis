@@ -256,7 +256,7 @@ Ostatecznie zdecydowałem się użyć narzędzia które nie jest związane z wyk
 
 \subsubsection{Mapa indeksów kształtu}
 
-Postanowiłem spróbować wyliczyć mapę indeksów kształtu (ang. shape index map) dla obrazu wejściowego, na którym wcześniej zastosowałem rozmycie gaussowskie. Indeks kształtu to liczba z przedziału $[-1, 1]$ przyporządkowana na podstawie ,,lokalnego kształtu'' powierzchni. Jest to skaloniezminnicza (ang. scale invariant) miara, która dzieli powierzchnię na obszary wypukłe, wklęsłe i hiperboliczne (rysunek \ref{fig:shape-index-range})\cite{paper:shape-index}. Obraz wejściowy interpretowany jest tutaj jako mapa wysokości. Zastosowanie rozmycia gaussowskiego w pierwszym kroku jest niezbędne w tym przypadku ze względu na nieodporność tej miary na szum obecny na obrazie wejściowym. Do wyliczenia mapy indeksów skorzystałem z wtyczki dla programu ImageJ autorstwa Johannesa Schindelina\cite{plugin:shape-index-map}.
+Postanowiłem spróbować wyliczyć mapę indeksów kształtu\cite{paper:shape-index} (ang. shape index map) dla obrazu wejściowego, na którym wcześniej zastosowałem rozmycie gaussowskie. Indeks kształtu to liczba z przedziału $[-1, 1]$ przyporządkowana na podstawie ,,lokalnego kształtu'' powierzchni. Jest to niezmiennicza na skalę (ang. scale invariant) miara, która dzieli powierzchnię na obszary wypukłe, wklęsłe i hiperboliczne (rysunek \ref{fig:shape-index-range}). Obraz wejściowy interpretowany jest tutaj jako mapa wysokości. Zastosowanie rozmycia gaussowskiego w pierwszym kroku jest niezbędne w tym przypadku ze względu na nieodporność tej miary na szum obecny na obrazie wejściowym. Do wyliczenia mapy indeksów skorzystałem z wtyczki dla programu ImageJ autorstwa Johannesa Schindelina\cite{plugin:shape-index-map}.
 
 \begin{figure}
   \includegraphics[width=\textwidth]{images/shape-index-range.png}
@@ -264,14 +264,22 @@ Postanowiłem spróbować wyliczyć mapę indeksów kształtu (ang. shape index 
   \label{fig:shape-index-range}
 \end{figure}
 
-Okazało się, że na wynikowej mapie otoczenie komórek interpretowane jest jako obszar wklęsły, w przeciwieństwie do samych komórek, których wnętrze oznaczane jest indeksami kształtów wypukłych. Własność ta zachodzi na większości testowych obrazów nawet przy stosunkowo dużym zagęszczeniu komórek.
+Okazało się, że na wynikowej mapie otoczenie komórek interpretowane jest jako obszar wklęsły, w przeciwieństwie do samych komórek, których wnętrze oznaczane jest indeksami kształtów wypukłych.
+Własność ta zachodzi dla większości testowych obrazów nawet przy stosunkowo dużym zagęszczeniu komórek.
 
 \subsection{Szkieletyzacja i wstępna detekcja komórek}
 
-Zgodnie z powyższą obserwacją, możemy łatwo oddzielić komórkę od jej otoczenia na obrazie ustalając pewien próg $t \approx 0$. Załóżmy przez chwilę, że binaryzując w ten sposób mapę indeksów kształtu otrzymamy obraz $\image_{bin}$, na którym każdy piksel leżący wewnątrz dowolnej komórki będzie miał wartość $1$, natomiast każdy piksel należący do zewnętrznego obrysu dowolnej komórki (nie należący do komórki, lecz sąsiadujący z pikselem należącym do niej) będzie miał wartość $0$.
-Przy takim założeniu każda komórka jest niezależną ,,wyspą'' na binarnym obrazie $\image_{bin}$. Chcąc odnaleźć ,,kręgosłup'' komórki (łamaną przechodzącą przez jej środek) chcemy tak naprawdę znaleźć łamaną, która jest równoodległa od jej krawędzi. Bardzo podobny problem rozwiązują algorytmy do wyznaczania szkieletu. Ich celem jest odnalezienie zbioru punktów równoodległych od co najmniej dwóch brzegów.
+Zgodnie z powyższą obserwacją, możemy łatwo oddzielić komórkę od jej otoczenia na obrazie ustalając pewien próg $t \approx 0$ dla indeksu kształtu.
+Załóżmy przez chwilę, że binaryzując w ten sposób mapę indeksów kształtu otrzymamy obraz $\image_{bin}$, na którym każdy piksel leżący wewnątrz dowolnej komórki będzie miał wartość $1$, natomiast każdy piksel należący do zewnętrznego obrysu dowolnej komórki (nie należący do komórki, lecz sąsiadujący z pikselem należącym do niej) będzie miał wartość $0$.
+Przy takim założeniu każda komórka jest niezależną ,,wyspą'' na binarnym obrazie $\image_{bin}$.
+Chcąc odnaleźć łamaną przechodzącą przez środek komórki, chcemy tak naprawdę znaleźć łamaną, która jest równoodległa do jej krawędzi.
+Analogiczny problem rozwiązują algorytmy do wyznaczania szkieletu.
+Ich celem jest odnalezienie dla danego kształtu zbioru punktów równoodległych do co najmniej dwóch brzegów.
 
-Na potrzeby tej pracy do szkieletonizacji użyta została implementacja algorytmu ,,3D thinning algorithm''\cite{algo:3d-thinning} w formie pluginu dla programu ImageJ\cite{plugin:skeletonize-3d}. Mimo iż wtyczka pozwala na szkieletyzację obrazów 3D, w tym przypadku została użyta do przetworzenia pojedynczego obrazu 2D. Wynikiem szkieletyzacji jest binarny obraz o pewnych właściwościach. Każdy aktywny piksel można przyporządkować do trzech grup:
+Na potrzeby tej pracy do szkieletyzacji użyta została implementacja algorytmu ,,3D thinning algorithm''\cite{algo:3d-thinning} w formie pluginu dla programu ImageJ\cite{plugin:skeletonize-3d}.
+Mimo to że wtyczka pozwala na szkieletyzację obrazów 3D, w tym przypadku została użyta do przetworzenia pojedynczego obrazu 2D.
+Wynikiem szkieletyzacji jest binarny obraz o pewnych właściwościach.
+Każdy aktywny piksel można przyporządkować do trzech grup:
 \begin{itemize}
   \item końcówki -- mają mniej niż 2 sąsiadujące aktywne piksele
   \item węzły -- mają więcej niż 2 sąsiadujące aktywne piksele
@@ -279,7 +287,7 @@ Na potrzeby tej pracy do szkieletonizacji użyta została implementacja algorytm
 \end{itemize}
 Przedstawiając szkielet jako graf końcówki tworzyłyby wierzchołki o stopniu równym $1$ lub $0$, wierzchołki o większych stopniach przedstawiałyby zbiory sąsiadujących ze sobą węzłów, natomiast krawędzie reprezentowałyby zbiory sąsiadujących ze sobą połączeń (zakończonych zbiorem węzłów lub końcówką). Taką reprezentację grafową można uzyskać za pomocą kolejnej wtyczki dla programu ImageJ tego samego autora\cite{plugin:analyze-skeleton}. Poza standardowymi informacjami wierzchołki i krawędzie utworzonego za jej pomocą grafu przechowują zbiory pikseli które reprezentują.
 
-Ze względu na specyficzny kształt komórki można zaobserwować następującą właściwość: po przeprowadzeniu szkieletyzacji obrazu $\image_{bin}$, o ile przyjęte wcześniej założenie jest spełnione, szkielet każdej z komórek składa się dokładnie z dwóch końcówek i połączeń między nimi. Łamaną opisującą zbiór połączeń można z powodzeniem nazwać ,,kręgosłupem komórki''. Mając do dyspozycji zbiór punktów $\mathbf{P}$ lokalizujących komórki można teraz w łatwy sposób odnaleźć dla każdej z nich graf ją opisujący (zawierający dwa wierzchołki i jedną krawędź). Jednym ze sposobów może być wyszukanie dla każdego punktu ze zbioru $\mathbf{P}$ krawędź która znajduje się najbliżej tego punktu, gdzie odległość między punktem a krawędzią zdefiniowana jest jako odległość między punktem, a najbliższym pikselem, który należy do zbioru opisywanego przez tę krawędź.
+Ze względu na specyficzny kształt komórki można zaobserwować następującą właściwość: po przeprowadzeniu szkieletyzacji obrazu $\image_{bin}$, o ile przyjęte wcześniej założenie jest spełnione, szkielet każdej z komórek składa się dokładnie z dwóch końcówek i połączeń między nimi. Łamaną opisującą zbiór połączeń można z powodzeniem nazwać ,,kręgosłupem komórki''. Mając do dyspozycji zbiór punktów $\mathbf{P}$ lokalizujących komórki można teraz w łatwy sposób odnaleźć dla każdej z nich graf ją opisujący (zawierający dwa wierzchołki i jedną krawędź). Jednym ze sposobów może być wyszukanie dla każdego punktu ze zbioru $\mathbf{P}$ krawędzi która znajduje się najbliżej tego punktu, gdzie odległość między punktem a krawędzią zdefiniowana jest jako odległość między punktem, a najbliższym pikselem, który należy do zbioru opisywanego przez tę krawędź.
 
 \subsection{Wybór krawędzi w węzłach}
 \label{sec:spine-extending}
@@ -293,13 +301,13 @@ Wstępna detekcja kręgosłupa danej komórki polega, tak jak w scenariuszu opty
 \FORALL{$v \in \{ v_0, u_0 \}$}
   \LOOP
     \STATE
-      $\text{E}_v \gets$ podzbiór krawędzi grafu $E(\mathbf{G}) - E(\mathbf{S}_n)$ incydentnych do $v$,\newline
-      \hphantom{$\text{E}_v \gets$} które nie tworzą cyklu w grafie $\mathbf{S}_n$
+      $\text{E}_v \gets$ zbiór krawędzi $e \in E(\mathbf{G}) - E(\mathbf{S}_n)$ incydentnych do $v$,\newline
+      \hphantom{$\text{E}_v \gets$} takich że graf $\mathbf{S}_n + e$ nie posiada cykli
     \IF{$\text{E}_v = \O$}
       \STATE \textbf{break}
     \ENDIF
     \STATE $\{v, u\} \gets \argmax_{e \in \text{E}_v} \ q_v(e)$
-    \STATE $\mathbf{S}_{n+1} \gets \mathbf{S}_n \cup (\{u\}, \{\{v, u\}\}) $
+    \STATE $\mathbf{S}_{n+1} \gets \mathbf{S}_n + \{v, u\} $
     \STATE $v \gets u$
   \ENDLOOP
 \ENDFOR
@@ -307,7 +315,9 @@ Wstępna detekcja kręgosłupa danej komórki polega, tak jak w scenariuszu opty
 \end{algorithm}
 
 \noindent
-Funkcja $q_v(e)$ jest tutaj funkcją oceny, która służy do wyboru najmocniej związanej krawędzi. Siła wiązania zdefiniowana jest tutaj jako najniższa wartość indeksu kształtu (oryginalnego obrazu) dla piksela leżącego na krawędzi $e$, w okolicy wierzchołka $v$ (w odległości nie większej niż pewna stała $d$ od środka masy pikseli tworzących węzeł $v$).
+W powyższym algorytmie oznaczenie $E(\mathbf{G})$ opisuje zbiór krawędzi grafu $\mathbf{G}$.
+Wyrażenie $\mathbf{S} + e$ oznacza graf utworzony poprzez dodanie do grafu $\mathbf{S}$ krawędzi $e$ oraz jej wierzchołków.
+Funkcja $q_v(e)$ jest tutaj funkcją oceny, która służy do wyboru najmocniej związanej krawędzi. Siłą wiązania nazywam najniższą wartość indeksu kształtu (oryginalnego obrazu) dla piksela leżącego na krawędzi $e$, w okolicy wierzchołka $v$ (w odległości nie większej niż pewna stała $d$ od środka masy pikseli tworzących węzeł $v$).
 
 Takie rozwiązanie sprawdza się dobrze dla komórek, których kręgosłup znajduje się w grafie $\mathbf{G}$, oraz jego zakończenia w tym grafie mają stopień $1$. Pomijam na ten moment przypadek, gdy szukany kręgosłup komórki nie istnieje w grafie $\mathbf{G}$. W pozostałych przypadkach przynajmniej jedno z zakończeń szukanego kręgosłupa $\mathbf{S}$ ma w grafie $\mathbf{G}$ stopień większy niż $1$. Zatem, o ile funkcja oceny $q_v(e)$ sprawdzi się dobrze jeśli chodzi o dobór krawędzi należących do szukanego kręgosłupa komórki, uzyskany na końcu algorytmu kręgosłup $\mathbf{S}_n$ będzie nadgrafem szukanego kręgosłupa $\mathbf{S}$. W takim przypadku ,,nadmiarowa'' część kręgosłupa należy do szkieletu innej komórki lub jest wynikiem artefaktu widocznego na oryginalnym obrazie. Drugi przypadek pozostawiam do ręcznego rozwiązania użytkownikowi. Pierwszy natomiast, nachodzące na siebie kręgosłupy komórek, rozwiązuję automatycznie.
 
@@ -340,7 +350,7 @@ Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma kręgosłupami, zale�
 \end{figure}
 
 W tym przypadku część wspólna przydzielana jest do jednego z kręgosłupów w całości.
-Są dwie możliwości: oba punkty charakterystyczne komórki leżą poza częścią wspólną lub dokładnie jeden z nich znajduje się w części wspólnej.
+Są dwie możliwości: oba punkty charakterystyczne komórek leżą poza częścią wspólną lub dokładnie jeden z nich znajduje się w części wspólnej.
 Gdyby oba punkty leżały w części wspólnej, to ze względu na sposób konstrukcji szkieletów, podczas procesu rozszerzania dobierane byłyby te same krawędzie, a więc końcowo oba kręgosłupy byłyby dokładnie takie same.
 W drugim przypadku sprawa jest prosta -- część wspólna zostaje przydzielona do kręgosłupa którego punkt charakterystyczny leży w części wspólnej. W pierwszym przypadku część wspólna przydzielana jest do tego kręgosłupa z którym jest mocniej związana (siłę wiązania określam w podobny sposób jak w algorytmie konstrukcji kręgosłupa).
 
@@ -382,14 +392,14 @@ Sposób rozwiązania tego konfliktu jest bardzo podobny do sposobu rozwiązania 
 Dwa kręgosłupy mogą mieć więcej niż jeden konflikt równocześnie. Jest to rzadkie, ale realistyczne.
 W tym przypadku w każdej iteracji rozwiązywany jest jeden z takich konfliktów za pomocą sposobów opisanych powyżej.
 
-\subsection{Uzyskiwanie linii łamanej korekta końcowa}
+\subsection{Uzyskiwanie linii łamanej}
 
 Po rozwiązaniu wszystkich konfliktów każdy kręgosłup opisuje szkielet pewnej komórki.
 Kolejnym krokiem jest konwersja reprezentacji grafowej (która zawiera zbiór pikseli opisujących szkielet) do linii łamanaj.
 W takiej formie użytkownik będzie mógł ręcznie modyfikować zaznaczenia komórek korzystając ze standardowego interfejsu programu ImageJ.
 Pierwsza wersja linii łamanej powstaje ze wszystkich punktów tworzących krawędzie i końcówki kręgosłupa, a także ze środków masy jego węzłów.
-Następnie geometria łamanej jest upraszczana za pomocą algorytmu Ramera--Douglasa--Peuckera\cite{algo:ramer-douglas-peucker}.
-Algorytm ten eliminuje punkty, których usunięcie nie wpływa znacząco na kształt łamanej tj. po ich usunięciu odległość uproszczonej łamanej od oryginalnej jest nie większa niż pewna przyjęta stała.
+Następnie geometria łamanej jest upraszczana za pomocą algorytmu Ramera--Douglasa--Peuckera\cite{algo:ramer}\cite{algo:douglas-peucker}.
+Algorytm ten eliminuje punkty, których usunięcie nie wpływa znacząco na kształt łamanej tj. po ich usunięciu odlegxłość uproszczonej łamanej od oryginalnej jest nie większa niż pewna przyjęta stała.
 
 \subsection{Korekta końcówek}
 \label{sec:correct-endpoints}
@@ -417,7 +427,7 @@ Następnie wybierane są te punkty (i stworzone przez nie kręgosłupy), które 
 
 Jeśli nowy kręgosłup komórki jest znacząco krótszy niż łamana opisująca ją na poprzednim obrazie, prawdopodobnie oznacza to, że nastąpił podział komórki. W takim przypadku wyszukiwany jest kolejny kręgosłup. Tym razem kandydatów na punkty lokalizujące poszukuję tylko po jednej stronie łamanej. Jeśli pierwszy kręgosłup powstał na podstawie punktu leżącego bliżej końca łamanej, jego bliźniaczy kręgosłup prawdopodobnie znajduje się bliżej jej początku i vice versa.
 
-Po odnalezieniu wszystkich nowych kręgosłupów zgodnie z powyższą procedurą, następuje etap rozwiązywania konfliktów, konwersji na linie łamane i ostatecznej korekty końcówek (\ref{sec:fix-conflicts}--\ref{sec:correct-endpoints}).
+Po odnalezieniu wszystkich nowych kręgosłupów zgodnie z powyższą procedurą, następuje etap rozwiązywania konfliktów, konwersji na linie łamane i ostatecznej korekty końcówek, tak jak to zostało opisane (\ref{sec:fix-conflicts}--\ref{sec:correct-endpoints}).
 
 
 
@@ -462,7 +472,7 @@ Zapewne można próbować rozwiązać te problemy automatycznie, ale na pewno po
 Właśnie z tego powodu postanowiłem zapewnić użytkownikowi możliwość interaktywnego poprawiania automatycznie wyznaczonych komórek, ale także całkowicie manualne kontynuowanie detekcji, zachowując przy tym informacje o historii komórek.
 
 Komórki przedstawione są w oknie programu jako standardowe zaznaczenia programu ImageJ i można je edytować za pomocą standardowego interfejsu.
-Poza tym plugin stworzyłem dwa dodatkowe narzędzia dla użytkownika.
+Dodatkowo stworzyłem dwa dodatkowe narzędzia dla użytkownika.
 Pierwsze z nich służy do rozcinania komórek w miejscach, w których się one dzielą.
 Mimo że algorytm śledzenia ma mechanizm odpowiedzialny za zauważenie takich zmian, zdarza się że dzieje się to zbyt późno (komórki jeszcze przez pewien czas po podziale znajdują się bardzo blisko siebie).
 
@@ -1036,6 +1046,20 @@ Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako ba
   Wikipedia,
   \emph{Ramer--Douglas--Peucker algorithm},
   \url{https://en.wikipedia.org/wiki/Ramer-Douglas-Peucker_algorithm}.
+
+\bibitem{algo:ramer}
+  Urs Ramer,
+  \emph{An iterative procedure for the polygonal approximation of plane curves},
+  Computer Graphics and Image Processing,
+  1(3):224–256,
+  1972.
+
+\bibitem{algo:douglas-peucker}
+  David Douglas, Thomas Peucker,
+  \emph{Algorithms for the reduction of the number of points required to represent a digitized line or its caricature},
+  The Canadian Cartographer,
+  10(2):112–122,
+  1973.
   
 \bibitem{imagej:segmented-line}
   ImageJ User Guide,
