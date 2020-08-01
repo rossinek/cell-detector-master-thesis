@@ -777,6 +777,7 @@ Na potrzeby tej pracy powstała jej implementacja \texttt{PolylineCellFrame}, kt
 Klasy te składają się na implementację grafu, który zawiera dodatkowe informacje o punktach składających się na krawędzie i wierzchołki.
 
 \subsection{Architektura umożliwiająca dalszy rozwój}
+\label{sec:architecture}
 
 Główną klasą projektu jest \texttt{CellsPlugin}, która instancjonowana jest przez program ImageJ po otwarciu wtyczki z poziomu menu \texttt{Development > Cell Detector}.
 Podczas uruchomienia tworzona jest kopia aktualnie otwartego stosu obrazów, która wyświetlona zostaje w specjalnym oknie pluginu (jego opis znajduje się w rozdziale \ref{sec:user-manual}), a także utworzona zostaje pusta kolekcja komórek.
@@ -879,11 +880,58 @@ Rozwiązanie to nie jest wyjątkowo stabilne, ponieważ dokonuje konwersji typó
 
 
 \section{Podsumowanie}
-\ldots % TODO Zakończenie: Podsumowanie
-\section{Ograniczenia wynikające z zastosowanych metod}
-\ldots % TODO Zakończenie: Ograniczenia wynikające z zastosowanych metod
+
+Efektem niniejszej pracy jest narzędzie, mające usprawnić proces pozyskiwania danych na temat cyklu komórkowego prątków z gatunku Mycobacterium smegmatis.
+Narzędzie to zostało stworzone jako plugin dla programu ImageJ, powszechnie używanego przez naukowców zajmujących się mikrobiologią.
+Wtyczka pozwala na oznaczanie komórek na kolejnych klatkach nagrania przedstawiającego cykl komórkowy, tworząc w ten sposób strukturę danych która w późniejszych etapach służy do dokładnej analizy obrazów.
+Oznaczanie komórek może odbywać się w sposób w pełni automatyczny, może być wspierana przez użytkownika poprzez wprowadzanie poprawek lub może odbywać się w pełni manualnie.
+Narzędzie zapewnia możliwość zapisu i odczytu zaznaczeń z pliku.
+Wtyczka wyposażona jest dodatkowo w narzędzia pomagające w analizie cyklu komórkowego poprzez dokonywanie pomiarów, tworzenie profili intensywności pod oznaczeniami komórek.
+Dane można wyświetlić w formie wykresów, a także wyeksportować w surowej formie w celu analizy poza programem ImageJ (np. w RStudio).
+
+W pełni automatyczne oznaczanie i śledzenie komórek nie zawsze jest możliwe.
+Efekty tego podejścia są zadowalające tylko w przypadku dobrych jakościowo nagrań.
+Mimo to, nawet w trybie w pełni manualnym narzędzie może usprawnić pracę naukowców.
+Plugin pozwala na rozdzielenie pracy nad zaznaczaniem komórek, od wykonywania dalszych pomiarów.
+Dzięki temu poszczególne kroki mogą być wykonywane przez inne osoby.
+Tworzona w pierwszych krokach struktura zawiera informacje o rozwoju całej populacji komórek.
+Może zostać zapisana i wczytywana z pliku, dzięki czemu użytkownik może podzielić swoją pracę w czasie, wykorzystywać wielokrotnie raz utworzone zaznaczenia, a także przesyłać je  do innych użytkowników analizujących to samo nagranie.
+Sam proces tworzenia zaznaczeń również został usprawniony poprzez możliwość skopiowania zaznaczeń z poprzedniej klatki oraz stworzenie specjalnych narzędzi do wykonywania najczęściej powtarzających się czynności.
+
+\section{Ograniczenia zastosowanych metod}
+
+Przyjęta metoda automatycznego oznaczania i śledzenia komórek nie jest wolna od ograniczeń.
+Zakłada ona, że na obrazie binarnym, tworzonym na etapie szkieletyzacji, komórki (lub grupy komórek) są oddzielone od otoczenia.
+Założenie to jest prawie zawsze spełnione w miejscach, w których w okolicy grup komórek nie znajdują się żadne stałe elementy płytek po których poruszają się komórki lub inne artefakty.
+Im lepsza była jakość nagrania (mniej szumów, mniej artefaktów, ostrzejsze krawędzie), tym lepiej radził sobie algorytm automatycznego śledzenia komórek.
+Warto więc w miarę możliwości zadbać o wysoką jakość nagrania.
+
+Przeciętne obrazy spod mikroskopu przedstawiające analizowane eksperymenty, zawierały wiele artefaktów.
+Artefakty nakładające się z komórkami często powodują błędne ich oznaczanie lub przedłużanie ich końcówek.
+Zdarzało się również, że nagranie traciło ostrość w niektórych momentach lub cała scena przesuwała się nieznacznie w trakcie nagrania.
+W pierwszym przypadku powodowało to całkowicie błędne oznaczenie komórek.
+W drugim przypadku, jeśli przesunięcie jest odpowiednio duże, uniemożliwia to poprawne odnalezienie lokalizacji komórek na podstawie oznaczenia z poprzedniej klatki.
+
+Jeśli krawędzie pomiędzy komórkami nie są wystarczająco ostre na nagraniu, to w przypadku gdy pojawia się większa ilość komórek na raz, przestają one być oddzielone od siebie na obrazie binarnym.
+W efekcie szkielet całego obrazu nie zawiera szkieletów poszczególnych komórek, co w przyjętej metodzie uniemożliwia oznaczenie tych komórek.
+
 \section{Dalszy rozwój}
-\ldots % TODO Zakończenie: Dalszy rozwój
+
+Wymienione w poprzednim rozdziale problemy zastosowanej metody automatycznego śledzenia komórek można spróbować rozwiązać korzystając ze znanych algorytmów z dziedziny przetwarzania obrazów.
+Aby zniwelować wpływ artefaktów na efekt końcowy, można by spróbować zastosować na etapie wstępnego przetwarzania metody automatycznego ich usuwania\cite{paper:removing-artifacts}.
+Rozwiązaniem problemu związanego z przesuwającą się nieznacznie sceną w trakcie nagrania, mogłoby być wyliczenie przesunięcia (translacji) poszczególnych klatek względem dowolnej klatki referencyjnej, na podstawie stałych elementów tła.
+Takie dane mogłyby następnie zostać wykorzystane przy próbach określenia poprawnej lokalizacji komórek na podstawie poprzedniej klatki.
+
+Tak jak wspomniałem w rozdziale \ref{sec:detection-input}, w niniejszej pracy nie zajmowałem się problemem określenia liczby i lokalizacji poszczególnych komórek bez wcześniejszego udziału użytkownika.
+Nawet w trybie automatycznym użytkownik zobowiązany jest do zaznaczenia wszystkich komórek obecnych na pierwszej klatce nagrania.
+Nie jest to duży wymóg, ponieważ komórek tych jest wtedy zazwyczaj niewiele.
+Zaimplementowanie automatycznej detekcji komórek dla obrazów z niewielką ich ilością mogłoby być jednak usprawnieniem aktualnej implementacji.
+
+Podczas implementacji pluginu starałem się podejmować decyzje, które pozwoliłyby w łatwy sposób rozwijać dalej ten projekt.
+W rozdziale \ref{sec:architecture} opisałem w jaki sposób można w łatwy sposób ,,wymienić'' dowolny etap pluginu, tj. lokalizację i wstępną detekcję komórek, automatyczne śledzenie komórek, dokonywanie pomiarów i wizualizacji na podstawie zaznaczeń.
+Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako baza dla kolejnych prób znalezienia metody automatycznego oznaczania i śledzenia komórek. 
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -892,8 +940,6 @@ Rozwiązanie to nie jest wyjątkowo stabilne, ponieważ dokonuje konwersji typó
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-%\bibitem{example} \ldots
 
 \begin{thebibliography}{1}
 
@@ -1005,6 +1051,13 @@ Rozwiązanie to nie jest wyjątkowo stabilne, ponieważ dokonuje konwersji typó
   ImageJ User Guide,
   \emph{Philosophy},
   \url{https://imagej.net/Philosophy}.
+
+\bibitem{paper:removing-artifacts}
+  Jinwei Gu, Ravi Ramamoorthi, Peter Belhumeur, Shree Nayar,
+  \emph{Removing Image Artifacts Due to Dirty Camera Lenses and Thin Occluders},
+  ACM Trans. Graph.,
+  28(12),
+  2009.
 
 \end{thebibliography}
 
