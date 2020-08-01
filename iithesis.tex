@@ -522,7 +522,7 @@ Aby uruchomić plugin w ramach własnej niezależnej instancji ImageJ, po zbudow
 \section{Obsługa pluginu}
 \label{sec:user-manual}
 
-Po zainstalowaniu pluginu w programie ImageJ pojawi się nowe menu \texttt{Development} (rysunek \ref{fig:ui-menu}) w którym znajdują się narzędzia zaimplementowane na potrzeby tej pracy. Poza głównym pluginem (\texttt{Cell detector}) znajdują się tam jeszcze dodatkowe wtyczki służące do importu oraz eksportu komórek, a także narzędzia pomocne w rozwoju programu.
+Po zainstalowaniu pluginu w programie ImageJ pojawi się nowe menu \texttt{Mycobacterium} (rysunek \ref{fig:ui-menu}) w którym znajdują się narzędzia zaimplementowane na potrzeby tej pracy. Poza głównym pluginem (\texttt{Cell detector}) znajdują się tam jeszcze dodatkowe wtyczki służące do importu oraz eksportu komórek, a także narzędzia pomocne w rozwoju programu.
 \begin{figure}
   \centering
   \includegraphics[width=0.7\textwidth]{images/ui-menu.png}
@@ -720,9 +720,9 @@ Kolorem czerwonym oznaczone zostaną końcówki powstałe w wyniku podziału kom
 \subsection{Importowanie i eksportowanie komórek}
 
 Manualne oznaczanie i poprawianie komórek może być czasochłonne i nie zawsze można zakończyć pracę w ciągu jednej sesji.
-Aby nie utracić efektów swojej pracy, użytkownik może wyeksportować oznaczone komórki za pomocą menu \texttt{Development > Export cells}.
+Aby nie utracić efektów swojej pracy, użytkownik może wyeksportować oznaczone komórki za pomocą menu \texttt{Mycobacterium > Export cells}.
 Stworzony w ten sposób plik \texttt{XML} jest wynikiem serializacji kolekcji komórek.
-Podczas kolejnej sesji, po otwarciu tego samego nagrania, zapisane komórki można wczytać korzystając z menu \texttt{Development > Import cells}.
+Podczas kolejnej sesji, po otwarciu tego samego nagrania, zapisane komórki można wczytać korzystając z menu \texttt{Mycobacterium > Import cells}.
 
 \section{Dokumentacja techniczna}
 
@@ -789,7 +789,7 @@ Klasy te składają się na implementację grafu, który zawiera dodatkowe infor
 \subsection{Architektura umożliwiająca dalszy rozwój}
 \label{sec:architecture}
 
-Główną klasą projektu jest \texttt{CellsPlugin}, która instancjonowana jest przez program ImageJ po otwarciu wtyczki z poziomu menu \texttt{Development > Cell Detector}.
+Główną klasą projektu jest \texttt{CellsPlugin}, która instancjonowana jest przez program ImageJ po otwarciu wtyczki z poziomu menu \texttt{Mycobacterium > Cell Detector}.
 Podczas uruchomienia tworzona jest kopia aktualnie otwartego stosu obrazów, która wyświetlona zostaje w specjalnym oknie pluginu (jego opis znajduje się w rozdziale \ref{sec:user-manual}), a także utworzona zostaje pusta kolekcja komórek.
 
 Podczas inicjalizacji uruchomiony zostaje również nasłuch na różnego rodzaju zdarzenia programu--hosta ImageJ m.in. na:
