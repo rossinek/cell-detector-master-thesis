@@ -81,7 +81,7 @@ Zebrane dane mogą posłużyć także do określenia funkcji wybranego białka\c
 Badanie to polega na modyfikacji szczepu poprzez np. usunięciu genu, który je koduje i analizę różnych procesów komórkowych w takim szczepie -- sprawdza się między innymi czy cykl komórkowy bądź morfologia pojedynczych komórek nie zostały u nich zaburzone.
 
 Ze względu na zróżnicowanie populacji bakteryjnych, ważne jest, aby analizy przeprowadzane były na poziomie pojedynczych komórek.
-Podejście takie pozwala na odkrycie zależności, które są spełnione tylko dla części populacji.
+Podejście takie pozwala na odkrycie zależności, które występują tylko dla części populacji.
 Przykładowo część komórek z tego samego szczepu może inaczej reagować na podany inhibitor.
 
 Istnieje wiele parametrów poszczególnych procesów cyklu komórkowego, których pomiary mogą być przydatne w badaniach nad biologią prątków.
@@ -100,7 +100,7 @@ W celu śledzenia różnych procesów cyklu komórkowego wykorzystuje się fluor
 
 \subsubsection{Pozyskiwanie danych}
 
-Do obserwacji komórek modelowych badacze z Wydziału Biotechnologii Uniwersytetu Wrocławskiego używają mikroskopu wyposażonego jest w zestaw filtrów umożliwiający wizualizację różnych białek fluorescencyjnych.
+Do obserwacji komórek modelowych badacze z Wydziału Biotechnologii Uniwersytetu Wrocławskiego używają mikroskopu wyposażonego w zestaw filtrów umożliwiający wizualizację różnych białek fluorescencyjnych.
 Podczas eksperymentu obserwowane komórki naświetlane są falami o odpowiedniej długości.
 Aminokwasy wewnątrz danego białka fluorescencyjnego tworzące fluorofor, absorbują promieniowanie elektormagnetyczne o określonej długości, a następnie emitują promieniowanie o niższej energii.
 Na zarejestrowanych w ten sposób obrazach widoczne są tzw. ,,ogniska fluorescencji''.
@@ -108,7 +108,7 @@ Są to makrokompleksy jakie tworzą białka fuzyjne z DNA chromosomalnym bakteri
 %Przykładowo zielona kropka, która po czasie rozdziela się na dwie, które są następnie dziedziczone do komórek potomnych obrazuje maszynerię replikacyjną czyli powielającą DNA naszych bakterii.
 
 Oprócz fluorescencji, która obrazuje wewnętrzną strukturę komórki, obserwuje się także ich zewnętrzną strukturę oświetloną światłem widzialnym.
-W celu zwiększenia kontrastu takich obrazów stosuje się układy z kontrastem różnicowo--interferencyjnym Nomarskiego (DIC, ang. differential interference contrast).
+W celu zwiększenia kontrastu takich obrazów stosuje się układy z kontrastem różnicowo--interferencyjnym Nomarskiego\cite{paper:dic} (DIC, ang. differential interference contrast).
 
 Przykładowy eksperyment przeprowadzany jest przez 20h w komorze, która umożliwia utrzymanie optymalnej dla komórek modelowych temperatury (37$^{\circ}$C).
 Co 10 min wykonywane jest zdjęcie.
@@ -135,7 +135,7 @@ Idealnym rozwiązaniem byłaby pełna automatyzacja procesu, ale dużym usprawni
   \item dokonywanie pomiarów.
 \end{itemize}
 W aktualnym procesie każda komórka zaznaczana jest osobno, dokonywane i zapisywane są dla niej pomiary, a następnie proces powtarzany jest dla kolejnych komórek.
-Możliwość zaznaczenia wszystkich komórek w pierwszym kroku, a następnie dokonania na nich pomiarów, mogłaby usprawnić cały proces.
+Możliwość zaznaczenia wszystkich komórek w pierwszym kroku, a następnie dokonania dla nich pomiarów, mogłaby usprawnić cały proces.
 Przy takim podejściu możliwy staje się także zapis i odczyt wszystkich zaznaczeń, co dałoby możliwość wielokrotnego wykorzystania raz włożonej pracy.
 
 Celem niniejszej pracy jest stworzenie narzędzia, które ułatwiałoby w przyszłości opisany powyżej proces pozyskiwania danych, a tym samym ułatwiało pracę badaczom.
@@ -162,7 +162,7 @@ Na pojedynczy obraz składają się przynajmniej dwa podstawowe kanały.
 Pierwszy z nich pozyskany jest za pomocą zjawiska fluorescencji i przedstawia głównie rozmieszczenie białek fuzyjnych.
 Drugi kanał przedstawia komórki oświetlone światłem widzialnym w kontraście DIC.
 Pozwala na dokładniejsze zaobserwowanie kształtu i rozmieszczenia poszczególnych komórek.
-Poszczególne kanały przykładowego kadru nagrania przedstawia rysunek \ref{fig:input-images}.
+Oba kanały przykładowego kadru nagrania przedstawia rysunek \ref{fig:input-images}.
 
 \begin{figure}[h]
   \centering
@@ -200,13 +200,13 @@ W takich przypadkach użytkownik powinien mieć możliwość ręcznego stworzeni
 \section{Powiązane prace}
 
 
-W literaturze opisano wiele metod wykrywania prątków na obrazach wykonanych przy pomocy mikroskopów.
+W literaturze opisano wiele metod wykrywania prątków na obrazach wykonanych przy pomocy mikroskopu.
 W większości dotyczą one jednak wykrywania komórek gruźlicy w celach diagnostycznych.
-Część takich metod, szczególnie wcześniejszych, opierała się na pracy z wykorzystaniem fluorescencji\cite{paper:detection-of-tb-with-ip}.
+Część takich metod, szczególnie wcześniejszych, opierała się na badaniach z wykorzystaniem fluorescencji\cite{paper:detection-of-tb-with-ip}.
 Istnieją także prace wykorzystujące zdjęcia oświetlane światłem widzialnym.
 Metody te mogą być szczególnie przydatne w miejscach, w których dostęp do mikroskopów fluorescencyjnych jest ograniczony lub wręcz niemożliwy\cite{paper:ip-techniques-for-identifying-tb}.
 Celem tego typu metod jest najczęściej segmentacja obrazu na komórki gruźlicy i pozostałe obszary.
-Efekt takiego działania pozwala na stwierdzenie obecności lub nieobecności komórek na obrazie, a także na określeniu ich lokalizacji. O ile metody te niewątpliwie są bardzo ważne w diagnostyce, o tyle niekoniecznie sprawdzą się w przypadku analizy danych na poziomie pojedynczych komórek.
+Efekt takiego działania pozwala na stwierdzenie obecności lub nieobecności komórek na obrazie, a także na określeniu ich zagęszczenia i lokalizacji. O ile metody te niewątpliwie są bardzo ważne w diagnostyce, o tyle niekoniecznie sprawdzą się w przypadku analizy danych na poziomie pojedynczych komórek.
 
 %Duża część prac opiera się na analizie kolorów
 %Niektóre metody bazują na odpowiednim sposobie przygotowania zdjęć (np. zabarwieniu tła na określony kolor\cite{paper:detection-of-tb-with-ip}).
@@ -285,9 +285,9 @@ Każdy aktywny piksel można przyporządkować do trzech grup:
   \item węzły -- mają więcej niż 2 sąsiadujące aktywne piksele
   \item połączenia -- mają dokładnie 2 sąsiadujące aktywne piksele.
 \end{itemize}
-Przedstawiając szkielet jako graf końcówki tworzyłyby wierzchołki o stopniu równym $1$ lub $0$, wierzchołki o większych stopniach przedstawiałyby zbiory sąsiadujących ze sobą węzłów, natomiast krawędzie reprezentowałyby zbiory sąsiadujących ze sobą połączeń (zakończonych zbiorem węzłów lub końcówką). Taką reprezentację grafową można uzyskać za pomocą kolejnej wtyczki dla programu ImageJ tego samego autora\cite{plugin:analyze-skeleton}. Poza standardowymi informacjami wierzchołki i krawędzie utworzonego za jej pomocą grafu przechowują zbiory pikseli które reprezentują.
+Przedstawiając szkielet jako graf, końcówki tworzyłyby wierzchołki o stopniu równym $1$ lub $0$, wierzchołki o większych stopniach przedstawiałyby zbiory sąsiadujących ze sobą węzłów, natomiast krawędzie reprezentowałyby zbiory sąsiadujących ze sobą połączeń (zakończonych zbiorem węzłów lub końcówką). Taką reprezentację grafową można uzyskać za pomocą kolejnej wtyczki dla programu ImageJ tego samego autora\cite{plugin:analyze-skeleton}. Poza standardowymi informacjami wierzchołki i krawędzie utworzonego za jej pomocą grafu przechowują zbiory pikseli które reprezentują.
 
-Ze względu na specyficzny kształt komórki można zaobserwować następującą właściwość: po przeprowadzeniu szkieletyzacji obrazu $\image_{bin}$, o ile przyjęte wcześniej założenie jest spełnione, szkielet każdej z komórek składa się dokładnie z dwóch końcówek i połączeń między nimi. Mając do dyspozycji zbiór punktów $\mathbf{P}$ lokalizujących komórki można teraz w łatwy sposób odnaleźć dla każdej z nich graf ją opisujący (zawierający dwa wierzchołki i jedną krawędź). Jednym ze sposobów może być wyszukanie dla każdego punktu ze zbioru $\mathbf{P}$ krawędzi która znajduje się najbliżej tego punktu, gdzie odległość między punktem a krawędzią zdefiniowana jest jako odległość między punktem, a najbliższym pikselem, który należy do zbioru opisywanego przez tę krawędź.
+Ze względu na specyficzny kształt komórki można zaobserwować następującą właściwość: po przeprowadzeniu szkieletyzacji obrazu $\image_{bin}$, o ile przyjęte wcześniej założenie jest spełnione, szkielet każdej z komórek składa się dokładnie z dwóch końcówek i połączeń między nimi. Graf opisujący komórkę będzie zawierał w takim przypadku dokładnie dwa wierzchołki i jedną krawędź łączącą je ze sobą. Mając do dyspozycji zbiór punktów $\mathbf{P}$ lokalizujących komórki, można teraz w łatwy sposób odnaleźć dla każdej z nich graf ją opisujący. Jednym ze sposobów może być wyszukanie dla każdego punktu ze zbioru $\mathbf{P}$ krawędzi która znajduje się najbliżej tego punktu, gdzie odległość między punktem a krawędzią zdefiniowana jest jako odległość między punktem, a najbliższym pikselem, który należy do zbioru opisywanego przez tę krawędź.
 
 \subsection{Wybór krawędzi w węzłach}
 \label{sec:spine-extending}
@@ -339,6 +339,8 @@ Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfli
 \end{algorithm}
 
 Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma szkieletami, zależy od tego w jaki sposób nachodzą one na siebie. Kluczową rolę odgrywają tutaj także punkty lokalizujące komórki. W dalszej części pisząc, o punkcie charakterystycznym komórki, będę miał na myśli punkt leżący na szkielecie będący najbliżej punktu lokalizującego komórkę. Wyróżniłem 4 typy nakładania się szkieletów.
+
+% TODO konflikty: coś tu jest nie tak
 
 \subsubsection{Nakładanie się częściowe z końcówką}
 
@@ -399,7 +401,7 @@ Kolejnym krokiem jest konwersja reprezentacji grafowej (która zawiera zbiór pi
 W takiej formie użytkownik będzie mógł ręcznie modyfikować zaznaczenia komórek korzystając ze standardowego interfejsu programu ImageJ.
 Pierwsza wersja linii łamanej powstaje ze wszystkich punktów tworzących krawędzie i końcówki szkieletu, a także ze środków masy jego węzłów.
 Następnie geometria łamanej jest upraszczana za pomocą algorytmu Ramera--Douglasa--Peuckera\cite{algo:ramer}\cite{algo:douglas-peucker}.
-Algorytm ten eliminuje punkty, których usunięcie nie wpływa znacząco na kształt łamanej tj. po ich usunięciu odlegxłość uproszczonej łamanej od oryginalnej jest nie większa niż pewna przyjęta stała.
+Algorytm ten eliminuje punkty, których usunięcie nie wpływa znacząco na kształt łamanej tj. po ich usunięciu odległość uproszczonej łamanej od oryginalnej jest nie większa niż pewna przyjęta stała.
 
 \subsection{Korekta końcówek}
 \label{sec:correct-endpoints}
@@ -421,7 +423,7 @@ Proces ten powtarzany jest dla każdego zakończenia komórki wymagającego popr
 \label{sec:cell-tracking}
 
 Do tej pory opisywałem sposób na wykrywanie i oznaczanie komórek na pojedynczym obrazie, mając do dyspozycji punkty lokalizujące komórki wprowadzone przez użytkownika.
-Oryginalny problem dotyczył jednak stosu obrazów przedstawiającego proces rozwoju komórek w czasie.
+Oryginalny problem dotyczył jednak stosu obrazów przedstawiającego cykl komórkowy bakterii w czasie.
 Uogólnienie opisanego sposobu polega na automatycznym wyznaczaniu dla każdej komórki kilku potencjalnych punktów ją lokalizujących, na podstawie łamanej opisującej tę komórkę w poprzedniej klatce nagrania naniesionej na aktualną klatkę.
 Następnie wybierane są te punkty (i stworzone przez nie szkielety), które dały najlepsze efekty względem pewnej funkcji oceny.
 
@@ -452,7 +454,7 @@ Cały proces można zobrazować następującym algorytmem:
     \ENDIF
   \ENDFOR
   \STATE $\mathbf{\hat{\Sigma}}_{n+1} \gets$ wynik rozwiązania konfliktów w zbiorze $\mathbf{\Sigma}_{n+1}$
-  \STATE $\mathbf{C}_{n+1} \gets$ wynik konwersji na łamane i korekcie końcówek elementów zbioru $\mathbf{\hat{\Sigma}}_{n+1}$
+  \STATE $\mathbf{C}_{n+1} \gets$ wynik konwersji na łamane i korekty końcówek elementów zbioru $\mathbf{\hat{\Sigma}}_{n+1}$
 \ENDFOR
 
 \end{algorithmic}
@@ -462,6 +464,8 @@ Cały proces można zobrazować następującym algorytmem:
 W algorytmie pojawia się zbiór $D \subseteq [0, 1]$ którego elementy dobrałem empirycznie jako $\{ 0.2, 0.4, 0.6, 0.8 \}$.
 Zbiór $D' \subset D$ to zbiór, który zależy od wcześniejszego wyboru najlepszego kandydata na szkielet komórki. Jeśli w danej iteracji szkielet $S$ powstał na podstawie punktu lokalizującego leżącego na pierwszej połowie łamanej, będzie to zbiór $\{ d \in D \ | \ d > 0.5 \}$ w przeciwnym wypadku będzie to pozostała część zbioru $D$.
 
+Funkcja $q_\sigma(S)$ jest funkcją oceny szkieletu względem krzywej $\sigma$. Bazuje ona na założeniu, że komórka w nowej klatce nie powinna zbytnio oddalić się od miejsca w którym znajdowała się poprzednio. Dla wszystkich potencjalnych punktów lokalizujących komórkę, wyliczana jest ich odległość od nowo utworzonego szkieletu $S$. Wartość oceny jest odwrotnie proporcjonalna do suma tych odległości.
+
 \section{Interakcja ze strony użytkownika}
 
 Niestety powyższe działania nie sprawdzą się dobrze w każdym przypadku.
@@ -469,10 +473,10 @@ Jest wiele czynników które utrudniają poprawną detekcję komórek.
 Większość z nich związana jest ze słabą jakością nagrań.
 Obrazy są mocno zaszumione, często występują na nich artefakty, czasem płytka na której poruszają się komórki minimalnie się przesuwa, a innym razem mikroskop traci ostrość na kilka klatek nagrania.
 Zapewne można próbować rozwiązać te problemy automatycznie, ale na pewno pojawią się nowe, nie rozważane wcześniej przypadki.
-Właśnie z tego powodu postanowiłem zapewnić użytkownikowi możliwość interaktywnego poprawiania automatycznie wyznaczonych komórek, ale także całkowicie manualne kontynuowanie detekcji, zachowując przy tym informacje o historii komórek.
+Właśnie z tego powodu postanowiłem zapewnić użytkownikowi możliwość interaktywnego poprawiania automatycznie stworzonych oznaczeń komórek, ale także całkowicie manualne kontynuowanie detekcji, zachowując przy tym informacje o historii komórek.
 
 Komórki przedstawione są w oknie programu jako standardowe zaznaczenia programu ImageJ i można je edytować za pomocą standardowego interfejsu.
-Dodatkowo stworzyłem dwa dodatkowe narzędzia dla użytkownika.
+Ponadto stworzyłem dwa dodatkowe narzędzia dla użytkownika.
 Pierwsze z nich służy do rozcinania komórek w miejscach, w których się one dzielą.
 Mimo że algorytm śledzenia ma mechanizm odpowiedzialny za zauważenie takich zmian, zdarza się że dzieje się to zbyt późno (komórki jeszcze przez pewien czas po podziale znajdują się bardzo blisko siebie).
 
@@ -504,7 +508,7 @@ Plugin był rozwijany głównie na systemie macOS Catalina, ale został równie�
 
 \section{Kompilacja i uruchomienie}
 
-Do poprawnego zbudowania pluginu z kodu źródłowego należy upewnić się że zainstalowane są wymagane zależności. Poniższa instrukcja zakłada, że system wyposażony jest w:
+Przed zbudowaniem pluginu z kodu źródłowego należy upewnić się, że zainstalowane są wymagane zależności. Poniższa instrukcja zakłada, że system wyposażony jest w:
 
 \begin{itemize}
   \item Apache Maven w wersji większej lub równej \texttt{3.3.9}
@@ -568,8 +572,8 @@ Można tam również włączyć podgląd mapy indeksów kształtu, a także szki
 
 Kolejnym krokiem jest śledzenie komórek w czasie (rysunek \ref{fig:ui-step-tracker}).
 Użytkownik na tym etapie może zdecydować w jaki sposób chce dalej pracować.
-Może skorzystać z opcji automatycznego wyliczenia jednej bądź kilku kolejnych klatek (przycisk \texttt{calculate next}) lub zduplikować aktualnie zaznaczone komórki do kolejnej klatki a następnie skorzystać z dostępnych narzędzi i manualnie je dostosować (\texttt{duplicate}).
-Cofając się w historii do poprzednich klatek można poprawiać zaznaczenia. Można też powtórnie wyliczyć zaznaczenia na danym obrazie, jednak należy wtedy pamiętać, że zaznaczenia w kolejnych klatkach zostaną zresetowane.
+Może skorzystać z opcji automatycznego wyliczenia jednej bądź kilku kolejnych klatek (przycisk \texttt{calculate next}) lub zduplikować aktualnie zaznaczone komórki do kolejnej klatki, a następnie skorzystać z dostępnych narzędzi i manualnie je dostosować (\texttt{duplicate}).
+Cofając się w historii do poprzednich klatek można poprawiać zaznaczenia. Można też powtórnie wyliczyć zaznaczenia na danym obrazie, jednak należy wtedy pamiętać, że zaznaczenia w kolejnych klatkach zostaną usunięte.
 
 \begin{figure}
   \centering
@@ -594,7 +598,7 @@ Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów w
 \begin{itemize}
   \item wykresu przedstawiającego zmianę długości w czasie
   \item stosu profili intensywności pod łamaną opisującą komórkę na kanale z fluorescencją (dla każdej klatki życia komórki)
-  \item średniego profilu intensywności od łamaną opisującą komórkę na kanale z fluorescencją (oś X każdego profilu jest przed uśrednieniem normalizowana do przedziału $[0, 1]$)
+  \item średniego profilu intensywności pod łamaną opisującą komórkę na kanale z fluorescencją (przed uśrednieniem oś X każdego profilu jest normalizowana do przedziału $[0, 1]$)
   \item umiejscowienia ,,ognisk'' na kanale z fluorescencją w czasie.
 \end{itemize}
 
@@ -639,7 +643,7 @@ W celu analizy profili i długości komórek poza programem można, za pomocą k
 \subsection{Manualna modyfikacja komórek}
 \label{sec:user-manual-modifications}
 
-W celu manualnej modyfikacji komórki należy wybrać ją w oknie \texttt{ROI Manager}, które otwierane jest automatycznie podczas pracy z komórkami (rysunek \ref{fig:ui-roi-manager}).
+W celu manualnej modyfikacji komórki należy wybrać ją w oknie \texttt{ROI Manager} (rysunek \ref{fig:ui-roi-manager}), które otwierane jest automatycznie podczas pracy z komórkami.
 Komórka na obrazie będzie wyświetlona w postaci standardowego zaznaczenia wykonanego narzędziem do zaznaczania linii łamanej (ang. Segmented Line Selection Tool)\cite{imagej:segmented-line}.
 Przesuwanie, usuwanie lub dodawanie wierzchołków takiego zaznaczenia zapisywane jest także dla komórki.
 Komórki usunięte z listy okna \texttt{ROI Manager} zostaną usunięte również z kolekcji wraz z zaznaczeniami w kolejnych klatkach, jak i całym potomstwem.
@@ -652,17 +656,17 @@ Kolekcja zaznaczeń dla poprzednich klatek pozostanie bez zmian.
   \label{fig:ui-roi-manager}
 \end{figure}
 
-Dodatkowo okno pluginu wyposażone jest w dwa dodatkowe narzędzia mające ułatwić manualną edycję komórek. Narzędzia można włączyć za pomocą przycisków widocznych w lewym dolnym rogu okna pluginu.
+Ponadto okno pluginu wyposażone jest w dwa dodatkowe narzędzia mające ułatwić manualną edycję komórek. Narzędzia można włączyć za pomocą przycisków widocznych w lewym dolnym rogu okna pluginu.
 
 Tryb rozcinania komórek można aktywować za pomocą przycisku z ikoną w kształcie nożyczek (\raisebox{-0.1em}{\includegraphics[width=0.9em]{images/tool-cut.png}}).
 Służy on do ręcznego oznaczania punktów podziału komórek. Po jego uruchomieniu użytkownik może ,,przeciąć'' komórkę rysując symboliczną linię na obrazie.
 Przecięta komórka zostanie podzielona na dwie komórki, które zostaną dodane do kolekcji jako ,,dzieci'' komórki sprzed podziału (jeśli występuje ona w poprzedniej klatce).
-Ze względu na cykl życia opisywanych komórek, nie jest możliwe doprowadzenie do stanu w którym jedna komórka dzieli się na więcej niż dwie części.
+Ze względu na specyfikę cyklu komórkowego, nie jest możliwe doprowadzenie do stanu w którym jedna komórka dzieli się na więcej niż dwie części.
 Należy pamiętać, że rozcięcie komórki, która została oznaczona w późniejszych klatkach, wiąże się z utratą jej zaznaczeń w tych klatkach oraz usunięciem jej potomstwa.
 
 Drugim dodatkowym narzędziem jest tryb skracania końcówek, uruchamiany za pomocą przycisku z ikoną w kształcie gumki do mazania (\raisebox{-0.1em}{\includegraphics[width=0.9em]{images/tool-erase.png}}).
 Działa on podobnie do narzędzia ,,gumki'' obecnego w popularnych programach graficznych. Za jego pomocą nie można podzielić komórki, ale można ją skrócić lub całkowicie usunąć.
-Jeśli cała komórka zostanie ,,wymazana'' to, analogicznie jak przy usuwaniu komórki z poziomu okna \texttt{ROI Manager}, usunięte zostaną również zaznaczenia w kolejnych klatkach oraz jej potomstwo.
+Jeśli cała komórka zostanie ,,wymazana'' w całości to, analogicznie jak przy usuwaniu komórki z poziomu okna \texttt{ROI Manager}, usunięte zostaną również zaznaczenia w kolejnych klatkach oraz jej potomstwo.
 
 \subsection{Nazewnictwo komórek oraz ich orientacja}
 \label{sec:cell-naming}
@@ -738,7 +742,7 @@ Główna struktura plików projektu podzielona jest zgodnie z konwencją zapropo
 Kod źródłowy aplikacji podzielony jest na kilka folderów, ze względu na aspekt którego dotyczy:
 
 \begin{itemize}
-  \item \texttt{cells} -- kod zawierający logikę dotyczącą domeny pracy, m.in. kod pluginu, interfejsy poszczególnych kroków, główne algorytmy itp.; wewnątrz wydzielono jeszcze dodatkowo foldery: 
+  \item \texttt{cells} -- kod zawierający logikę dotyczącą domeny pracy, m.in. kod pluginu, interfejsy poszczególnych kroków, główne algorytmy itp.; wewnątrz wydzielono dodatkowo foldery: 
   \begin{itemize}
     \item[$\circ$] \texttt{serialization} -- kod dotyczący importu i eksportu komórek
     \item[$\circ$] \texttt{skeleton} -- implementacja króków detekcji i śledzenia komórek opisana w tej pracy (oparta na szkieletyzacji)
@@ -784,7 +788,7 @@ Na potrzeby tej pracy powstała jej implementacja \texttt{PolylineCellFrame}, kt
 
 \subsubsection{\texttt{Graph}, \texttt{Edge}, \texttt{Vertex}, \texttt{Point}}
 
-Klasy te składają się na implementację grafu, który zawiera dodatkowe informacje o punktach składających się na krawędzie i wierzchołki.
+Klasy te składają się na implementację grafu, który zawiera dodatkowe informacje o punktach reprezentowanych przez krawędzie i wierzchołki.
 
 \subsection{Architektura umożliwiająca dalszy rozwój}
 \label{sec:architecture}
@@ -809,12 +813,12 @@ Interfejs ten deklaruje zaledwie trzy publiczne metody:
 
 Metoda ta wywoływana jest podczas inicjalizacji danego kroku np. przy starcie pluginu (dla kroku wstępnej detekcji) lub przy wciśnięciu przycisku \texttt{next} (dla kolejnego kroku).
 Argumentami są obraz źródłowy (nagranie) oraz referencje do kolekcji komórek.
-Metoda odpowiedzialna jest również za stworzenie i zwrócenie komponent interfejsu danego kroku, który zostanie automatycznie umieszczony w odpowiednim miejscu okna wtyczki.
+Metoda odpowiedzialna jest również za stworzenie i zwrócenie komponentu interfejsu danego kroku, który zostanie automatycznie umieszczony w odpowiednim miejscu okna wtyczki.
 
 \item \texttt{void imageUpdated()}
 
 Ta metoda służy do nasłuchiwania na zmiany obrazu i wyświetlanych komórek.
-Uruchamiana jest przez przez plugin po każdej aktualizacji podglądu obrazu i komórek na nim wyświetlonych.
+Uruchamiana jest przez plugin dla aktywnego kroku po każdej aktualizacji podglądu obrazu i komórek na nim wyświetlonych.
 
 \item \texttt{void cleanup()}
 
@@ -830,7 +834,7 @@ Funkcjonalności niezależne od implementacji poszczególnych etapów takie jak 
 
 ImageJ jest częścią większego ekosystemu SciJava.
 Projekty tworzone w ramach tego ekosystemu są wytwarzane jako otwarte oprogramowanie z publicznie dostępnym kodem.
-ImageJ jest nie tylko programem, ale rozszerzalną platformą zbudowaną na rozszerzalnej architekturze opartej o mechanizm pluginów.
+ImageJ jest nie tylko programem, ale rozszerzalną platformą zbudowaną na architekturze opartej o mechanizm pluginów.
 Stanowi to jeden z największych atutów tej platformy\cite{imagej:philosophy}.
 
 Plugin został napisany przy wykorzystaniu nowszego API ImageJ2, jednak korzysta również z warstwy zapewniającej kompatybilność z ImageJ 1.x.
@@ -855,17 +859,17 @@ Słuchacz będzie otrzymywać zgłoszenia na temat różnych wydarzeń związany
 W moim programie nasłuchiwanie na te wydarzenia odgrywa kluczową rolę.
 Zdiagnozowałem kilka miejsc w których system notyfikacji działa, moim zdaniem, niezgodnie z intuicją:
 \begin{itemize}
-  \item Tworzenie zaznaczenia w kształcie linii polega na oznaczenie kursorem myszy punktu początkowego, wciśnięciu głównego klawisza myszy, przeciągnięciu kursora do miejsca docelowego, a następnie zwolnieniu klawisza myszy. Konstruując zaznaczenie w kształcie linii, słuchacz dostaje informacje na temat wydarzenia związanego z modyfikacją, natomiast po zwolnieniu przycisku myszy nie jest zgłaszane żadne wydarzenie. Intuicja podpowiada mi, że powinno zostać zgłoszone wydarzenie związane z ukończeniem konstrukcji zaznaczenia.
-  \item Analogiczny problem występuje w przypadku zaznaczania za pomocą pędzla. Tutaj proces zaznaczania podobny jest do ,,malowania'' narzędziem pędzla w popularnych programach graficznych. I w tym przypadku po zwolnieniu przycisku myszy nie jest zgłaszane żadne wydarzenie.
+  \item Tworzenie zaznaczenia w kształcie linii polega na oznaczeniu kursorem myszy punktu początkowego, wciśnięciu głównego klawisza myszy, przeciągnięciu kursora do miejsca docelowego, a następnie zwolnieniu klawisza myszy. Konstruując zaznaczenie w kształcie linii, słuchacz dostaje informacje na temat wydarzenia związanego z modyfikacją, natomiast po zwolnieniu przycisku myszy nie jest zgłaszane żadne wydarzenie. Intuicja podpowiada mi, że powinno zostać zgłoszone wydarzenie związane z ukończeniem konstrukcji zaznaczenia.
+  \item Analogiczny problem występuje w przypadku zaznaczania za pomocą pędzla. Tutaj proces zaznaczania podobny jest do ,,malowania'' narzędziem pędzla w popularnych programach graficznych. Również w tym przypadku po zwolnieniu przycisku myszy nie jest zgłaszane żadne wydarzenie.
   \item Zaznaczenie w postaci lini łamanej może być modyfikowane na różne sposoby. Można przeciągać całą linię łamaną lub modyfikować jej wierzchołki poprzez ich przeciąganie, usuwanie lub dodawanie. W przypadku przesunięć całego zaznaczenia jak i w przypadku zmiany pozycji poszczególnych wierzchołków zgłaszane są poprawne wydarzenia (odpowiednio o przesunięciu i modyfikacji). Jednak w przypadku usuwania i dodawania wierzchołków żadne wydarzenie nie jest zgłaszane.
 \end{itemize}
 
 W celu rozwiązania pierwszych dwóch problemów postanowiłem stworzyć własną warstwę aplikacji (\texttt{RoiObserver}) odpowiedzialną za obserwowanie zmian zaznaczeń.
 Nasłuchuje ona na zmiany zaznaczeń poprzez interfejs \texttt{RoiListener}, ale także nasłuchuje na zdarzenia związane z interakcją między kursorem myszy, a otwartymi oknami obrazów.
-Podczas konstrukcji problematycznych zaznaczeń zapisywane są ich referencje, aby następnie po zgłoszeniu wydarzenia o zwolnieniu przycisku myszy wyemitować brakujące wydarzenie.
+Podczas konstrukcji problematycznych zaznaczeń zapisywane są ich referencje, aby następnie po otrzymaniu informacji o zwolnieniu przycisku myszy wyemitować brakujące wydarzenie.
 
 Trzeci problem został rozwiązany poprzez utworzenie i korzystanie z nowej klasy rozszerzającej zaznaczenie w kształcie lini łamanej.
-Nadpisuje ona tylko jedną metodę \texttt{PolygonRoi::mouseDownInHandle}, która używana jest do tworzenia i usuwania dodatkowych wierzchołków (odbywa się to przez kliknięcie kursorem myszy w wierzchołek mając przy tym wciśnięty klawisz \texttt{alt} lub \texttt{control}).
+Nadpisuje ona tylko jedną metodę \texttt{PolygonRoi::mouseDownInHandle}, która używana jest do tworzenia i usuwania dodatkowych wierzchołków -- odbywa się to przez kliknięcie kursorem myszy w wierzchołek, mając przy tym wciśnięty klawisz \texttt{alt} lub \texttt{control}.
 Nowa wersja metody wywołuje oryginalną, zachowując przy tym pierwotny sposób działania, a następnie zgłasza wydarzenie związane z modyfikacją.
 
 \subsubsection{Usuwanie ROI z poziomu okna \texttt{ROI Manager}}
@@ -874,12 +878,13 @@ Najbardziej naturalnym sposobem na usunięcie komórki (np. w przypadku gdy zost
 Bez specjalnej obsługi takiego zachowania, zaznaczenie komórki zniknęłoby, mimo że komórka wciąż pozostawałaby w kolekcji i po odświeżeniu podglądu znów pojawiłaby się na ekranie.
 Takie zachowanie byłoby nieintuicyjne z perspektywy użytkownika.
 Postanowiłem więc stworzyć odpowiednią obsługę takiej sytuacji.
-Okazało się jednak, że nie istnieje żadne narzędzie pozwalające otrzymać powiadomienie na temat usuniętego z poziomu tego okna zaznaczenia.
+Okazało się jednak, że nie istnieje żadne narzędzie pozwalające otrzymywać powiadomienia na temat usuniętego z poziomu tego okna zaznaczenia.
 
-Problem ten rozwiązałem dostając się do komponentu wyświetlającego listę komórek.
+Problem ten rozwiązałem poprzez odnalezienie referencji do jednego z komponentów okna \texttt{ROI Manager}, służącego do wyświetlania listy komórek.
 Pozwala on na nasłuchiwanie na zmianę zawartości, w szczególności usunięcie jednego lub wielu elementów.
 Po otrzymaniu takiego powiadomienia, stan listy porównywany jest z kolekcją komórek, które powinny aktualnie być wyświetlane -- te których brakuje na liście usuwane są również z kolekcji.
 Rozwiązanie to nie jest wyjątkowo stabilne, ponieważ dokonuje konwersji typów bazując na strukturze komponentów z jakich składa się okno \texttt{ROI Manager}.
+Wymaga również każdorazowej ingerencji w to okno podczas jego uruchamiania.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -896,8 +901,8 @@ Narzędzie to zostało stworzone jako plugin dla programu ImageJ, powszechnie u�
 Wtyczka pozwala na oznaczanie komórek na kolejnych klatkach nagrania przedstawiającego cykl komórkowy, tworząc w ten sposób strukturę danych która w późniejszych etapach służy do dokładnej analizy obrazów.
 Oznaczanie komórek może odbywać się w sposób w pełni automatyczny, może być wspierana przez użytkownika poprzez wprowadzanie poprawek lub może odbywać się w pełni manualnie.
 Narzędzie zapewnia możliwość zapisu i odczytu zaznaczeń z pliku.
-Wtyczka wyposażona jest dodatkowo w narzędzia pomagające w analizie cyklu komórkowego poprzez dokonywanie pomiarów, tworzenie profili intensywności pod oznaczeniami komórek.
-Dane można wyświetlić w formie wykresów, a także wyeksportować w surowej formie w celu analizy poza programem ImageJ (np. w RStudio).
+Wtyczka wyposażona jest dodatkowo w narzędzia pomagające w analizie cyklu komórkowego poprzez dokonywanie pomiarów, a także tworzenie profili intensywności pod oznaczeniami komórek.
+Dane można wyświetlić w formie wykresów lub wyeksportować w surowej formie w celu analizy poza programem ImageJ (np. w RStudio).
 
 W pełni automatyczne oznaczanie i śledzenie komórek nie zawsze jest możliwe.
 Efekty tego podejścia są zadowalające tylko w przypadku dobrych jakościowo nagrań.
@@ -906,21 +911,21 @@ Plugin pozwala na rozdzielenie pracy nad zaznaczaniem komórek, od wykonywania d
 Dzięki temu poszczególne kroki mogą być wykonywane przez inne osoby.
 Tworzona w pierwszych krokach struktura zawiera informacje o rozwoju całej populacji komórek.
 Może zostać zapisana i wczytywana z pliku, dzięki czemu użytkownik może podzielić swoją pracę w czasie, wykorzystywać wielokrotnie raz utworzone zaznaczenia, a także przesyłać je  do innych użytkowników analizujących to samo nagranie.
-Sam proces tworzenia zaznaczeń również został usprawniony poprzez możliwość skopiowania zaznaczeń z poprzedniej klatki oraz stworzenie specjalnych narzędzi do wykonywania najczęściej powtarzających się czynności.
+Sam proces manualnego tworzenia zaznaczeń również został usprawniony poprzez możliwość skopiowania zaznaczeń z poprzedniej klatki oraz stworzenie specjalnych narzędzi do wykonywania najczęściej powtarzających się czynności.
 
 \section{Ograniczenia zastosowanych metod}
 
 Przyjęta metoda automatycznego oznaczania i śledzenia komórek nie jest wolna od ograniczeń.
 Zakłada ona, że na obrazie binarnym, tworzonym na etapie szkieletyzacji, komórki (lub grupy komórek) są oddzielone od otoczenia.
-Założenie to jest prawie zawsze spełnione w miejscach, w których w okolicy grup komórek nie znajdują się żadne stałe elementy płytek po których poruszają się komórki lub inne artefakty.
+Założenie to jest prawie zawsze spełnione w miejscach, w których w okolicy grup komórek nie są widoczne żadne artefakty lub stałe elementy płytek po których poruszają się komórki.
 Im lepsza była jakość nagrania (mniej szumów, mniej artefaktów, ostrzejsze krawędzie), tym lepiej radził sobie algorytm automatycznego śledzenia komórek.
 Warto więc w miarę możliwości zadbać o wysoką jakość nagrania.
 
 Przeciętne obrazy spod mikroskopu przedstawiające analizowane eksperymenty, zawierały wiele artefaktów.
-Artefakty nakładające się z komórkami często powodują błędne ich oznaczanie lub przedłużanie ich końcówek.
+Wady obrazów nakładające się z komórkami często powodują błędne ich oznaczanie lub przedłużanie ich końcówek.
 Zdarzało się również, że nagranie traciło ostrość w niektórych momentach lub cała scena przesuwała się nieznacznie w trakcie nagrania.
 W pierwszym przypadku powodowało to całkowicie błędne oznaczenie komórek.
-W drugim przypadku, jeśli przesunięcie jest odpowiednio duże, uniemożliwia to poprawne odnalezienie lokalizacji komórek na podstawie oznaczenia z poprzedniej klatki.
+W drugim przypadku, odpowiednio duże przesunięcie również uniemożliwia poprawne odnalezienie lokalizacji komórek na podstawie oznaczenia z poprzedniej klatki.
 
 Jeśli krawędzie pomiędzy komórkami nie są wystarczająco ostre na nagraniu, to w przypadku gdy pojawia się większa ilość komórek na raz, przestają one być oddzielone od siebie na obrazie binarnym.
 W efekcie szkielet całego obrazu nie zawiera szkieletów poszczególnych komórek, co w przyjętej metodzie uniemożliwia oznaczenie tych komórek.
@@ -935,11 +940,11 @@ Takie dane mogłyby następnie zostać wykorzystane przy próbach określenia po
 Tak jak wspomniałem w rozdziale \ref{sec:detection-input}, w niniejszej pracy nie zajmowałem się problemem określenia liczby i lokalizacji poszczególnych komórek bez wcześniejszego udziału użytkownika.
 Nawet w trybie automatycznym użytkownik zobowiązany jest do zaznaczenia wszystkich komórek obecnych na pierwszej klatce nagrania.
 Nie jest to duży wymóg, ponieważ komórek tych jest wtedy zazwyczaj niewiele.
-Zaimplementowanie automatycznej detekcji komórek dla obrazów z niewielką ich ilością mogłoby być jednak usprawnieniem aktualnej implementacji.
+Zaimplementowanie automatycznej detekcji komórek dla obrazów z niewielką ich ilością mogłoby być jednak usprawnieniem aktualnego programu.
 
 Podczas implementacji pluginu starałem się podejmować decyzje, które pozwoliłyby w łatwy sposób rozwijać dalej ten projekt.
 W rozdziale \ref{sec:architecture} opisałem w jaki sposób można w łatwy sposób ,,wymienić'' dowolny etap pluginu, tj. lokalizację i wstępną detekcję komórek, automatyczne śledzenie komórek, dokonywanie pomiarów i wizualizacji na podstawie zaznaczeń.
-Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako baza dla kolejnych prób znalezienia metody automatycznego oznaczania i śledzenia komórek. 
+Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako baza dla kolejnych prób znalezienia zupełnie nowej metody automatycznego oznaczania i śledzenia komórek. 
 
 
 
@@ -975,6 +980,13 @@ Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako ba
   American Society for Microbiology,
   8(6),
   2017.
+  
+\bibitem{paper:dic}
+  Walter Lang,
+  \emph{Nomarski differential interference-contrast microscopy},
+  ZEISS Information,
+  70:114–120,
+  1968.
 
 \bibitem{imagej:fiji}
   ImageJ User Guide,
