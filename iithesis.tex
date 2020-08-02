@@ -227,7 +227,7 @@ Mimo różnic pomiędzy tymi dziedzinami, praca opisana przez Javiera Fernández
 
 \subsection{Wstęp}
 
-Problem opisany w sekcji \ref{sec:problem} zdefiniowany jest dla nagrań spod mikroskopu. Postanowiłem jednak najpierw rozwiązać podobny problem, ale zdefiniowany dla pojedynczego obrazu. Rozwiązanie tego problemu mogłoby z łatwością zostać uogólnione na stos obrazów (nagranie). W tym rozdziale opiszę rozwiązanie uproszczonego problemu: oznaczanie komórek widocznych na pojedynczym obrazie. Przez ,,oznaczenie komórki'' mam na myśli odnalezienie łamanej przechodzącej przez środek komórki, a więc jej kręgosłupa.
+Problem opisany w sekcji \ref{sec:problem} zdefiniowany jest dla nagrań spod mikroskopu. Postanowiłem jednak najpierw rozwiązać podobny problem, ale zdefiniowany dla pojedynczego obrazu. Rozwiązanie tego problemu mogłoby z łatwością zostać uogólnione na stos obrazów (nagranie). W tym rozdziale opiszę rozwiązanie uproszczonego problemu: oznaczanie komórek widocznych na pojedynczym obrazie. Przez ,,oznaczenie komórki'' mam na myśli odnalezienie łamanej przechodzącej przez środek komórki, a więc jej szkieletu.
 
 \subsection{Dane wejściowe}
 \label{sec:detection-input}
@@ -287,14 +287,14 @@ Każdy aktywny piksel można przyporządkować do trzech grup:
 \end{itemize}
 Przedstawiając szkielet jako graf końcówki tworzyłyby wierzchołki o stopniu równym $1$ lub $0$, wierzchołki o większych stopniach przedstawiałyby zbiory sąsiadujących ze sobą węzłów, natomiast krawędzie reprezentowałyby zbiory sąsiadujących ze sobą połączeń (zakończonych zbiorem węzłów lub końcówką). Taką reprezentację grafową można uzyskać za pomocą kolejnej wtyczki dla programu ImageJ tego samego autora\cite{plugin:analyze-skeleton}. Poza standardowymi informacjami wierzchołki i krawędzie utworzonego za jej pomocą grafu przechowują zbiory pikseli które reprezentują.
 
-Ze względu na specyficzny kształt komórki można zaobserwować następującą właściwość: po przeprowadzeniu szkieletyzacji obrazu $\image_{bin}$, o ile przyjęte wcześniej założenie jest spełnione, szkielet każdej z komórek składa się dokładnie z dwóch końcówek i połączeń między nimi. Łamaną opisującą zbiór połączeń można z powodzeniem nazwać ,,kręgosłupem komórki''. Mając do dyspozycji zbiór punktów $\mathbf{P}$ lokalizujących komórki można teraz w łatwy sposób odnaleźć dla każdej z nich graf ją opisujący (zawierający dwa wierzchołki i jedną krawędź). Jednym ze sposobów może być wyszukanie dla każdego punktu ze zbioru $\mathbf{P}$ krawędzi która znajduje się najbliżej tego punktu, gdzie odległość między punktem a krawędzią zdefiniowana jest jako odległość między punktem, a najbliższym pikselem, który należy do zbioru opisywanego przez tę krawędź.
+Ze względu na specyficzny kształt komórki można zaobserwować następującą właściwość: po przeprowadzeniu szkieletyzacji obrazu $\image_{bin}$, o ile przyjęte wcześniej założenie jest spełnione, szkielet każdej z komórek składa się dokładnie z dwóch końcówek i połączeń między nimi. Mając do dyspozycji zbiór punktów $\mathbf{P}$ lokalizujących komórki można teraz w łatwy sposób odnaleźć dla każdej z nich graf ją opisujący (zawierający dwa wierzchołki i jedną krawędź). Jednym ze sposobów może być wyszukanie dla każdego punktu ze zbioru $\mathbf{P}$ krawędzi która znajduje się najbliżej tego punktu, gdzie odległość między punktem a krawędzią zdefiniowana jest jako odległość między punktem, a najbliższym pikselem, który należy do zbioru opisywanego przez tę krawędź.
 
 \subsection{Wybór krawędzi w węzłach}
 \label{sec:spine-extending}
 
-Niestety przyjęte założenie o tym, że każdy piksel należący do zewnętrznego obrysu dowolnej komórki będzie miał wartość $0$, nie zawsze jest spełnione. W realistycznym scenariuszu zdarza się, że jedna z końcówek komórki znajdują się na tyle blisko innej komórki, że wstępne przetwarzanie i progowanie obrazu nie powoduje ich rozdzielenia na obrazie binarnym. Czasem artefakty widoczne na obrazie wejściowym powodują, że wyspa na obrazie binarnym zawiera nie tylko komórkę, ale także fragment innego kształtu. W zdecydowanej większości takich przypadków kręgosłup komórki można opisać spójnym podgrafem o stopniu 2 grafu reprezentującego szkielet wyspy zawierającej komórki.
+Niestety przyjęte założenie o tym, że każdy piksel należący do zewnętrznego obrysu dowolnej komórki będzie miał wartość $0$, nie zawsze jest spełnione. W realistycznym scenariuszu zdarza się, że jedna z końcówek komórki znajdują się na tyle blisko innej komórki, że wstępne przetwarzanie i progowanie obrazu nie powoduje ich rozdzielenia na obrazie binarnym. Czasem artefakty widoczne na obrazie wejściowym powodują, że wyspa na obrazie binarnym zawiera nie tylko komórkę, ale także fragment innego kształtu. W zdecydowanej większości takich przypadków szkielet komórki można opisać spójnym podgrafem o stopniu 2 grafu reprezentującego szkielet wyspy zawierającej komórki.
 
-Wstępna detekcja kręgosłupa danej komórki polega, tak jak w scenariuszu optymistycznym, na odnalezieniu krawędzi $\{v_0, u_0\}$ w grafie $\mathbf{G}$ leżącej najbliżej punktu opisującego komórkę, a następnie na stworzeniu z niej i jej wierzchołków nowego grafu $\mathbf{S}_0$. Tak utworzony kręgosłup rozszerzany jest później zgodnie z następującym algorytmem:
+Wstępna detekcja szkieletu danej komórki polega, tak jak w scenariuszu optymistycznym, na odnalezieniu krawędzi $\{v_0, u_0\}$ w grafie $\mathbf{G}$ leżącej najbliżej punktu opisującego komórkę, a następnie na stworzeniu z niej i jej wierzchołków nowego grafu $\mathbf{S}_0$. Tak utworzony szkielet rozszerzany jest później zgodnie z następującym algorytmem:
 
 \begin{algorithm}[H]
 \begin{algorithmic}
@@ -319,12 +319,12 @@ W powyższym algorytmie oznaczenie $E(\mathbf{G})$ opisuje zbiór krawędzi graf
 Wyrażenie $\mathbf{S} + e$ oznacza graf utworzony poprzez dodanie do grafu $\mathbf{S}$ krawędzi $e$ oraz jej wierzchołków.
 Funkcja $q_v(e)$ jest tutaj funkcją oceny, która służy do wyboru najmocniej związanej krawędzi. Siłą wiązania nazywam najniższą wartość indeksu kształtu (oryginalnego obrazu) dla piksela leżącego na krawędzi $e$, w okolicy wierzchołka $v$ (w odległości nie większej niż pewna stała $d$ od środka masy pikseli tworzących węzeł $v$).
 
-Takie rozwiązanie sprawdza się dobrze dla komórek, których kręgosłup znajduje się w grafie $\mathbf{G}$, oraz jego zakończenia w tym grafie mają stopień $1$. Pomijam na ten moment przypadek, gdy szukany kręgosłup komórki nie istnieje w grafie $\mathbf{G}$. W pozostałych przypadkach przynajmniej jedno z zakończeń szukanego kręgosłupa $\mathbf{S}$ ma w grafie $\mathbf{G}$ stopień większy niż $1$. Zatem, o ile funkcja oceny $q_v(e)$ sprawdzi się dobrze jeśli chodzi o dobór krawędzi należących do szukanego kręgosłupa komórki, uzyskany na końcu algorytmu kręgosłup $\mathbf{S}_n$ będzie nadgrafem szukanego kręgosłupa $\mathbf{S}$. W takim przypadku ,,nadmiarowa'' część kręgosłupa należy do szkieletu innej komórki lub jest wynikiem artefaktu widocznego na oryginalnym obrazie. Drugi przypadek pozostawiam do ręcznego rozwiązania użytkownikowi. Pierwszy natomiast, nachodzące na siebie kręgosłupy komórek, rozwiązuję automatycznie.
+Takie rozwiązanie sprawdza się dobrze dla komórek, których szkielet znajduje się w grafie $\mathbf{G}$, oraz jego zakończenia w tym grafie mają stopień $1$. Pomijam na ten moment przypadek, gdy szukany szkielet komórki nie istnieje w grafie $\mathbf{G}$. W pozostałych przypadkach przynajmniej jedno z zakończeń szukanego podgrafu $\mathbf{S}$ ma w grafie $\mathbf{G}$ stopień większy niż $1$. Zatem, o ile funkcja oceny $q_v(e)$ sprawdzi się dobrze jeśli chodzi o dobór krawędzi należących do szukanego szkieletu komórki, uzyskany na końcu algorytmu graf $\mathbf{S}_n$ będzie nadgrafem szukanego szkieletu $\mathbf{S}$. W takim przypadku jego ,,nadmiarowa'' część należy do szkieletu innej komórki lub jest wynikiem artefaktu widocznego na oryginalnym obrazie. Drugi przypadek pozostawiam do ręcznego rozwiązania użytkownikowi. Pierwszy natomiast, nachodzące na siebie szkielety komórek, rozwiązuję automatycznie.
 
 \subsection{Rozwiązywanie konfliktów}
 \label{sec:fix-conflicts}
 
-Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfliktów''. Niech $\mathbf{\Sigma}_0$ będzie zbiorem wszystkich znalezionych kręgosłupów, natomiast $X(\mathbf{\Sigma})$ zbiorem par kręgosłupów nachodzących na siebie należących do zbioru $\mathbf{\Sigma}$. Rozwiązywanie konfliktów przebiega w następujący sposób:
+Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfliktów''. Niech $\mathbf{\Sigma}_0$ będzie zbiorem wszystkich znalezionych szkieletów komórek, natomiast $X(\mathbf{\Sigma})$ zbiorem par szkieletów nachodzących na siebie należących do zbioru $\mathbf{\Sigma}$. Rozwiązywanie konfliktów przebiega w następujący sposób:
 
 \begin{algorithm}[H]
 \begin{algorithmic}
@@ -338,7 +338,7 @@ Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfli
 \end{algorithmic}
 \end{algorithm}
 
-Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma kręgosłupami, zależy od tego w jaki sposób nachodzą one na siebie. Kluczową rolę odgrywają tutaj także punkty lokalizujące komórki. W dalszej części pisząc, o punkcie charakterystycznym komórki, będę miał na myśli punkt leżący na kręgosłupie będący najbliżej punktu lokalizującego komórkę. Wyróżniłem 4 typy nakładania się kręgosłupów.
+Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma szkieletami, zależy od tego w jaki sposób nachodzą one na siebie. Kluczową rolę odgrywają tutaj także punkty lokalizujące komórki. W dalszej części pisząc, o punkcie charakterystycznym komórki, będę miał na myśli punkt leżący na szkielecie będący najbliżej punktu lokalizującego komórkę. Wyróżniłem 4 typy nakładania się szkieletów.
 
 \subsubsection{Nakładanie się częściowe z końcówką}
 
@@ -349,10 +349,10 @@ Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma kręgosłupami, zale�
   \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-pwv-solved.png}
 \end{figure}
 
-W tym przypadku część wspólna przydzielana jest do jednego z kręgosłupów w całości.
+W tym przypadku część wspólna przydzielana jest do jednego ze szkieletów w całości.
 Są dwie możliwości: oba punkty charakterystyczne komórek leżą poza częścią wspólną lub dokładnie jeden z nich znajduje się w części wspólnej.
-Gdyby oba punkty leżały w części wspólnej, to ze względu na sposób konstrukcji szkieletów, podczas procesu rozszerzania dobierane byłyby te same krawędzie, a więc końcowo oba kręgosłupy byłyby dokładnie takie same.
-W drugim przypadku sprawa jest prosta -- część wspólna zostaje przydzielona do kręgosłupa którego punkt charakterystyczny leży w części wspólnej. W pierwszym przypadku część wspólna przydzielana jest do tego kręgosłupa z którym jest mocniej związana (siłę wiązania określam w podobny sposób jak w algorytmie konstrukcji kręgosłupa).
+Gdyby oba punkty leżały w części wspólnej, to ze względu na sposób konstrukcji szkieletów, podczas procesu rozszerzania dobierane byłyby te same krawędzie, a więc końcowo oba szkielety byłyby dokładnie takie same.
+W drugim przypadku sprawa jest prosta -- część wspólna zostaje przydzielona do szkieletu którego punkt charakterystyczny leży w części wspólnej. W pierwszym przypadku część wspólna przydzielana jest do tego szkieletu z którym jest mocniej związana (siłę wiązania określam w podobny sposób jak w opisanym wcześniej algorytmie konstrukcji szkieletu).
 
 \subsubsection{Nakładanie się częściowe}
 
@@ -364,7 +364,7 @@ W drugim przypadku sprawa jest prosta -- część wspólna zostaje przydzielona 
 \end{figure}
 
 W przypadku takiego rodzaju nakładania oba punkty charakterystyczne komórki znajdują się poza częścią wspólną.
-Rozwiązanie konfliktu polega tutaj na znalezieniu najsłabszego punktu części wspólnej (mającego najniższy indeks kształtu), a następnie odpowiednim skróceniu obu kręgosłupów do tego punktu.
+Rozwiązanie konfliktu polega tutaj na znalezieniu najsłabszego punktu części wspólnej (mającego najniższy indeks kształtu), a następnie odpowiednim skróceniu obu szkieletów do tego punktu.
 
 \subsubsection{Pełne pokrycie}
 
@@ -389,15 +389,15 @@ Sposób rozwiązania tego konfliktu jest bardzo podobny do sposobu rozwiązania 
   \includegraphics[valign=m,width=0.3\textwidth]{images/overlap-m-solved2.png}
 \end{figure}
 
-Dwa kręgosłupy mogą mieć więcej niż jeden konflikt równocześnie. Jest to rzadkie, ale realistyczne.
+Dwa szkielety mogą mieć więcej niż jeden konflikt równocześnie. Jest to rzadkie, ale realistyczne.
 W tym przypadku w każdej iteracji rozwiązywany jest jeden z takich konfliktów za pomocą sposobów opisanych powyżej.
 
 \subsection{Uzyskiwanie linii łamanej}
 
-Po rozwiązaniu wszystkich konfliktów każdy kręgosłup opisuje szkielet pewnej komórki.
+Po rozwiązaniu wszystkich konfliktów każdy szkielet opisuje pewną komórkę.
 Kolejnym krokiem jest konwersja reprezentacji grafowej (która zawiera zbiór pikseli opisujących szkielet) do linii łamanaj.
 W takiej formie użytkownik będzie mógł ręcznie modyfikować zaznaczenia komórek korzystając ze standardowego interfejsu programu ImageJ.
-Pierwsza wersja linii łamanej powstaje ze wszystkich punktów tworzących krawędzie i końcówki kręgosłupa, a także ze środków masy jego węzłów.
+Pierwsza wersja linii łamanej powstaje ze wszystkich punktów tworzących krawędzie i końcówki szkieletu, a także ze środków masy jego węzłów.
 Następnie geometria łamanej jest upraszczana za pomocą algorytmu Ramera--Douglasa--Peuckera\cite{algo:ramer}\cite{algo:douglas-peucker}.
 Algorytm ten eliminuje punkty, których usunięcie nie wpływa znacząco na kształt łamanej tj. po ich usunięciu odlegxłość uproszczonej łamanej od oryginalnej jest nie większa niż pewna przyjęta stała.
 
@@ -423,11 +423,11 @@ Proces ten powtarzany jest dla każdego zakończenia komórki wymagającego popr
 Do tej pory opisywałem sposób na wykrywanie i oznaczanie komórek na pojedynczym obrazie, mając do dyspozycji punkty lokalizujące komórki wprowadzone przez użytkownika.
 Oryginalny problem dotyczył jednak stosu obrazów przedstawiającego proces rozwoju komórek w czasie.
 Uogólnienie opisanego sposobu polega na automatycznym wyznaczaniu dla każdej komórki kilku potencjalnych punktów ją lokalizujących, na podstawie łamanej opisującej tę komórkę w poprzedniej klatce nagrania naniesionej na aktualną klatkę.
-Następnie wybierane są te punkty (i stworzone przez nie kręgosłupy), które dały najlepsze efekty względem pewnej funkcji oceny.
+Następnie wybierane są te punkty (i stworzone przez nie szkielety), które dały najlepsze efekty względem pewnej funkcji oceny.
 
-Jeśli nowy kręgosłup komórki jest znacząco krótszy niż łamana opisująca ją na poprzednim obrazie, prawdopodobnie oznacza to, że nastąpił podział komórki. W takim przypadku wyszukiwany jest kolejny kręgosłup. Tym razem kandydatów na punkty lokalizujące poszukuję tylko po jednej stronie łamanej. Jeśli pierwszy kręgosłup powstał na podstawie punktu leżącego bliżej końca łamanej, jego bliźniaczy kręgosłup prawdopodobnie znajduje się bliżej jej początku i vice versa.
+Jeśli nowy szkielet komórki jest znacząco krótszy niż łamana opisująca ją na poprzednim obrazie, prawdopodobnie oznacza to, że nastąpił podział komórki. W takim przypadku wyszukiwany jest kolejny szkielet. Tym razem kandydatów na punkty lokalizujące poszukuję tylko po jednej stronie łamanej. Jeśli pierwszy szkielet powstał na podstawie punktu leżącego bliżej końca łamanej, jego bliźniaczy szkielet prawdopodobnie znajduje się bliżej jej początku i vice versa.
 
-Po odnalezieniu wszystkich nowych kręgosłupów zgodnie z powyższą procedurą, następuje etap rozwiązywania konfliktów, konwersji na linie łamane i ostatecznej korekty końcówek, tak jak to zostało opisane (\ref{sec:fix-conflicts}--\ref{sec:correct-endpoints}).
+Po odnalezieniu wszystkich nowych szkieletów zgodnie z powyższą procedurą, następuje etap rozwiązywania konfliktów, konwersji na linie łamane i ostatecznej korekty końcówek, tak jak to zostało opisane (\ref{sec:fix-conflicts}--\ref{sec:correct-endpoints}).
 
 
 
@@ -460,7 +460,7 @@ Cały proces można zobrazować następującym algorytmem:
 
 \noindent
 W algorytmie pojawia się zbiór $D \subseteq [0, 1]$ którego elementy dobrałem empirycznie jako $\{ 0.2, 0.4, 0.6, 0.8 \}$.
-Zbiór $D' \subset D$ to zbiór, który zależy od wcześniejszego wyboru najlepszego kandydata na kręgosłup komórki. Jeśli w danej iteracji kręgosłup $S$ powstał na podstawie punktu lokalizującego leżącego na pierwszej połowie łamanej, będzie to zbiór $\{ d \in D \ | \ d > 0.5 \}$ w przeciwnym wypadku będzie to pozostała część zbioru $D$.
+Zbiór $D' \subset D$ to zbiór, który zależy od wcześniejszego wyboru najlepszego kandydata na szkielet komórki. Jeśli w danej iteracji szkielet $S$ powstał na podstawie punktu lokalizującego leżącego na pierwszej połowie łamanej, będzie to zbiór $\{ d \in D \ | \ d > 0.5 \}$ w przeciwnym wypadku będzie to pozostała część zbioru $D$.
 
 \section{Interakcja ze strony użytkownika}
 
