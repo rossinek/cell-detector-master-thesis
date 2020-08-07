@@ -28,3 +28,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: build
           FOLDER: build
+      - name: Send it with mail
+        uses: dawidd6/action-send-mail@v2
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: Master thesis ${{ github.sha }}
+          body: Build job of ${{ github.repository }} completed successfully
+          to: rossinek@gmail.com
+          from: Self Mailer
+          attachments: ./build/iithesis.pdf
