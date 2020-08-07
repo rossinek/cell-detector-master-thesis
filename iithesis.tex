@@ -104,7 +104,7 @@ Do obserwacji komórek modelowych badacze z Wydziału Biotechnologii Uniwersytet
 Podczas eksperymentu obserwowane komórki naświetlane są falami o odpowiedniej długości.
 Aminokwasy wewnątrz danego białka fluorescencyjnego tworzące fluorofor, absorbują promieniowanie elektormagnetyczne o określonej długości, a następnie emitują promieniowanie o niższej energii.
 Na zarejestrowanych w ten sposób obrazach widoczne są tzw. ,,ogniska fluorescencji''.
-Są to makrokompleksy jakie tworzą białka fuzyjne z DNA chromosomalnym bakterii. 
+Są to makrokompleksy jakie tworzą białka fuzyjne z DNA chromosomalnym bakterii.
 %Przykładowo zielona kropka, która po czasie rozdziela się na dwie, które są następnie dziedziczone do komórek potomnych obrazuje maszynerię replikacyjną czyli powielającą DNA naszych bakterii.
 
 Oprócz fluorescencji, która obrazuje wewnętrzną strukturę komórki, obserwuje się także ich zewnętrzną strukturę oświetloną światłem widzialnym.
@@ -166,7 +166,7 @@ Oba kanały przykładowego kadru nagrania przedstawia rysunek \ref{fig:input-ima
 
 \begin{figure}[h]
   \centering
-  
+
   \begin{subfigure}[t]{.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/input-channel-1.png}
@@ -179,7 +179,7 @@ Oba kanały przykładowego kadru nagrania przedstawia rysunek \ref{fig:input-ima
     \caption{\centering Kanał światła widzialnego w kontraście DIC.}
   \end{subfigure}
   \hfill
-    
+
   \caption{Dwa kanały tej samej klatki przykładowego nagrania.}
   \label{fig:input-images}
 \end{figure}
@@ -198,7 +198,6 @@ Ze względu na słabą jakość nagrań oraz często występujące na obrazach a
 W takich przypadkach użytkownik powinien mieć możliwość ręcznego stworzenia oznaczeń.
 
 \section{Powiązane prace}
-
 
 W literaturze opisano wiele metod wykrywania prątków na obrazach wykonanych przy pomocy mikroskopu.
 W większości dotyczą one jednak wykrywania komórek gruźlicy w celach diagnostycznych.
@@ -338,7 +337,7 @@ Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfli
 \end{algorithmic}
 \end{algorithm}
 
-Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma szkieletami, zależy od tego w jaki sposób nachodzą one na siebie. Kluczową rolę odgrywają tutaj także punkty lokalizujące komórki. W dalszej części pisząc, o punkcie charakterystycznym komórki, będę miał na myśli punkt leżący na szkielecie będący najbliżej punktu lokalizującego komórkę. 
+Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma szkieletami, zależy od tego w jaki sposób nachodzą one na siebie. Kluczową rolę odgrywają tutaj także punkty lokalizujące komórki. W dalszej części pisząc, o punkcie charakterystycznym komórki, będę miał na myśli punkt leżący na szkielecie będący najbliżej punktu lokalizującego komórkę.
 
 Zaimplementowałem dwie metody rozwiązywania konfliktów, które stosuję w zależności od rozmieszczenia punktów charakterystycznych.
 W obu przypadkach rozwiązanie konfliktu pomiędzy komórkami polega na skróceniu ich w taki sposób, by nie nachodziły one na siebie.
@@ -462,7 +461,7 @@ Cały proces można zobrazować następującym algorytmem:
     \STATE $\Sigma \gets \{ S_{n+1}(\phi_\sigma(d)) \ | \ d \in \text{D} \}$
     \STATE $S \gets \argmax_{S \in \Sigma} \ q_\sigma(S)$
     \STATE $\mathbf{\Sigma}_{n+1} \gets \mathbf{\Sigma}_{n+1} \cup \{ S \}$
-    
+
     \IF{$| S | < 0.9 \cdot | \sigma |$}
       \STATE $\Sigma' \gets \{ S_{n+1}(\phi_\sigma(d')) \ | \ d' \in \text{D}' \}$
       \STATE $S' \gets \argmax_{S' \in \Sigma} \ q_\sigma(S')$
@@ -520,7 +519,7 @@ Repozytorium można znaleźć pod adresem
 
 Program zaimplementowany jest jako wtyczka do programu ImageJ, napisana w języku Java. Do automatyzacji procesu budowy wykorzystany został Apache Maven. Wszystkie zależności zostały uwzględnione w pliku konfiguracyjnym dla Mavena, który odpowiada również za ich pobranie.
 
-Plugin był rozwijany głównie na systemie macOS Catalina, ale został również przetestowany na systemie Windows 10. 
+Plugin był rozwijany głównie na systemie macOS Catalina, ale został również przetestowany na systemie Windows 10.
 
 \section{Kompilacja i uruchomienie}
 
@@ -620,7 +619,7 @@ Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów w
 
 \begin{figure}
   \centering
-  
+
   \begin{subfigure}[t]{.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/ui-plot-lengths.png}
@@ -633,9 +632,9 @@ Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów w
     \caption{\centering Stos profili intensywności pod łamaną opisującą komórkę na kanale z fluorescencją.}
   \end{subfigure}
   \hfill
-  
+
   \par\bigskip
-  
+
   \begin{subfigure}[t]{.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/ui-plot-avg-profile.png}
@@ -648,7 +647,7 @@ Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów w
     \caption{\centering Umiejscowienie ,,ognisk'' na kanale z fluorescencją w czasie.}
   \end{subfigure}
   \hfill
-  
+
   \caption{Różne rodzaje wykresów.}
   \label{fig:ui-plots}
 \end{figure}
@@ -697,7 +696,7 @@ Przykładowe drzewo pokrewieństwa opisane nazwami komórek przedstawia rysunek 
 
 
 \begin{figure}[h]
-  \Tree 
+  \Tree
     [.\texttt{A-0-1}
       [.\texttt{A-1-1}
         [.\texttt{A-2-1}
@@ -758,7 +757,7 @@ Główna struktura plików projektu podzielona jest zgodnie z konwencją zapropo
 Kod źródłowy aplikacji podzielony jest na kilka folderów, ze względu na aspekt którego dotyczy:
 
 \begin{itemize}
-  \item \texttt{cells} -- kod zawierający logikę dotyczącą domeny pracy, m.in. kod pluginu, interfejsy poszczególnych kroków, główne algorytmy itp.; wewnątrz wydzielono dodatkowo foldery: 
+  \item \texttt{cells} -- kod zawierający logikę dotyczącą domeny pracy, m.in. kod pluginu, interfejsy poszczególnych kroków, główne algorytmy itp.; wewnątrz wydzielono dodatkowo foldery:
   \begin{itemize}
     \item[$\circ$] \texttt{serialization} -- kod dotyczący importu i eksportu komórek
     \item[$\circ$] \texttt{skeleton} -- implementacja króków detekcji i śledzenia komórek opisana w tej pracy (oparta na szkieletyzacji)
@@ -960,7 +959,7 @@ Zaimplementowanie automatycznej detekcji komórek dla obrazów z niewielką ich 
 
 Podczas implementacji pluginu starałem się podejmować decyzje, które pozwoliłyby w łatwy sposób rozwijać dalej ten projekt.
 W rozdziale \ref{sec:architecture} opisałem w jaki sposób można w łatwy sposób ,,wymienić'' dowolny etap pluginu, tj. lokalizację i wstępną detekcję komórek, automatyczne śledzenie komórek, dokonywanie pomiarów i wizualizacji na podstawie zaznaczeń.
-Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako baza dla kolejnych prób znalezienia zupełnie nowej metody automatycznego oznaczania i śledzenia komórek. 
+Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako baza dla kolejnych prób znalezienia zupełnie nowej metody automatycznego oznaczania i śledzenia komórek.
 
 
 
@@ -996,7 +995,7 @@ Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako ba
   American Society for Microbiology,
   8(6),
   2017.
-  
+
 \bibitem{paper:dic}
   Walter Lang,
   \emph{Nomarski differential interference-contrast microscopy},
@@ -1008,7 +1007,7 @@ Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako ba
   ImageJ User Guide,
   \emph{Fiji},
   \url{https://imagej.net/Fiji}.
-  
+
 \bibitem{paper:detection-of-tb-with-ip}
   H. B. Rachna, M. S. Mallikarjuna Swamy,
   \emph{Detection of Tuberculosis Bacilli using Image Processing Techniques},
@@ -1027,7 +1026,7 @@ Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako ba
   Wikipedia,
   \emph{Caenorhabditis elegans},
   \url{https://pl.wikipedia.org/wiki/Caenorhabditis_elegans}.
-  
+
 \bibitem{paper:worm-detection}
   Javier Fernández,
   \emph{Image Processing to Detect Worms},
@@ -1069,7 +1068,7 @@ Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako ba
   3.3.0,
   2018,
   \url{https://imagej.net/AnalyzeSkeleton}.
-  
+
 \bibitem{algo:ramer-douglas-peucker}
   Wikipedia,
   \emph{Ramer--Douglas--Peucker algorithm},
@@ -1088,12 +1087,12 @@ Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako ba
   The Canadian Cartographer,
   10(2):112–122,
   1973.
-  
+
 \bibitem{imagej:segmented-line}
   ImageJ User Guide,
   \emph{Segmented Line Selection Tool},
   \url{https://imagej.nih.gov/ij/docs/guide/146-19.html#sub:Segmented-Line-Selection}.
-  
+
 \bibitem{docs:maven-project-layout}
   Apache Maven Project,
   \emph{Introduction to the Standard Directory Layout},
