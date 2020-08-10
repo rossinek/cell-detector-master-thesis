@@ -371,7 +371,7 @@ W drugim przypadku sprawa jest prosta -- część wspólna zostaje przydzielona 
 
 \subsubsection{Podzielenie części wspólnej}
 
-We wszystkich pozostałych przypadkach stosuję inną metodę polegającą na skróceniu obu komórek.
+We wszystkich pozostałych przypadkach stosuję drugą metodę, polegającą na skróceniu obu komórek.
 Rozwiązanie konfliktu polega tutaj na znalezieniu najsłabszego punktu (mającego najniższy indeks kształtu) leżącego w części wspólnej pomiędzy punktami charakterystycznymi, a następnie odpowiednim skróceniu obu szkieletów do tego punktu.
 
 \begin{figure}[H]
@@ -445,7 +445,6 @@ Następnie wybierane są te punkty (i stworzone przez nie szkielety), które da�
 Jeśli nowy szkielet komórki jest znacząco krótszy niż łamana opisująca ją na poprzednim obrazie, prawdopodobnie oznacza to, że nastąpił podział komórki. W takim przypadku wyszukiwany jest kolejny szkielet. Tym razem kandydatów na punkty lokalizujące poszukuję tylko po jednej stronie łamanej. Jeśli pierwszy szkielet powstał na podstawie punktu leżącego bliżej końca łamanej, jego bliźniaczy szkielet prawdopodobnie znajduje się bliżej jej początku i vice versa.
 
 Po odnalezieniu wszystkich nowych szkieletów zgodnie z powyższą procedurą, następuje etap rozwiązywania konfliktów, konwersji na linie łamane i ostatecznej korekty końcówek, tak jak to zostało opisane (\ref{sec:fix-conflicts}--\ref{sec:correct-endpoints}).
-
 
 
 Niech $\mathbf{C}_n$ będzie zbiorem łamanych opisujących komórki na $n$-tym obrazie stosu.
