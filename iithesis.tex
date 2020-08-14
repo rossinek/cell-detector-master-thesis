@@ -45,16 +45,34 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{qtree}
+\usepackage{listings}
 \usepackage{subcaption}
+\usepackage{transparent}
+
 
 \DeclareMathOperator*{\argmax}{\textbf{argmax}}
 \newcommand{\image}{\mathbf{I}}
 \renewcommand{\algorithmicforall}{\textbf{for each}}
 
+
 %%%%%
 
 \begin{document}
 
+\lstset{ 
+  language=Java,
+  basicstyle=\scriptsize\ttfamily,
+  frame=single,
+  commentstyle=\transparent{0.4},
+  stringstyle=\transparent{0.8}
+}
+
+% kolory nie działają przez klasę bazową...
+%  stringstyle=\color{orange}
+%  keywordstyle=\bfseries\color{green!40!black},
+%  commentstyle=\itshape\color{purple!40!black},
+%  identifierstyle=\color{blue},
+%  stringstyle=\color{orange}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -842,9 +860,116 @@ Metoda ta wywoływana jest podczas zmiany aktualnego kroku lub przy zamknięciu 
 
 \end{itemize}
 
+Instancja klasy implementującej interfejs \texttt{ICellsPluginStep} tworzona jest za pomocą metody \texttt{Class.newInstance}.
+Do jej stworzenia użyty zostanie konstruktor niewymagający podania argumentów.
+
 Dzięki tak zaprojektowanemu systemowi każdy z etapów programu jest niezależny i może zostać z łatwością wymieniony na inną implementację tego interfejsu.
+Klasy które mają zostać użyte są zadeklarowane jako statyczne stałe \linebreak
+\texttt{CellsPlugin.StepDetectorClass}, \texttt{CellsPlugin.StepLifeTrackerClass} oraz \linebreak
+\texttt{CellsPlugin.StepMeasurementsClass}.
+
+W aktualnej wersji pluginu implementacjami poszczególnych kroków są klasy \texttt{SkeletonCellDetector}, \texttt{SkeletonCellLifeTracker} oraz \texttt{StepMeasurements}.\linebreak
+Przykładowo chcąc użyć klasy \texttt{ExampleLifeTracker} jako innej implementacji kroku śledzenia komórek, należy upewnić się że implementuje ona interfejs opisany powyżej, a następnie zmienić wartość stałej \texttt{CellsPlugin.StepLifeTrackerClass} na \texttt{ExampleLifeTracker.class}.
+
 Kod pluginu zawiera wszystkie główne struktury danych (lub ich abstrakcyjne wersje) i dzięki temu jest zupełnie niezależny od implementacji poszczególnych kroków -- komunikuje się z nimi jedynie za pomocą opisanych wyżej interfejsów.
 Funkcjonalności niezależne od implementacji poszczególnych etapów takie jak wyświetlanie, usuwanie i ręczna modyfikacja komórek, a także ich eksportowanie i importowanie, bazują wyłącznie na metodach deklarowanych przez odpowiednie interfejsy lub klasy abstrakcyjne.
+
+\subsubsection{Przykładowa implementacja pojedynczego etapu pluginu}
+
+Poniższy fragment kodu przedstawia przykładową implementację kroku śledzenia komórek.
+Jest to uproszczona implementacja wyświetlająca jedynie przycisk \texttt{duplicate}, który umożliwia skopiowanie aktualnych zaznaczeń do kolejnej klatki.
+
+\par\bigskip
+  
+\begin{lstlisting}
+public class ExampleLifeTracker implements ICellsPluginStep {
+  ImagePlus imp;
+  CellCollection cellCollection;
+
+  @Override
+  public JComponent init(ImagePlus imp, CellCollection cellCollection) {
+    this.imp = imp;
+    this.cellCollection = cellCollection;
+
+    JPanel component = new JPanel();
+    component.setLayout(new BoxLayout(component, BoxLayout.Y_AXIS));
+    component.add(new RunnableButton("duplicate", this::onDuplicateClick));
+    return component;
+  }
+
+  @Override
+  public void imageUpdated() {
+    // ignore
+  }
+
+  @Override
+  public void cleanup() {
+    // ignore
+  }
+
+  void onDuplicateClick() {
+    int currentFrameIndex = imp.getT();
+    // get list of cells visible at current frame
+    List<Cell> cells = cellCollection.getCells(currentFrameIndex);
+    int nextFrameIndex = currentFrameIndex + 1;
+    if (cells.size() < 1 || nextFrameIndex > imp.getNFrames()) {
+      return;
+    }
+    // clear previous selections for next frames
+    cells.forEach(cell -> cell.clearFuture(nextFrameIndex));
+    cells.forEach(cell -> {
+      // clone current selection
+      AbstractCellFrame duplicate = cell.getFrame(currentFrameIndex).clone();
+      // set selection for next frame to cloned value
+      cell.setFrame(nextFrameIndex, duplicate);
+    });
+    // show next frame
+    imp.setT(nextFrameIndex);
+    // update image and cells preview
+    imp.updateAndDraw();
+  }
+}
+\end{lstlisting}
+
+Podczas inicjalizacji zapisywane są referencje do obrazu wejściowego \texttt{imp} oraz do kolekcji komórek \texttt{cellCollection}, a następnie tworzony jest komponent zawierający jeden przycisk.
+Wciśnięcie przycisku \texttt{duplicate} powoduje wywołanie metody \texttt{onDuplicateClick}, która duplikuje zaznaczenia widoczne w aktualnej klatce do kolejnej klatki.
+Jeśli w aktualnej klatce nie ma żadnych zaznaczeń lub jest to ostatnia klatka nagrania, metoda nie powoduje żadnego efektu.
+Zwrócony przez przez metodę \texttt{init} komponent zostanie automatycznie umieszczony w oknie pluginu.
+
+Załóżmy że chcemy jeszcze dodatkowo zmienić podgląd obrazu, tak aby zamiast oryginalnego obrazu użytkownik widział mapę indeksów kształtu.
+Można to zrobić nakładając dodatkową warstwę \texttt{Overlay} na podgląd obrazu.
+
+\par\bigskip
+
+\begin{lstlisting}
+public class ExampleLifeTracker implements ICellsPluginStep {
+
+  // ...
+  
+  @Override
+  public void imageUpdated() {
+    ImagePlus frame = HyperstackHelper.extractFrame(imp);
+    ImagePlus shapeIndexMap = ShapeIndexMap.getShapeIndexMap(frame, 4.0);
+    ImageRoi roi = new ImageRoi(0, 0, shapeIndexMap.getProcessor());
+    Overlay overlay = new Overlay();
+    overlay.add(roi);
+    imp.setOverlay(overlay);
+  }
+
+  @Override
+  public void cleanup() {
+    imp.setOverlay(null);
+  }
+  
+  // ...
+
+}  
+\end{lstlisting}
+
+Metoda \texttt{imageUpdated} zostanie wywołana przy każdej aktualizacji oryginalnego obrazu np. gdy zmieni się wyświetlana klatka lub kanał.
+Po przejściu do kolejnego etapu pluginu zostanie wywołana metoda \texttt{cleanup}, która w powyższej wersji usunie dodatkową warstwę przywracając tym samym podgląd do oryginalnej wersji.
+
+Analogicznego mechanizmu używają aktualne implementacje kroku detekcji oraz śledzenia komórek do wyświetlenia podglądu mapy indeksów kształtu lub szkieletu (\texttt{advanced settings}).
 
 \subsection{Wykorzystywane API ImageJ}
 
@@ -870,7 +995,7 @@ Mimo wszystko kilka elementów systemu okazało się działać nie do końca zgo
 
 \subsubsection{Nasłuchiwanie na zdarzenia modyfikacji ROI}
 
-Chcąc rejestrować wydarzenia na temat modyfikacji wyświetlanych aktualnie zaznaczeń, należy zaimplementować interfejs \texttt{RoiListener}, a następnie tę implementację zarejestrować przekazując ją do statycznej metody \texttt{Roi::addRoiListener}.
+Chcąc rejestrować wydarzenia na temat modyfikacji wyświetlanych aktualnie zaznaczeń, należy zaimplementować interfejs \texttt{RoiListener}, a następnie tę implementację zarejestrować przekazując ją do statycznej metody \texttt{Roi.addRoiListener}.
 Słuchacz będzie otrzymywać zgłoszenia na temat różnych wydarzeń związanych z zaznaczeniami m.in. na temat ich utworzenia, przesunięcia, modyfikacji, rozszerzenia, ukończenia czy usunięcia.
 W moim programie nasłuchiwanie na te wydarzenia odgrywa kluczową rolę.
 Zdiagnozowałem kilka miejsc w których system notyfikacji działa, moim zdaniem, niezgodnie z intuicją:
@@ -885,7 +1010,7 @@ Nasłuchuje ona na zmiany zaznaczeń poprzez interfejs \texttt{RoiListener}, ale
 Podczas konstrukcji problematycznych zaznaczeń zapisywane są ich referencje, aby następnie po otrzymaniu informacji o zwolnieniu przycisku myszy wyemitować brakujące wydarzenie.
 
 Trzeci problem został rozwiązany poprzez utworzenie i korzystanie z nowej klasy rozszerzającej zaznaczenie w kształcie lini łamanej.
-Nadpisuje ona tylko jedną metodę \texttt{PolygonRoi::mouseDownInHandle}, która używana jest do tworzenia i usuwania dodatkowych wierzchołków -- odbywa się to przez kliknięcie kursorem myszy w wierzchołek, mając przy tym wciśnięty klawisz \texttt{alt} lub \texttt{control}.
+Nadpisuje ona tylko jedną metodę \texttt{PolygonRoi.mouseDownInHandle}, która używana jest do tworzenia i usuwania dodatkowych wierzchołków -- odbywa się to przez kliknięcie kursorem myszy w wierzchołek, mając przy tym wciśnięty klawisz \texttt{alt} lub \texttt{control}.
 Nowa wersja metody wywołuje oryginalną, zachowując przy tym pierwotny sposób działania, a następnie zgłasza wydarzenie związane z modyfikacją.
 
 \subsubsection{Usuwanie ROI z poziomu okna \texttt{ROI Manager}}
