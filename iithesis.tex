@@ -78,7 +78,8 @@ Chcąc dokładniej poznać naturę mikroorganizmów z rodziny Mycobacteriaceae, 
 % np. czas replikacji czy segregacji lub separacji chromosomów potomnych, tempo i charakterystykę zmian długości komórek, czy lokalizację wewnątrzkomórkową niektórych białek.
 Takie analizy pozwalają między innymi na określenie wpływu różnych inhibitorów/antybiotyków na cykl komórkowy\cite{paper:watching-dna-replication}.
 Zebrane dane mogą posłużyć także do określenia funkcji wybranego białka\cite{paper:protein-responsibility}.
-Badanie to polega na modyfikacji szczepu poprzez np. usunięciu genu, który je koduje i analizę różnych procesów komórkowych w takim szczepie -- sprawdza się między innymi czy cykl komórkowy bądź morfologia pojedynczych komórek nie zostały u nich zaburzone.
+Badanie to polega na modyfikacji szczepu poprzez np. usunięcie genu, który je koduje i analizę różnych procesów komórkowych w takim szczepie.
+Następnie sprawdza się między innymi czy cykl komórkowy bądź morfologia pojedynczych komórek nie zostały u nich zaburzone.
 
 Ze względu na zróżnicowanie populacji bakteryjnych, ważne jest, aby analizy przeprowadzane były na poziomie pojedynczych komórek.
 Podejście takie pozwala na odkrycie zależności, które występują tylko dla części populacji.
@@ -94,9 +95,9 @@ Takimi parametrami mogą być np. czas replikacji czy segregacji chromosomów po
 Jednym z organizmów modelowych w badaniach nad biologią prątków są komórki Mycobacterium smegmatis.
 W przeciwieństwie do ich bardziej znanych krewnych Mycobacterium tuberculosis, mikroorganizmy te nie są chorobotwórcze, dzięki czemu badania z ich udziałem są bezpieczniejsze i tym samym łatwiejsze do przeprowadzenia.
 W przypadku obu tych gatunków podstawowe procesy komórkowe wyglądają podobnie.
-Kolejną ważną cechą jest ich czas podziału, który jest 8 razy krótszy niż czas podziału komórek wywołujących gruźlicę i wynosi około 3 godziny.
+Kolejną ważną cechą jest ich czas podziału, który jest 8 razy krótszy niż czas podziału komórek wywołujących gruźlicę i wynosi około 3 godzin.
 
-W celu śledzenia różnych procesów cyklu komórkowego wykorzystuje się fluorescencyjne szczepy reporterowe, które produkują białka zaangażowane w procesy replikacji czy segregacji lub białka umożliwiające wizualizację chromosomu tych bakterii w fuzji z białkami fluorescencyjnymi (tj. białka fuzyjne).
+W celu śledzenia różnych procesów cyklu komórkowego wykorzystuje się fluorescencyjne szczepy reporterowe, które produkują białka zaangażowane w procesy replikacji czy segregacji lub białka umożliwiające wizualizację chromosomu tych bakterii w fuzji z białkami fluorescencyjnymi tj. białka fuzyjne.
 
 \subsubsection{Pozyskiwanie danych}
 
@@ -118,7 +119,7 @@ Wyposażona jest w wiele wtyczek ułatwiających naukową analizę obrazu.
 Przy jej pomocy zbierane są także dane dotyczące poszczególnych komórek na poszczególnych klatkach nagrania, takie jak długość czy umiejscowienie ,,ognisk fluorescencji''.
 W tym celu pracownicy naukowi ręcznie oznaczają mierzoną komórkę na obrazie, aby następnie skorzystać z odpowiednich narzędzi programu dokonujących pomiarów.
 Pomiary są zapisywane, a proces powtarzany jest dla pozostałych komórek widocznych w danej klatce, a następnie dla pozostałych klatek nagrania.
-Kolejną częścią procesu jest analiza zbiorczych danych w programie RStudio.
+Kolejną częścią procesu jest analiza zbiorczych danych w programie RStudio\cite{app:rstudio}.
 Tam dokonywane są analizy statystyczne czy wizualizacje wyników, które następnie wykorzystywane są w pracach naukowych.
 
 Podczas wywiadu z badaczami Wydziału Biotechnologii dowiedziałem się, że istnieją różne narzędzia do automatycznej analizy danych mikroskopowych, ale są one tworzone pod konkretne gatunki bakterii.
@@ -476,9 +477,11 @@ Cały proces można zobrazować następującym algorytmem:
 
 \noindent
 W algorytmie pojawia się zbiór $D \subseteq [0, 1]$ którego elementy dobrałem empirycznie jako $\{ 0.2, 0.4, 0.6, 0.8 \}$.
-Zbiór $D' \subset D$ to zbiór, który zależy od wcześniejszego wyboru najlepszego kandydata na szkielet komórki. Jeśli w danej iteracji szkielet $S$ powstał na podstawie punktu lokalizującego leżącego na pierwszej połowie łamanej, będzie to zbiór $\{ d \in D \ | \ d > 0.5 \}$ w przeciwnym wypadku będzie to pozostała część zbioru $D$.
+Zbiór $D' \subset D$ to zbiór, który zależy od wcześniejszego wyboru najlepszego kandydata na szkielet komórki.
+Jeśli w danej iteracji szkielet $S$ powstał na podstawie punktu lokalizującego leżącego na pierwszej połowie łamanej, będzie to zbiór $\{ d \in D \ | \ d > 0.5 \}$ w przeciwnym wypadku będzie to pozostała część zbioru $D$.
 
-Funkcja $q_\sigma(S)$ jest funkcją oceny szkieletu względem krzywej $\sigma$. Bazuje ona na założeniu, że komórka w nowej klatce nie powinna zbytnio oddalić się od miejsca w którym znajdowała się poprzednio. Dla wszystkich potencjalnych punktów lokalizujących komórkę, wyliczana jest ich odległość od nowo utworzonego szkieletu $S$. Wartość oceny jest odwrotnie proporcjonalna do suma tych odległości.
+Funkcja $q_\sigma(S)$ jest funkcją oceny szkieletu względem krzywej $\sigma$. Bazuje ona na założeniu, że komórka w nowej klatce nie powinna zbytnio oddalić się od miejsca w którym znajdowała się poprzednio.
+Dla wszystkich potencjalnych punktów lokalizujących komórkę, wyliczana jest ich odległość od nowo utworzonego szkieletu $S$. Wartość oceny jest odwrotnie proporcjonalna do sumy tych odległości.
 
 \section{Interakcja ze strony użytkownika}
 
@@ -511,8 +514,7 @@ Chcąc ręcznie oznaczyć komórki w kolejnej klatce (zamiast wyliczać je autom
 
 \section{Kod źródłowy}
 
-Kod źródłowy projektu zamieszczony został w publicznie dostępnym repozytorium w serwisie GitHub.
-% TODO licencja?
+Kod źródłowy projektu zamieszczony został w publicznie dostępnym repozytorium w serwisie GitHub na licencji MIT.
 Repozytorium można znaleźć pod adresem
 \linebreak\url{https://github.com/rossinek/cell-detector-imagej-plugin}.
 
@@ -622,7 +624,7 @@ Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów w
   \begin{subfigure}[t]{.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/ui-plot-lengths.png}
-    \caption{\centering Wykresu przedstawiający zmianę długości w czasie.}
+    \caption{\centering Wykres przedstawiający zmianę długości w czasie.}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{.45\textwidth}
@@ -637,7 +639,7 @@ Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów w
   \begin{subfigure}[t]{.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/ui-plot-avg-profile.png}
-    \caption{\centering Średni profil intensywności od łamaną opisującą komórkę na kanale z fluorescencją.}
+    \caption{\centering Średni profil intensywności pod łamaną opisującą komórkę na kanale z fluorescencją.}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{.45\textwidth}
@@ -1006,6 +1008,11 @@ Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako ba
   ImageJ User Guide,
   \emph{Fiji},
   \url{https://imagej.net/Fiji}.
+
+\bibitem{app:rstudio}
+  RStudio,
+  \emph{RStudio IDE},
+  \url{https://rstudio.com/products/rstudio}.
 
 \bibitem{paper:detection-of-tb-with-ip}
   H. B. Rachna, M. S. Mallikarjuna Swamy,
