@@ -56,7 +56,7 @@
 Gruźlica i inne choroby powodowane przez bakterie z rodzaju Mycobacterium są wciąż poważnym problemem w wielu miejscach świata.
 Badania podstawowe mające na celu poznawanie biologii prątków są bardzo ważne dla dalszych prac związanych z poszukiwaniem nowych leków.
 Praca ta powstała przy współpracy z pracownikami naukowymi Zakładu Mikrobiologii Molekularnej na Wydziale Biotechnologii Uniwersytetu Wrocławskiego, którzy m.in. zajmują się tego typu badaniami.
-Jedną z istotnych części tego typu badań jest proces pozyskiwania danych z nagrań spod mikroskopu przedstawiających cykl komórkowy komórek modelowych.
+Jedną z istotnych części prowadzonych przez nich badań jest proces pozyskiwania danych z nagrań spod mikroskopu przedstawiających cykl komórkowy organizmów modelowych.
 Celem niniejszej pracy było stworzenie narzędzia, które usprawni ten proces, a także sporządzenie instrukcji jego obsługi oraz udokumentowanie sposobu na dalszy jego rozwój.
 Narzędzie zostało stworzone jako wtyczka do powszechnie używanego przez środowiska naukowe programu ImageJ.
 }
@@ -65,8 +65,8 @@ Narzędzie zostało stworzone jako wtyczka do powszechnie używanego przez środ
 Tuberculosis and other diseases caused by the genus Mycobacterium remains a serious worldwide problem.
 Basic research aimed at understanding the biology of Mycobacteria is very important for further work related to novel drug development.
 This thesis was created in cooperation with scientists from the Department of Molecular Microbiology from the Faculty of Biotechnology at the University of Wrocław.
-This type of research are one of the issues they deal with.
-One of the main parts of their research is the process of obtaining data from microscopic recordings of the cell cycle of model organisms.
+This type of research is one of the issues they deal with.
+The important part of their research is the process of obtaining data from microscopic recordings of the cell cycle of model organisms.
 The aim of this work was to create a tool that will simplify this process, as well as to prepare instructions for its use.
 The work also contains information on its further development.
 The tool was created as a plugin for the ImageJ -- program that is widely used by the scientific community.
@@ -330,7 +330,7 @@ Niestety przyjęte założenie o tym, że każdy piksel należący do zewnętrzn
 
 Wstępna detekcja szkieletu danej komórki polega, tak jak w scenariuszu optymistycznym, na odnalezieniu krawędzi $\{v_0, u_0\}$ w grafie $\mathbf{G}$ leżącej najbliżej punktu opisującego komórkę, a następnie na stworzeniu z niej i jej wierzchołków nowego grafu $\mathbf{S}_0$. Tak utworzony szkielet rozszerzany jest później zgodnie z następującym algorytmem:
 
-\begin{algorithm}[H]
+\par\bigskip
 \begin{algorithmic}
 \FORALL{$v \in \{ v_0, u_0 \}$}
   \LOOP
@@ -346,7 +346,7 @@ Wstępna detekcja szkieletu danej komórki polega, tak jak w scenariuszu optymis
   \ENDLOOP
 \ENDFOR
 \end{algorithmic}
-\end{algorithm}
+\par\bigskip
 
 \noindent
 W powyższym algorytmie oznaczenie $E(\mathbf{G})$ opisuje zbiór krawędzi grafu $\mathbf{G}$.
@@ -360,7 +360,7 @@ Takie rozwiązanie sprawdza się dobrze dla komórek, których szkielet znajduje
 
 Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfliktów''. Niech $\mathbf{\Sigma}_0$ będzie zbiorem wszystkich znalezionych szkieletów komórek, natomiast $X(\mathbf{\Sigma})$ zbiorem par szkieletów nachodzących na siebie, należących do zbioru $\mathbf{\Sigma}$. Rozwiązywanie konfliktów przebiega w następujący sposób:
 
-\begin{algorithm}[H]
+\par\bigskip
 \begin{algorithmic}
 
 \WHILE{$X(\mathbf{\Sigma}_n) \neq \O$}
@@ -370,7 +370,7 @@ Rozdzielanie nachodzących na siebie komórek nazwałem ,,rozwiązywaniem konfli
 \ENDWHILE
 
 \end{algorithmic}
-\end{algorithm}
+\par\bigskip
 
 Sposób w jaki rozwiązywany jest konflikt pomiędzy dwoma szkieletami, zależy od tego w jaki sposób nachodzą one na siebie. Kluczową rolę odgrywają tutaj także punkty lokalizujące komórki. W dalszej części pisząc, o punkcie charakterystycznym komórki, będę miał na myśli punkt leżący na szkielecie będący najbliżej punktu lokalizującego komórkę.
 
@@ -486,7 +486,7 @@ Niech $\mathbf{C}_n$ będzie zbiorem łamanych opisujących komórki na $n$-tym 
 Niech $\phi_\sigma(d)$ będzie funkcją która liczbą z przedziału $[0, 1]$ przyporządkowuje punkty leżące na łamanej $\sigma$, proporcjonalnie do odległości od jej początku (przyjmijmy, że linia łamana ma zdefiniowany ,,kierunek'', tzn. ma początek i koniec). Niech $S_n(p)$ będzie szkieletem komórki wyznaczonym zgodnie z metodą opisaną wcześniej (\ref{sec:detection-input}--\ref{sec:spine-extending}) dla punktu lokalizującego $p$ i $n$-tej klatki nagrania.
 Cały proces można zobrazować następującym algorytmem:
 
-\begin{algorithm}[H]
+\par\medskip
 \begin{algorithmic}
 
 \FORALL{$n \in \{ 0, 1, \ldots, n-1 \}$}
@@ -507,7 +507,6 @@ Cały proces można zobrazować następującym algorytmem:
 \ENDFOR
 
 \end{algorithmic}
-\end{algorithm}
 
 \noindent
 W algorytmie pojawia się zbiór $D \subseteq [0, 1]$ którego elementy dobrałem empirycznie jako $\{ 0.2, 0.4, 0.6, 0.8 \}$.
