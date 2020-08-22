@@ -11,8 +11,8 @@
 % Pamiętaj o mądrym (zgodnym z logicznym rozbiorem zdania oraz estetyka) ręcznym
 % złamaniu wierszy w temacie pracy, zwłaszcza tego w języku pracy. Użyj do tego
 % polecenia \fmlinebreak.
-\polishtitle    {Wykrywanie i śledzenie cyklu komórkowego prątków w programie ImageJ}
-\englishtitle   {Mycobacterial cell cycle detection and tracking in ImageJ}
+\polishtitle    {Wykrywanie i śledzenie komórek prątków\fmlinebreak w programie ImageJ}
+\englishtitle   {Mycobacterial cell detection and tracking in ImageJ}
 % w pracach wielu autorów nazwiska można oddzielić poleceniem \and
 \author         {Artur Rosa}
 % w przypadku kilku promotorów, lub konieczności podania ich afiliacji, linie
@@ -53,7 +53,7 @@
 \renewcommand{\algorithmicforall}{\textbf{for each}}
 
 \polishabstract {
-Gruźlica i inne choroby powodowane przez bakterie z rodzaju Mycobacterium są wciąż poważnym problemem w wielu miejscach świata.
+Gruźlica i inne choroby powodowane przez bakterie z rodzaju \emph{Mycobacterium} są wciąż poważnym problemem w wielu miejscach świata.
 Badania podstawowe mające na celu poznawanie biologii prątków są bardzo ważne dla dalszych prac związanych z poszukiwaniem nowych leków.
 Praca ta powstała przy współpracy z pracownikami naukowymi Zakładu Mikrobiologii Molekularnej na Wydziale Biotechnologii Uniwersytetu Wrocławskiego, którzy m.in. zajmują się tego typu badaniami.
 Jedną z istotnych części prowadzonych przez nich badań jest proces pozyskiwania danych z nagrań spod mikroskopu przedstawiających cykl komórkowy organizmów modelowych.
@@ -62,7 +62,7 @@ Narzędzie zostało stworzone jako wtyczka do powszechnie używanego przez środ
 }
 
 \englishabstract{
-Tuberculosis and other diseases caused by the genus Mycobacterium remains a serious worldwide problem.
+Tuberculosis and other diseases caused by the genus \emph{Mycobacterium} remains a serious worldwide problem.
 Basic research aimed at understanding the biology of Mycobacteria is very important for further work related to novel drug development.
 This thesis was created in cooperation with scientists from the Department of Molecular Microbiology from the Faculty of Biotechnology at the University of Wrocław.
 This type of research is one of the issues they deal with.
@@ -100,7 +100,7 @@ The tool was created as a plugin for the ImageJ -- program that is widely used b
 
 \section{Wstęp}
 
-Prątki, czyli bakterie z rodzaju Mycobacterium, znane są przede wszystkim za sprawą patogennych gatunków m.in. Mycobacterium tuberculosis i Mycobacterium leprae, które powodują odpowiednio gruźlicę i trąd. Choroby te, a w szczególności gruźlica, są wciąż poważnym problemem w wielu miejscach świata. Według światowej organizacji zdrowia, na całym świecie gruźlica jest jedną z 10 głównych przyczyn zgonów, a zarazem główną przyczyną spowodowaną przez pojedynczy czynnik zakaźny\cite{who-stats}. Szacuje się, że w samym 2018 roku na całym świecie zachorowało na gruźlicę około 10 milionów ludzi.
+Prątki, czyli bakterie z rodzaju \emph{Mycobacterium}, znane są przede wszystkim za sprawą patogennych gatunków m.in. \emph{Mycobacterium tuberculosis} i \emph{Mycobacterium leprae}, które powodują odpowiednio gruźlicę i trąd. Choroby te, a w szczególności gruźlica, są wciąż poważnym problemem w wielu miejscach świata. Według Światowej Organizacji Zdrowia (WHO, ang. World Health Organization), na całym świecie gruźlica jest jedną z 10 głównych przyczyn zgonów, a zarazem główną przyczyną spowodowaną przez pojedynczy czynnik zakaźny\cite{who-stats}. Szacuje się, że w samym 2018 roku na całym świecie zachorowało na gruźlicę około 10 milionów ludzi.
 
 Niniejsza praca powstała przy współpracy z pracownikami naukowymi Zakładu Mikrobiologii Molekularnej na Wydziale Biotechnologii Uniwersytetu Wrocławskiego. Badania przez nich prowadzone, są w dużej mierze tzw. badaniami podstawowymi, a więc ich celem jest przede wszystkim zdobywanie nowej wiedzy i poznawanie biologii prątków. Badania tego typu są często wykorzystywane w dalszych analizach, skierowanych już na konkretne zastosowania praktyczne takie jak np. poszukiwanie nowych leków.
 
@@ -108,7 +108,7 @@ Niniejsza praca powstała przy współpracy z pracownikami naukowymi Zakładu Mi
 \section{Opis zagadnienia}
 \label{sec:intro-description}
 
-Chcąc dokładniej poznać naturę mikroorganizmów z rodziny Mycobacteriaceae, badacze analizują parametry różnych procesów cyklu komórkowego.
+Chcąc dokładniej poznać naturę mikroorganizmów z rodziny \emph{Mycobacteriaceae}, badacze analizują parametry różnych procesów cyklu komórkowego.
 % np. czas replikacji czy segregacji lub separacji chromosomów potomnych, tempo i charakterystykę zmian długości komórek, czy lokalizację wewnątrzkomórkową niektórych białek.
 Takie analizy pozwalają między innymi na określenie wpływu różnych inhibitorów/antybiotyków na cykl komórkowy\cite{paper:watching-dna-replication}.
 Zebrane dane mogą posłużyć także do określenia funkcji wybranego białka\cite{paper:protein-responsibility}.
@@ -126,10 +126,9 @@ Takimi parametrami mogą być np. czas replikacji czy segregacji chromosomów po
 
 \subsubsection{Komórki modelowe}
 
-Jednym z organizmów modelowych w badaniach nad biologią prątków są komórki Mycobacterium smegmatis.
-W przeciwieństwie do ich bardziej znanych krewnych Mycobacterium tuberculosis, mikroorganizmy te nie są chorobotwórcze, dzięki czemu badania z ich udziałem są bezpieczniejsze i tym samym łatwiejsze do przeprowadzenia.
-W przypadku obu tych gatunków podstawowe procesy komórkowe wyglądają podobnie.
-Kolejną ważną cechą jest ich czas podziału, który jest 8 razy krótszy niż czas podziału komórek wywołujących gruźlicę i wynosi około 3 godzin.
+Jednym z organizmów modelowych w badaniach nad biologią prątków są komórki \emph{Mycobacterium smegmatis}.
+W przeciwieństwie do \emph{M. tuberculosis}, mikroorganizmy te nie są chorobotwórcze oraz charakteryzują się krótszym czasem podziału (3h vs 22h), dzięki czemu badania z ich udziałem są bezpieczniejsze i tym samym łatwiejsze do przeprowadzenia.
+W przypadku obydwu gatunków białka zaangażowane w podstawowe procesy komórkowe wykazują duże podobieństwo, co czyni \emph{M. smegmatis} dogodnym modelem w badaniach nad biologią prątków.
 
 W celu śledzenia różnych procesów cyklu komórkowego wykorzystuje się fluorescencyjne szczepy reporterowe, które produkują białka zaangażowane w procesy replikacji czy segregacji lub białka umożliwiające wizualizację chromosomu tych bakterii w fuzji z białkami fluorescencyjnymi tj. białka fuzyjne.
 
@@ -138,16 +137,16 @@ W celu śledzenia różnych procesów cyklu komórkowego wykorzystuje się fluor
 Do obserwacji komórek modelowych badacze z Wydziału Biotechnologii Uniwersytetu Wrocławskiego używają mikroskopu wyposażonego w zestaw filtrów umożliwiający wizualizację różnych białek fluorescencyjnych.
 Podczas eksperymentu obserwowane komórki naświetlane są falami o odpowiedniej długości.
 Aminokwasy wewnątrz danego białka fluorescencyjnego tworzące fluorofor, absorbują promieniowanie elektormagnetyczne o określonej długości, a następnie emitują promieniowanie o niższej energii.
-Na zarejestrowanych w ten sposób obrazach widoczne są tzw. ,,ogniska fluorescencji''.
-Są to makrokompleksy jakie tworzą białka fuzyjne z DNA chromosomalnym bakterii.
+Na zarejestrowanych w ten sposób obrazach widoczne są tzw. ,,skupiska fluorescencji''.
+Są to makrokompleksy jakie tworzą białka fuzyjne wewnątrz komórek bakteryjnych, np. w kompleksie z DNA chromosomalnym.
 %Przykładowo zielona kropka, która po czasie rozdziela się na dwie, które są następnie dziedziczone do komórek potomnych obrazuje maszynerię replikacyjną czyli powielającą DNA naszych bakterii.
 
-Oprócz fluorescencji, która obrazuje wewnętrzną strukturę komórki, obserwuje się także ich zewnętrzną strukturę oświetloną światłem widzialnym.
+Oprócz fluorescencji, która umożliwia obserwację struktur wewnątrzkomórkowych, analizuje się również morfologię pojedynczych komórek w świetle widzialnym. 
 W celu zwiększenia kontrastu takich obrazów stosuje się układy z kontrastem różnicowo--interferencyjnym Nomarskiego\cite{paper:dic} (DIC, ang. differential interference contrast).
 
-Przykładowy eksperyment przeprowadzany jest przez 20h w komorze, która umożliwia utrzymanie optymalnej dla komórek modelowych temperatury (37$^{\circ}$C).
+Przykładowy eksperyment przeprowadzany jest przez 20 godzin w komorze, która umożliwia utrzymanie optymalnej temperatury (37$^{\circ}$C) do hodowli \emph{M. smegmatis}.
 Co 10 min wykonywane jest zdjęcie.
-Tak pozyskane nagranie badacze obrabiają przy użyciu programu Fiji\cite{imagej:fiji}.
+Tak pozyskany film poklatkowy badacze przetwarzają i analizują przy użyciu programu Fiji\cite{imagej:fiji}.
 Jest to dystrybucja otwartego oprogramowania ImageJ służącego do przetwarzania obrazów.
 Wyposażona jest w wiele wtyczek ułatwiających naukową analizę obrazu.
 Przy jej pomocy zbierane są także dane dotyczące poszczególnych komórek na poszczególnych klatkach nagrania, takie jak długość czy umiejscowienie ,,ognisk fluorescencji''.
@@ -158,7 +157,7 @@ Tam dokonywane są analizy statystyczne czy wizualizacje wyników, które nastę
 
 Podczas wywiadu z badaczami Wydziału Biotechnologii dowiedziałem się, że istnieją różne narzędzia do automatycznej analizy danych mikroskopowych, ale są one tworzone pod konkretne gatunki bakterii.
 Populacje prątków są bardzo zróżnicowane, przez co ciężko stworzyć ujednolicony algorytm do ich rozpoznawania.
-Dodatkowym utrudnieniem jest specyficzna budowa ściany komórkowej bakterii Mycobacterium smegmatis, która powoduje, że po podziale, komórki te bardzo długo są do siebie ,,przyklejone''.
+Dodatkowym utrudnieniem jest swoista budowa ściany komórkowej bakterii \emph{M. smegmatis}, która powoduje, że po podziale, komórki te bardzo długo pozostają ze sobą złączone.
 
 \section{Cel pracy}
 \label{sec:target}
@@ -191,7 +190,7 @@ Narzędzie to postanowiłem zaimplementować jako wtyczkę do programu ImageJ, z
 \subsection{Obrazy wejściowe}
 \label{sec:input-images}
 
-Proces uzyskiwania nagrań przedstawiających cykl komórkowy Mycobacterium smegmatis opisałem w rozdziale \ref{sec:intro-description}.
+Proces uzyskiwania nagrań przedstawiających cykl komórkowy \emph{M. smegmatis} opisałem w rozdziale \ref{sec:intro-description}.
 Nagrania takie są w istocie stosem obrazów wykonanych w stałych odstępach czasu.
 Na pojedynczy obraz składają się przynajmniej dwa podstawowe kanały.
 Pierwszy z nich pozyskany jest za pomocą zjawiska fluorescencji i przedstawia głównie rozmieszczenie białek fuzyjnych.
@@ -222,7 +221,7 @@ Oba kanały przykładowego kadru nagrania przedstawia rysunek \ref{fig:input-ima
 
 \subsection{Pożądany efekt}
 
-Celem pracy, który został opisany dokładniej w rozdziale \ref{sec:target}, jest uproszczenie części procesu pozyskiwania danych o cyklu komórkowym prątków z gatunku Mycobacterium smegmatis.
+Celem pracy, który został opisany dokładniej w rozdziale \ref{sec:target}, jest uproszczenie części procesu pozyskiwania danych o cyklu komórkowym prątków z gatunku \emph{M. smegmatis}.
 Narzędzie stworzone na potrzeby tej pracy ma pomóc badaczom w żmudnym procesie oznaczania komórek na nagraniach.
 Optymistyczny scenariusz zakłada że program, przy niewielkiej interakcji ze strony użytkownika, oznaczy komórki na wszystkich obrazach, zachowując przy tym informacje na temat pochodzenia każdej z nich.
 Oznaczenie komórki oznacza odnalezienie krzywej lub linii łamanej przechodzącej przez środek komórki.
@@ -247,7 +246,7 @@ Efekt takiego działania pozwala na stwierdzenie obecności lub nieobecności ko
 
 Podobnym zagadnieniem, niekoniecznie w kontekście dziedziny, ale z perspektywy przetwarzania obrazów, jest także wykrywanie nicieni.
 Jeden z gatunków, Caenorhabditis elegans, od wielu lat jest organizmem modelowym w badaniach nauk biologicznych\cite{wiki:c-elegans}.
-C. elegans, podobnie jak prątki, ma symetryczny tubowaty kształt przypominający robaka.
+C. elegans, podobnie jak prątki, ma symetryczny pałeczkowaty kształt przypominający robaka.
 Oczywiście jest to zupełnie inny rząd wielkości.
 Badania takich bezkręgowców często polega na analizie danych na poziomie pojedynczego osobnika.
 W literaturze można znaleźć prace opisujące metody automatycznego oznaczania i opisywania tych nicieni.
@@ -286,7 +285,7 @@ O ile kanał z fluorescencją mógłby bardzo dobrze sprawdzić się do określe
 
 Celem wstępnego przetwarzania obrazu wejściowego jest w tym przypadku oddzielenie poszczególnych komórek od otoczenia, zachowując przy tym informację na temat ich krawędzi. W ramach pracy przeprowadziłem wiele testów mających na celu odnalezienie narzędzia spełniającego ten cel. Krawędzie otrzymywane za pomocą filtrów czy algorytmów do ich wyszukiwania często były nieciągłe. Dobierając inne parametry często pojawiały się niechciane zaznaczenia wewnątrz komórek.
 
-Ostatecznie zdecydowałem się użyć narzędzia które nie jest związane z wykrywaniem krawędzi. Zaobserwowałem, że zdjęcia zrobione tą techniką mają pewne specyficzne właściwości. Komórki są na nich dość równomiernie oświetlone, przez co dobrze widać ich ,,tubowaty'' kształt. Każdą komórkę otacza też ciemne obramowanie.
+Ostatecznie zdecydowałem się użyć narzędzia które nie jest związane z wykrywaniem krawędzi. Zaobserwowałem, że zdjęcia zrobione tą techniką mają pewne specyficzne właściwości. Komórki są na nich dość równomiernie oświetlone, przez co dobrze widać ich pałeczkowaty kształt. Każdą komórkę otacza też ciemne obramowanie.
 
 \subsubsection{Mapa indeksów kształtu}
 
@@ -645,10 +644,10 @@ W celu zapewnienia poprawności danych należy najpierw wskazać numer kanału z
 Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów wykresów (rysunek \ref{fig:ui-plots}):
 
 \begin{itemize}
-  \item wykresu przedstawiającego zmianę długości w czasie
-  \item stosu profili intensywności pod łamaną opisującą komórkę na kanale z fluorescencją (dla każdej klatki życia komórki)
+  \item wykresu przedstawiającego zmianę długości komórki w czasie
+  \item stosu profili intensywności pod łamaną opisującą komórkę na kanale z fluorescencją (dla każdej klatki w cyklu komórkowym dla analizowanej komórki)
   \item średniego profilu intensywności pod łamaną opisującą komórkę na kanale z fluorescencją (przed uśrednieniem oś X każdego profilu jest normalizowana do przedziału $[0, 1]$)
-  \item umiejscowienia ,,ognisk'' na kanale z fluorescencją w czasie.
+  \item umiejscowienia ,,skupisk'' na kanale z fluorescencją w czasie.
 \end{itemize}
 
 \begin{figure}
@@ -657,7 +656,7 @@ Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów w
   \begin{subfigure}[t]{.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/ui-plot-lengths.png}
-    \caption{\centering Wykres przedstawiający zmianę długości w czasie.}
+    \caption{\centering Wykres przedstawiający zmianę długości komórki w czasie.}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{.45\textwidth}
@@ -678,7 +677,7 @@ Umieszczona niżej sekcja przycisków pozwala na wyświetlenie kilku rodzajów w
   \begin{subfigure}[t]{.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{images/ui-plot-picks.png}
-    \caption{\centering Umiejscowienie ,,ognisk'' na kanale z fluorescencją w czasie.}
+    \caption{\centering Umiejscowienie ,,skupisk'' na kanale z fluorescencją w czasie.}
   \end{subfigure}
   \hfill
 
@@ -695,7 +694,7 @@ W celu analizy profili i długości komórek poza programem można, za pomocą k
 W celu manualnej modyfikacji komórki należy wybrać ją w oknie \texttt{ROI Manager} (rysunek \ref{fig:ui-roi-manager}), które otwierane jest automatycznie podczas pracy z komórkami.
 Komórka na obrazie będzie wyświetlona w postaci standardowego zaznaczenia wykonanego narzędziem do zaznaczania linii łamanej (ang. Segmented Line Selection Tool)\cite{imagej:segmented-line}.
 Przesuwanie, usuwanie lub dodawanie wierzchołków takiego zaznaczenia zapisywane jest także dla komórki.
-Komórki usunięte z listy okna \texttt{ROI Manager} zostaną usunięte również z kolekcji wraz z zaznaczeniami w kolejnych klatkach, jak i całym potomstwem.
+Komórki usunięte z listy okna \texttt{ROI Manager} zostaną usunięte również z kolekcji wraz z zaznaczeniami w kolejnych klatkach, jak i komórkami pochodnymi.
 Kolekcja zaznaczeń dla poprzednich klatek pozostanie bez zmian.
 
 \begin{figure}
@@ -709,13 +708,13 @@ Ponadto okno pluginu wyposażone jest w dwa dodatkowe narzędzia mające ułatwi
 
 Tryb rozcinania komórek można aktywować za pomocą przycisku z ikoną w kształcie nożyczek (\raisebox{-0.1em}{\includegraphics[width=0.9em]{images/tool-cut.png}}).
 Służy on do ręcznego oznaczania punktów podziału komórek. Po jego uruchomieniu użytkownik może ,,przeciąć'' komórkę rysując symboliczną linię na obrazie.
-Przecięta komórka zostanie podzielona na dwie komórki, które zostaną dodane do kolekcji jako ,,dzieci'' komórki sprzed podziału (jeśli występuje ona w poprzedniej klatce).
+Przecięta komórka zostanie podzielona na dwie komórki, które zostaną dodane do kolekcji jako kolejne pokolenia (,,dzieci'') komórki sprzed podziału (jeśli przecinana komórka występuje w poprzedniej klatce).
 Ze względu na specyfikę cyklu komórkowego, nie jest możliwe doprowadzenie do stanu w którym jedna komórka dzieli się na więcej niż dwie części.
-Należy pamiętać, że rozcięcie komórki, która została oznaczona w późniejszych klatkach, wiąże się z utratą jej zaznaczeń w tych klatkach oraz usunięciem jej potomstwa.
+Należy pamiętać, że rozcięcie komórki, która została oznaczona w późniejszych klatkach, wiąże się z utratą jej zaznaczeń w tych klatkach oraz usunięciem kolejnych pokoleń pochodzących od tej komórki.
 
 Drugim dodatkowym narzędziem jest tryb skracania końcówek, uruchamiany za pomocą przycisku z ikoną w kształcie gumki do mazania (\raisebox{-0.1em}{\includegraphics[width=0.9em]{images/tool-erase.png}}).
 Działa on podobnie do narzędzia ,,gumki'' obecnego w popularnych programach graficznych. Za jego pomocą nie można podzielić komórki, ale można ją skrócić lub całkowicie usunąć.
-Jeśli cała komórka zostanie ,,wymazana'' w całości to, analogicznie jak przy usuwaniu komórki z poziomu okna \texttt{ROI Manager}, usunięte zostaną również zaznaczenia w kolejnych klatkach oraz jej potomstwo.
+Jeśli komórka zostanie ,,wymazana'' w całości to, analogicznie jak przy usuwaniu komórki z poziomu okna \texttt{ROI Manager}, usunięte zostaną również zaznaczenia w kolejnych klatkach oraz kolejne pokolenia pochodzące od tej komórki.
 
 \subsection{Nazewnictwo komórek oraz ich orientacja}
 \label{sec:cell-naming}
@@ -1052,9 +1051,9 @@ Wymaga również każdorazowej ingerencji w to okno podczas jego uruchamiania.
 
 \section{Podsumowanie}
 
-Efektem niniejszej pracy jest narzędzie, mające usprawnić proces pozyskiwania danych na temat cyklu komórkowego prątków z gatunku Mycobacterium smegmatis.
-Narzędzie to zostało stworzone jako plugin dla programu ImageJ, powszechnie używanego przez naukowców zajmujących się mikrobiologią.
-Wtyczka pozwala na oznaczanie komórek na kolejnych klatkach nagrania przedstawiającego cykl komórkowy, tworząc w ten sposób strukturę danych która w późniejszych etapach służy do dokładnej analizy obrazów.
+Efektem niniejszej pracy jest narzędzie, mające usprawnić proces pozyskiwania danych na temat cyklu komórkowego bakterii z gatunku \emph{Mycobacterium smegmatis}.
+Narzędzie to zostało stworzone jako plugin dla programu ImageJ, powszechnie używanego przez biologów, a szczególnie przez mikrobiologów.
+Wtyczka pozwala na oznaczanie komórek na kolejnych klatkach nagrania przedstawiającego cykl komórkowy \emph{M. smegmatis}, tworząc w ten sposób strukturę danych która w późniejszych etapach służy do dokładnej analizy obrazów.
 Oznaczanie komórek może odbywać się w sposób w pełni automatyczny, może być wspierana przez użytkownika poprzez wprowadzanie poprawek lub może odbywać się w pełni manualnie.
 Narzędzie zapewnia możliwość zapisu i odczytu zaznaczeń z pliku.
 Wtyczka wyposażona jest dodatkowo w narzędzia pomagające w analizie cyklu komórkowego poprzez dokonywanie pomiarów, a także tworzenie profili intensywności pod oznaczeniami komórek.
@@ -1063,10 +1062,9 @@ Dane można wyświetlić w formie wykresów lub wyeksportować w surowej formie 
 W pełni automatyczne oznaczanie i śledzenie komórek nie zawsze jest możliwe.
 Efekty tego podejścia są zadowalające tylko w przypadku dobrych jakościowo nagrań.
 Mimo to, nawet w trybie w pełni manualnym narzędzie może usprawnić pracę naukowców.
-Plugin pozwala na rozdzielenie pracy nad zaznaczaniem komórek, od wykonywania dalszych pomiarów.
-Dzięki temu poszczególne kroki mogą być wykonywane przez inne osoby.
+Plugin pozwala na usprawnienie podstawowych analiz danych mikroskopowych obejmujących m.in. pomiary długości komórek badanego szczepu bakteryjnego.
 Tworzona w pierwszych krokach struktura zawiera informacje o rozwoju całej populacji komórek.
-Może zostać zapisana i wczytywana z pliku, dzięki czemu użytkownik może podzielić swoją pracę w czasie, wykorzystywać wielokrotnie raz utworzone zaznaczenia, a także przesyłać je  do innych użytkowników analizujących to samo nagranie.
+Może zostać zapisana i wczytywana z pliku, dzięki czemu użytkownik może podzielić swoją pracę w czasie, wykorzystywać wielokrotnie raz utworzone zaznaczenia, a także przesyłać je do innych użytkowników analizujących to samo nagranie.
 Sam proces manualnego tworzenia zaznaczeń również został usprawniony poprzez możliwość skopiowania zaznaczeń z poprzedniej klatki oraz stworzenie specjalnych narzędzi do wykonywania najczęściej powtarzających się czynności.
 
 \section{Ograniczenia zastosowanych metod}
@@ -1079,7 +1077,7 @@ Warto więc w miarę możliwości zadbać o wysoką jakość nagrania.
 
 Przeciętne obrazy spod mikroskopu przedstawiające analizowane eksperymenty, zawierały wiele artefaktów.
 Wady obrazów nakładające się z komórkami często powodują błędne ich oznaczanie lub przedłużanie ich końcówek.
-Zdarzało się również, że nagranie traciło ostrość w niektórych momentach lub cała scena przesuwała się nieznacznie w trakcie nagrania.
+Zdarzało się również, że nagranie traciło ostrość w niektórych momentach lub pole widzenia przesuwało się nieznacznie w trakcie nagrania.
 W pierwszym przypadku powodowało to całkowicie błędne oznaczenie komórek.
 W drugim przypadku, odpowiednio duże przesunięcie również uniemożliwia poprawne odnalezienie lokalizacji komórek na podstawie oznaczenia z poprzedniej klatki.
 
@@ -1090,7 +1088,7 @@ W efekcie szkielet całego obrazu nie zawiera szkieletów poszczególnych komór
 
 Wymienione w poprzednim rozdziale problemy zastosowanej metody automatycznego śledzenia komórek można spróbować rozwiązać korzystając ze znanych algorytmów z dziedziny przetwarzania obrazów.
 Aby zniwelować wpływ artefaktów na efekt końcowy, można by spróbować zastosować na etapie wstępnego przetwarzania metody automatycznego ich usuwania\cite{paper:removing-artifacts}.
-Rozwiązaniem problemu związanego z przesuwającą się nieznacznie sceną w trakcie nagrania, mogłoby być wyliczenie przesunięcia (translacji) poszczególnych klatek względem dowolnej klatki referencyjnej, na podstawie stałych elementów tła.
+Rozwiązaniem problemu związanego z przesuwającym się w trakcie nagrania polem widzenia, mogłoby być wyliczenie przesunięcia (translacji) poszczególnych klatek względem dowolnej klatki referencyjnej, na podstawie stałych elementów tła.
 Takie dane mogłyby następnie zostać wykorzystane przy próbach określenia poprawnej lokalizacji komórek na podstawie poprzedniej klatki.
 
 Tak jak wspomniałem w rozdziale \ref{sec:detection-input}, w niniejszej pracy nie zajmowałem się problemem określenia liczby i lokalizacji poszczególnych komórek bez wcześniejszego udziału użytkownika.
