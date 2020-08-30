@@ -149,7 +149,7 @@ Co 10 min wykonywane jest zdjęcie.
 Tak pozyskany film poklatkowy badacze przetwarzają i analizują przy użyciu programu Fiji\cite{imagej:fiji}.
 Jest to dystrybucja otwartego oprogramowania ImageJ służącego do przetwarzania obrazów.
 Wyposażona jest w wiele wtyczek ułatwiających naukową analizę obrazu.
-Przy jej pomocy zbierane są także dane dotyczące poszczególnych komórek na poszczególnych klatkach nagrania, takie jak długość czy umiejscowienie ,,ognisk fluorescencji''.
+Przy jej pomocy zbierane są także dane dotyczące poszczególnych komórek na poszczególnych klatkach nagrania, takie jak długość czy umiejscowienie ,,skupisk fluorescencji''.
 W tym celu pracownicy naukowi ręcznie oznaczają mierzoną komórkę na obrazie, aby następnie skorzystać z odpowiednich narzędzi programu dokonujących pomiarów.
 Pomiary są zapisywane, a proces powtarzany jest dla pozostałych komórek widocznych w danej klatce, a następnie dla pozostałych klatek nagrania.
 Kolejną częścią procesu jest analiza zbiorczych danych w programie RStudio\cite{app:rstudio}.
@@ -170,9 +170,9 @@ Idealnym rozwiązaniem byłaby pełna automatyzacja procesu, ale dużym usprawni
 \end{itemize}
 W aktualnym procesie każda komórka zaznaczana jest osobno, dokonywane i zapisywane są dla niej pomiary, a następnie proces powtarzany jest dla kolejnych komórek.
 Możliwość zaznaczenia wszystkich komórek w pierwszym kroku, a następnie dokonania dla nich pomiarów, mogłaby usprawnić cały proces.
-Przy takim podejściu możliwy staje się także zapis i odczyt wszystkich zaznaczeń, co dałoby możliwość wielokrotnego wykorzystania raz włożonej pracy.
+Przy takim podejściu możliwy staje się także zapis i odczyt wszystkich zaznaczeń, co dałoby możliwość wielokrotnego wykorzystania raz wykonanej pracy.
 
-Celem niniejszej pracy jest stworzenie narzędzia, które ułatwiałoby w przyszłości opisany powyżej proces pozyskiwania danych, a tym samym ułatwiało pracę badaczom.
+Celem niniejszej pracy jest stworzenie narzędzia, które ułatwiałoby w przyszłości opisany powyżej proces pozyskiwania danych, a tym samym usprawniałoby pracę badaczy.
 Narzędzie to postanowiłem zaimplementować jako wtyczkę do programu ImageJ, ze względu na dotychczasowe doświadczenia zespołu i biegłość w obsłudze tego programu.
 
 
@@ -244,10 +244,10 @@ O ile metody te niewątpliwie są bardzo ważne w diagnostyce, o tyle niekoniecz
 %Duża część prac opiera się na analizie kolorów
 %Niektóre metody bazują na odpowiednim sposobie przygotowania zdjęć (np. zabarwieniu tła na określony kolor\cite{paper:detection-of-tb-with-ip}).
 
-Podobnym zagadnieniem, niekoniecznie w kontekście dziedziny, ale z perspektywy przetwarzania obrazów, jest także wykrywanie nicieni.
+Podobnym zagadnieniem, niekoniecznie w kontekście dziedziny, ale z perspektywy przetwarzania obrazów, jest wykrywanie nicieni.
 Jeden z gatunków, \emph{Caenorhabditis elegans}, od wielu lat jest organizmem modelowym w badaniach organizmów eukariotycznych\cite{wiki:c-elegans}.
 \emph{C. elegans}, podobnie jak prątki, ma symetryczny pałeczkowaty kształt przypominający robaka.
-Badania takich bezkręgowców często polega na analizie danych na poziomie pojedynczego osobnika.
+Badania takich bezkręgowców często polegają na analizie danych na poziomie pojedynczego osobnika.
 W literaturze można znaleźć prace opisujące metody automatycznego oznaczania i opisywania tych nicieni.
 Ze względu na dużo większy rozmiar w porównaniu do komórek bakteryjnych, analizy mikroskopowe \emph{C. elegans} pozwalają na uzyskanie bardzo dobrej jakości danych.
 Lepsza jakość nagrań znacząco ułatwia ich późniejszą obróbkę.
@@ -280,7 +280,7 @@ Danymi wejściowymi są zatem dwa kanały obrazu $\image$ oraz zbiór punktów $
 
 Obraz wejściowy składa się z dwóch podstawowych kanałów (\ref{sec:input-images}).
 Chcąc jak najdokładniej oznaczyć początek i koniec komórki, a także miejsca ich podziału, postanowiłem wybrać kanał, który zawiera wyraźną informację o krawędziach w tych miejscach.
-O ile kanał z fluorescencją mógłby bardzo dobrze sprawdzić się do określenie liczby oraz lokalizacji poszczególnych komórek (w przypadku ich niewielkiej liczby), o tyle drugi kanał zawiera dużo dokładniejszą informację na temat krawędzi komórek.
+O ile kanał z fluorescencją mógłby bardzo dobrze sprawdzić się do określenia liczby oraz lokalizacji poszczególnych komórek (w przypadku ich niewielkiej liczby), o tyle drugi kanał zawiera dużo dokładniejszą informację na temat krawędzi komórek.
 
 Celem wstępnego przetwarzania obrazu wejściowego jest w tym przypadku oddzielenie poszczególnych komórek od otoczenia, zachowując przy tym informację na temat ich krawędzi. W ramach pracy przeprowadziłem wiele testów mających na celu odnalezienie narzędzia spełniającego ten cel. Krawędzie otrzymywane za pomocą filtrów czy algorytmów do ich wyszukiwania często były nieciągłe. Dobierając inne parametry często pojawiały się niechciane zaznaczenia wewnątrz komórek.
 
@@ -324,7 +324,7 @@ Ze względu na specyficzny kształt komórki można zaobserwować następującą
 \subsection{Wybór krawędzi w węzłach}
 \label{sec:spine-extending}
 
-Niestety przyjęte założenie o tym, że każdy piksel należący do zewnętrznego obrysu dowolnej komórki będzie miał wartość $0$, nie zawsze jest spełnione. W realistycznym scenariuszu zdarza się, że jedna z końcówek komórki znajdują się na tyle blisko innej komórki, że wstępne przetwarzanie i progowanie obrazu nie powoduje ich rozdzielenia na obrazie binarnym. Czasem artefakty widoczne na obrazie wejściowym powodują, że wyspa na obrazie binarnym zawiera nie tylko komórkę, ale także fragment innego kształtu. W zdecydowanej większości takich przypadków szkielet komórki można opisać spójnym podgrafem o stopniu 2 grafu reprezentującego szkielet wyspy zawierającej komórki.
+Niestety przyjęte założenie o tym, że każdy piksel należący do zewnętrznego obrysu dowolnej komórki będzie miał wartość $0$, nie zawsze jest spełnione. W realistycznym scenariuszu zdarza się, że jedna z końcówek komórki znajduje się na tyle blisko innej komórki, że wstępne przetwarzanie i progowanie obrazu nie powoduje ich rozdzielenia na obrazie binarnym. Czasem artefakty widoczne na obrazie wejściowym powodują, że wyspa na obrazie binarnym zawiera nie tylko komórkę, ale także fragment innego kształtu. W zdecydowanej większości takich przypadków szkielet komórki można opisać spójnym podgrafem o stopniu 2 grafu reprezentującego szkielet wyspy zawierającej komórki.
 
 Wstępna detekcja szkieletu danej komórki polega, tak jak w scenariuszu optymistycznym, na odnalezieniu krawędzi $\{v_0, u_0\}$ w grafie $\mathbf{G}$ leżącej najbliżej punktu opisującego komórkę, a następnie na stworzeniu z niej i jej wierzchołków nowego grafu $\mathbf{S}_0$. Tak utworzony szkielet rozszerzany jest później zgodnie z następującym algorytmem:
 
@@ -402,6 +402,9 @@ W drugim przypadku sprawa jest prosta -- część wspólna zostaje przydzielona 
   \includegraphics[valign=m,width=0.35\textwidth]{images/overlap-out-in-assign-solved.png}
 \end{figure}
 
+% rysunki mogłyby być bezpośrednio pod punktami
+% można by dodać jeszcze legendę jak wygląda komórka, punkt charakterystyczny, część wspólna
+
 \subsubsection{Podzielenie części wspólnej}
 
 We wszystkich pozostałych przypadkach stosuję drugą metodę, polegającą na skróceniu obu komórek.
@@ -430,7 +433,8 @@ Rozwiązanie konfliktu polega tutaj na znalezieniu najsłabszego punktu (mające
 
 \subsubsection{Nakładanie się wielokrotne}
 
-Dwa szkielety mogą mieć więcej niż jeden konflikt równocześnie. Jest to rzadkie, ale realistyczne.
+Dwa szkielety mogą mieć więcej niż jeden konflikt równocześnie.
+Taka sytuacja nie zdarza się często, ale jest prawdopodobna.
 W tym przypadku w każdej iteracji rozwiązywany jest jeden z takich konfliktów za pomocą sposobów opisanych powyżej.
 
 \begin{figure}[H]
@@ -947,7 +951,7 @@ public class ExampleLifeTracker implements ICellsPluginStep {
 Podczas inicjalizacji zapisywane są referencje do obrazu wejściowego \texttt{imp} oraz do kolekcji komórek \texttt{cellCollection}, a następnie tworzony jest komponent zawierający jeden przycisk.
 Wciśnięcie przycisku \texttt{duplicate} powoduje wywołanie metody \texttt{onDuplicateClick}, która duplikuje zaznaczenia widoczne w aktualnej klatce do kolejnej klatki.
 Jeśli w aktualnej klatce nie ma żadnych zaznaczeń lub jest to ostatnia klatka nagrania, metoda nie powoduje żadnego efektu.
-Zwrócony przez przez metodę \texttt{init} komponent zostanie automatycznie umieszczony w oknie pluginu.
+Zwrócony przez metodę \texttt{init} komponent zostanie automatycznie umieszczony w oknie pluginu.
 
 Załóżmy że chcemy jeszcze dodatkowo zmienić podgląd obrazu, tak aby zamiast oryginalnego obrazu użytkownik widział mapę indeksów kształtu.
 Można to zrobić nakładając dodatkową warstwę \texttt{Overlay} na podgląd obrazu.
@@ -1004,14 +1008,14 @@ W tak dużym otwartym oprogramowaniu tworzonym przez dużą społeczność nie s
 Implementując niektóre funkcjonalności zdecydowałem się użyć standardowych narzędzi ImageJ, w celu nieco innym niż ich oryginalne przeznaczenie.
 Ze względu na to, potrzebowałem niskopoziomowego dostępu do różnych mechanizmów za tym stojących, aby wstrzyknąć tam własną warstwę pośredniczącą.
 Twórcy ImageJ, mając na uwadze potrzebę rozszerzalności, wyposażyli tę platformę w szereg narzędzi mających w tym pomóc.
-Mimo wszystko kilka elementów systemu okazało się działać nie do końca zgodnie z intuicją i wymagało nie do końca eleganckiego rozszerzenia.
+Mimo wszystko kilka elementów systemu okazało się działać nie do końca zgodnie z intuicją i wymagało niezbyt eleganckiego rozszerzenia.
 
 \subsubsection{Nasłuchiwanie na zdarzenia modyfikacji ROI}
 
 Chcąc rejestrować wydarzenia na temat modyfikacji wyświetlanych aktualnie zaznaczeń, należy zaimplementować interfejs \texttt{RoiListener}, a następnie tę implementację zarejestrować przekazując ją do statycznej metody \texttt{Roi.addRoiListener}.
 Słuchacz będzie otrzymywać zgłoszenia na temat różnych wydarzeń związanych z zaznaczeniami m.in. na temat ich utworzenia, przesunięcia, modyfikacji, rozszerzenia, ukończenia czy usunięcia.
 W moim programie nasłuchiwanie na te wydarzenia odgrywa kluczową rolę.
-Zdiagnozowałem kilka miejsc w których system notyfikacji działa, moim zdaniem, niezgodnie z intuicją:
+Zdiagnozowałem kilka miejsc, w których moim zdaniem system notyfikacji działa niezgodnie z intuicją:
 \begin{itemize}
   \item Tworzenie zaznaczenia w kształcie linii polega na oznaczeniu kursorem myszy punktu początkowego, wciśnięciu głównego klawisza myszy, przeciągnięciu kursora do miejsca docelowego, a następnie zwolnieniu klawisza myszy. Konstruując zaznaczenie w kształcie linii, słuchacz dostaje informacje na temat wydarzenia związanego z modyfikacją, natomiast po zwolnieniu przycisku myszy nie jest zgłaszane żadne wydarzenie. Intuicja podpowiada mi, że powinno zostać zgłoszone wydarzenie związane z ukończeniem konstrukcji zaznaczenia.
   \item Analogiczny problem występuje w przypadku zaznaczania za pomocą pędzla. Tutaj proces zaznaczania podobny jest do ,,malowania'' narzędziem pędzla w popularnych programach graficznych. Również w tym przypadku po zwolnieniu przycisku myszy nie jest zgłaszane żadne wydarzenie.
@@ -1053,7 +1057,7 @@ Wymaga również każdorazowej ingerencji w to okno podczas jego uruchamiania.
 Efektem niniejszej pracy jest narzędzie, mające usprawnić proces pozyskiwania danych na temat cyklu komórkowego bakterii z gatunku \emph{Mycobacterium smegmatis}.
 Narzędzie to zostało stworzone jako plugin dla programu ImageJ, powszechnie używanego przez biologów, a szczególnie przez mikrobiologów.
 Wtyczka pozwala na oznaczanie komórek na kolejnych klatkach nagrania przedstawiającego cykl komórkowy \emph{M. smegmatis}, tworząc w ten sposób strukturę danych która w późniejszych etapach służy do dokładnej analizy obrazów.
-Oznaczanie komórek może odbywać się w sposób w pełni automatyczny, może być wspierana przez użytkownika poprzez wprowadzanie poprawek lub może odbywać się w pełni manualnie.
+Oznaczanie komórek może odbywać się w sposób w pełni automatyczny, może być wspierane przez użytkownika poprzez wprowadzanie poprawek lub może odbywać się w pełni manualnie.
 Narzędzie zapewnia możliwość zapisu i odczytu zaznaczeń z pliku.
 Wtyczka wyposażona jest dodatkowo w narzędzia pomagające w analizie cyklu komórkowego poprzez dokonywanie pomiarów, a także tworzenie profili intensywności pod oznaczeniami komórek.
 Dane można wyświetlić w formie wykresów lub wyeksportować w surowej formie w celu analizy poza programem ImageJ (np. w RStudio).
@@ -1086,7 +1090,7 @@ W efekcie szkielet całego obrazu nie zawiera szkieletów poszczególnych komór
 \section{Dalszy rozwój}
 
 Wymienione w poprzednim rozdziale problemy zastosowanej metody automatycznego śledzenia komórek można spróbować rozwiązać korzystając ze znanych algorytmów z dziedziny przetwarzania obrazów.
-Aby zniwelować wpływ artefaktów na efekt końcowy, można by spróbować zastosować na etapie wstępnego przetwarzania metody automatycznego ich usuwania\cite{paper:removing-artifacts}.
+Aby zniwelować wpływ artefaktów na efekt końcowy, można by spróbować zastosować metody automatycznego ich usuwania na etapie wstępnego przetwarzania\cite{paper:removing-artifacts}.
 Rozwiązaniem problemu związanego z przesuwającym się w trakcie nagrania polem widzenia, mogłoby być wyliczenie przesunięcia (translacji) poszczególnych klatek względem dowolnej klatki referencyjnej, na podstawie stałych elementów tła.
 Takie dane mogłyby następnie zostać wykorzystane przy próbach określenia poprawnej lokalizacji komórek na podstawie poprzedniej klatki.
 
@@ -1096,7 +1100,7 @@ Nie jest to duży wymóg, ponieważ komórek tych jest wtedy zazwyczaj niewiele.
 Zaimplementowanie automatycznej detekcji komórek dla obrazów z niewielką ich ilością mogłoby być jednak usprawnieniem aktualnego programu.
 
 Podczas implementacji pluginu starałem się podejmować decyzje, które pozwoliłyby w łatwy sposób rozwijać dalej ten projekt.
-W rozdziale \ref{sec:architecture} opisałem w jaki sposób można w łatwy sposób ,,wymienić'' dowolny etap pluginu, tj. lokalizację i wstępną detekcję komórek, automatyczne śledzenie komórek, dokonywanie pomiarów i wizualizacji na podstawie zaznaczeń.
+W rozdziale \ref{sec:architecture} opisałem w jaki sposób można w prosty sposób ,,wymienić'' dowolny etap pluginu, tj. lokalizację i wstępną detekcję komórek, automatyczne śledzenie komórek, dokonywanie pomiarów i wizualizacji na podstawie zaznaczeń.
 Dzięki zastosowanemu podejściu, kod pluginu może zostać wykorzystany jako baza dla kolejnych prób znalezienia zupełnie nowej metody automatycznego oznaczania i śledzenia komórek.
 
 
